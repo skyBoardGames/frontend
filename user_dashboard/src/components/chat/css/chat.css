@@ -1,0 +1,73 @@
+/* All users  */
+.chat-users-search-container{
+    border: 1px solid #BD3193;
+    background-color: rgba(255, 255, 255, 0.20);    
+}
+
+.chat-users-section-filter-container{
+    border-radius: 5px;
+    border: 2px solid #BD3193;    
+}
+
+
+
+
+
+
+/* Player Profile */
+.chat-player-profile-play-btn{
+    border: 1px solid #BD3193;    
+}
+
+
+
+
+
+
+/* .Chat Users */
+.chat-chat-users-container{
+    background: rgba(189, 49, 147, 0.20);
+}
+
+.chat-chat-single-user-container{
+    border-radius: 5px;
+    border: 1px solid #BD3193;    
+}
+
+
+
+
+
+
+
+/* Chat Room  */
+.chat-chat-room-active-chat-container{
+    border-radius: 5px;
+    background: rgba(189, 49, 147, 0.15);    
+}
+
+
+
+
+
+
+/* Chat Msgs  */
+.chat-chat-msgs-send-msg-container{
+    border-radius: 15px 0px 15px 15px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(189, 49, 147, 0.80);    
+}
+
+.chat-chat-msgs-receive-msg-container{
+    border-radius: 0px 15px 15px 15px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.20) 100%), rgba(189, 49, 147, 0.20);    
+}
+
+.chat-chat-msgs-type-container{
+    border-radius: 5px;
+    background: rgba(189, 49, 147, 0.15);    
+}
+
+.chat-chat-msgs-type-input-container{
+    border-radius: 5px;
+    background: rgba(189, 49, 147, 0.40);    
+}

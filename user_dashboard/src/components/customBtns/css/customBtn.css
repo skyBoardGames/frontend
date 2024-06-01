@@ -1,0 +1,8 @@
+/* Floating button  */
+.floating-btn-conainer{
+    position: fixed;
+    z-index: 10000;
+    background-color: #BD3193;
+    bottom: 30px;
+    right: 25px;
+}
