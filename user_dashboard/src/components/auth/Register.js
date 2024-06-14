@@ -7,7 +7,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Carousel } from "react-bootstrap";
 import SuccessModal from "./auxiliary/SuccessModal";
 import { register, SendEmailOTP } from "../apiRequests/requestApi";
-import { useEmail } from "../hooks";
+import { useUser } from "../../utils/hooks";
 
 const carouselItems = [
   {
@@ -25,7 +25,7 @@ export default function Register({ navigateTo }) {
   const [dob, setDob] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [referralCode, setRefferalCode] = useState(null);
-  const { setUser, user } = useEmail();
+  const { setUser, user } = useUser();
   const submit = async () => {
     try {
       const dateParts = dob.split("-");

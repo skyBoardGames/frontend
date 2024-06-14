@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import CustomSvg from "../../svgs/CustomSvg";
 
 
-export default function AmountPicker({ btnTxt, btnFunc, subTxt }){
+export default function AmountPicker({ btnTxt, btnFunc, subTxt, value, setValue }){
 
-    const [value, setValue] = useState(2000)
+  
 
     const onIncrement = () => value < 25000 && setValue(prev => prev + 1000)
     const onDecrement = () => value > 0 && setValue(prev => prev - 1000)

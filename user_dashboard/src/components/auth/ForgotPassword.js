@@ -3,8 +3,10 @@ import logo from "../../assets/images/logo1.png";
 import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../apiRequests/requestApi";
+import { useUser } from "../../utils/hooks";
 
 export default function ForgotPassword() {
+  const { setUserDetails, user } = useUser();
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
 
@@ -14,10 +16,12 @@ export default function ForgotPassword() {
 
   const submit = async () => {
     try {
+      setUserDetails({ ...user, email });
       const response = await forgotPassword({ email });
       console.log(response);
       goToVerifyEmail();
     } catch (error) {
+      alert("Something went wrong try again");
       console.error(error);
     }
   };

@@ -7,7 +7,9 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Carousel } from "react-bootstrap";
 import SuccessModal from "./auxiliary/SuccessModal";
 import { useNavigate } from "react-router-dom";
-import { loginFunc } from "../apiRequests/requestApi";
+import { loginFunc, refresh } from "../apiRequests/requestApi";
+import { useUser } from "../../utils/hooks";
+import { setCookie } from "../../utils";
 
 const carouselItems = [
   {
@@ -34,6 +36,8 @@ export default function Login({}) {
     size: "md",
   });
 
+  const { user } = useUser();
+
   const submit = async () => {
     try {
       const details = {
@@ -45,10 +49,15 @@ export default function Login({}) {
 
       const response = await loginFunc(details);
       console.log(response);
-      localStorage.setItem("token", response);
+      user.email = email;
+
+      user.tokens = response?.data;
+
+      sessionStorage.setItem("token", JSON.stringify(response?.data));
+
       openSuccessModal();
     } catch (error) {
-      console.error(error.message);
+      console.error(error?.message);
     }
   };
 
@@ -68,7 +77,7 @@ export default function Login({}) {
         className="d-flex align-items-center justify-content-center flex-column py-5"
       >
         <div className="col-lg-6 d-flex align-items-center justify-content-center mb-5">
-          <img src={img} className="col-lg-12" alt=""/>
+          <img src={img} className="col-lg-12" alt="" />
         </div>
 
         <p className="small-txt txt-F7FAFF font-weight-400 line-height-30 m-0 p-0 font-family-poppins text-center">

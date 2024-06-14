@@ -6,15 +6,18 @@ import { HashRouter } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
-import { EmailContextProvider } from "./components/contexts/EmailContext";
+import { UserContextProvider } from "./utils/contexts/UserContext";
+import { GamesContextProvider } from "./utils/contexts/GameContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <EmailContextProvider>
-        <App />
-      </EmailContextProvider>
+      <UserContextProvider>
+        <GamesContextProvider>
+          <App />
+        </GamesContextProvider>
+      </UserContextProvider>
     </HashRouter>
   </React.StrictMode>
 );

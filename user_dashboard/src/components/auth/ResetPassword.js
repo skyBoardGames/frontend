@@ -4,6 +4,8 @@ import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import SuccessModal from "./auxiliary/SuccessModal";
+import { resetPassword } from "../apiRequests/requestApi";
+import { useUser } from "../../utils/hooks";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -11,6 +13,9 @@ export default function ResetPassword() {
 
   const goToLogin = () => navigateTo("/login");
 
+  const { codeToken, user } = useUser();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [successModal, setSuccessModal] = useState({
@@ -18,6 +23,25 @@ export default function ResetPassword() {
     onHide: null,
     size: "md",
   });
+
+  const submit = async () => {
+    try {
+      console.log({
+        email: user?.email,
+        token: codeToken,
+        password,
+      });
+      const response = await resetPassword({
+        email: user?.email,
+        token: codeToken,
+        password,
+      });
+      console.log(response);
+      openSuccessModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const togglePasswordVisibility = () => setPasswordVisible((prev) => !prev);
   const toggleConfirmPasswordVisibility = () =>
@@ -58,6 +82,7 @@ export default function ResetPassword() {
             <input
               type={passwordVisible ? "text" : "password"}
               style={{ width: "88%" }}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
             />
@@ -80,6 +105,7 @@ export default function ResetPassword() {
             <input
               type={confirmPasswordVisible ? "text" : "password"}
               style={{ width: "88%" }}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm your password"
               className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
             />
@@ -97,7 +123,7 @@ export default function ResetPassword() {
           </div>
 
           <button
-            onClick={openSuccessModal}
+            onClick={submit}
             className="w-100 bg-BD3193 d-flex align-items-center justify-content-center p-2 mb-5"
           >
             <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">

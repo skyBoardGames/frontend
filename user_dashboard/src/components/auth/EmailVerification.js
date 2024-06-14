@@ -4,10 +4,10 @@ import logo from "../../assets/images/logo1.png";
 import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { verifyOTP } from "../apiRequests/requestApi";
-import { useEmail } from "../hooks";
+import { useUser } from "../../utils/hooks";
 
 export default function EmailVerification({ type }) {
-  const { user } = useEmail();
+  const { user, setCode } = useUser();
 
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
@@ -49,20 +49,11 @@ export default function EmailVerification({ type }) {
   }, [countdown]);
 
   const onBtnClick = async () => {
-    // Previous code
-
-    // if (type === "resetPassword") {
-    //   return goToResetPassword();
-    // }
-
-    // if (type === "activateAcct") {
-    //   return goToSelectAvatar();
-    // }
-
-    // End of previous code
     try {
       const code = otp.join("");
       console.log(code);
+
+      setCode(code);
 
       const details = {
         email: user?.email,
@@ -73,7 +64,13 @@ export default function EmailVerification({ type }) {
       const response = await verifyOTP(details);
 
       console.log(response);
-      goToSelectAvatar();
+      if (type === "resetPassword") {
+        return goToResetPassword();
+      }
+
+      if (type === "activateAcct") {
+        return goToSelectAvatar();
+      }
     } catch (error) {
       if (error.message) {
         alert("OTP is incrorrect");
