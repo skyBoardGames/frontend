@@ -54,7 +54,7 @@ export default function Register({ navigateTo }) {
       setUser(...user, { email: email });
       openSuccessModal();
 
-      const otpResponse = await SendEmailOTP("damitigha@gmail.com");
+      const otpResponse = await SendEmailOTP(email);
       console.log(otpResponse);
     } catch (error) {
       console.log(error.message);
