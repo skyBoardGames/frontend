@@ -30,7 +30,7 @@ function Dashboard() {
   return (
     <div style={{ minHeight: '100vh' }} className='dashboard font-family-poppins'>
         <DashboardHeader />
-        <div className='d-lg-flex d-md-flex d-block mt-lg-4 mt-md-4 mt-2 px-lg-4 px-md-4 px-2 justify-content-between align-items-start herogeneral'>
+        <div className='d-lg-flex d-md-flex d-block mt-lg-4 mt-md-4 mt-2 px-lg-4 px-md-4 px-3 justify-content-between align-items-start herogeneral'>
             
             <div className='d-lg-none d-md-none d-flex align-items-center justify-content-between mb-2'>
               <div className='col-lg-2'>

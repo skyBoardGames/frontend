@@ -12,6 +12,7 @@ import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockrig
 import { useNavigate, useParams } from "react-router-dom";
 import { useGames } from "../../utils/hooks";
 import { postRequest } from "../apiRequests/requestApi";
+import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 
 export default function SelectedGame() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function SelectedGame() {
   const stakesNodeRef = useRef(null);
   const showActiveUsersNodeRef = useRef(null);
 
+  const [apiReqs, setApiReqs] = useState({ isLoading: false, errorMsg: null })
   const [showGames, setShowGames] = useState(true);
   const [showActiveUsers, setShowActiveUsers] = useState(false);
   const [showBtns, setShowBtns] = useState(true);
@@ -60,6 +62,14 @@ export default function SelectedGame() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
+  useEffect(() => {
+    if(apiReqs.data && apiReqs.isLoading){
+      createLobby()
+    }
+  }, [apiReqs])
+
+  const initiateLobbyCreation = () => setApiReqs({ isLoading: true, errorMsg: null })
+
   const createLobby = async () => {
     const selectedGame = games?.filter((game) => game.id === gameId);
     const { _id } = selectedGame[0];
@@ -83,10 +93,15 @@ export default function SelectedGame() {
       console.log(data);
 
       openActiveUsers();
+
+      setApiReqs({ isLoading: false, errorMsg: null })
+
     } catch (error) {
       console.error(error);
+      setApiReqs({ isLoading: false, errorMsg: 'Error getting users' })
     }
   };
+
   const openStakes = () => setShowStakes(true);
   const hideStakes = () => setShowStakes(false);
 
@@ -208,11 +223,17 @@ export default function SelectedGame() {
                           Select Stake Amount
                         </p>
 
+                        {
+                          apiReqs.errorMsg &&
+                            <CustomErrorMsg errorMsg={apiReqs.errorMsg} verticalPadding={true} />
+                        }
+
                         <AmountPicker
                           btnTxt="Select Player"
-                          btnFunc={createLobby}
+                          btnFunc={initiateLobbyCreation}
                           subTxt="Stake 1k upwards for a 2 player game"
                           value={value}
+                          loading={apiReqs.isLoading}
                           setValue={setValue}
                         />
 

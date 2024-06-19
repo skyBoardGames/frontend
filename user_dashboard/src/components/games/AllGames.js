@@ -6,6 +6,7 @@ import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../apiRequests/requestApi";
 import { useGames } from "../../utils/hooks";
+import { Spinner } from "react-bootstrap";
 
 export default function AllGames() {
   const navigate = useNavigate();
@@ -138,9 +139,20 @@ export default function AllGames() {
             Select any game of your choice that you will like to participate in
           </p>
 
-          <div className="d-flex align-items-center flex-wrap justify-content-lg-start justify-content-md-start justify-content-center">
-            {displayGames}
-          </div>
+          {
+            games && games.length > 0
+            ?
+              <div className="d-flex align-items-center flex-wrap justify-content-lg-start justify-content-md-start justify-content-center">
+                {displayGames}
+              </div>         
+            :   
+              <div className="d-flex align-items-center">
+                <p className="m-0 p-0 small-txt txt-FFF font-weight-500 font-family-poppins">Loading games...</p>
+                <div className="mx-2">
+                  <Spinner size="sm" variant="light" />
+                </div>
+              </div>
+          }
         </div>
 
         <div

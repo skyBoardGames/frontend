@@ -1,13 +1,15 @@
 import helpers from "../helpers/helpers";
 import axios from "axios";
 
-const { BaseUrl } = helpers;
 const { apiUrl } = helpers;
 
 const refreshToken = async () => {
   const token = sessionStorage.getItem("token");
   const tokens = JSON.parse(token);
-  const refreshToken = tokens?.refreshToken;
+
+  const refreshToken = tokens ? tokens.tokens.refreshToken : null
+      
+  console.log("Token refreshed", refreshToken)
 
   if (!refreshToken) {
     throw new Error("No refresh token available");
@@ -22,9 +24,11 @@ const refreshToken = async () => {
     const { data } = result.data;
     sessionStorage.setItem("token", JSON.stringify(data));
     return data?.accessToken;
+    
   } catch (error) {
+    console.log(error)
     sessionStorage.removeItem("token");
-    throw new Error("Failed to refresh token");
+    // throw new Error("Failed to refresh token");
   }
 };
 
@@ -34,10 +38,13 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
+
     const token = sessionStorage.getItem("token");
     const tokens = JSON.parse(token);
 
-    const accessToken = tokens?.accessToken;
+    const accessToken = tokens ? tokens.tokens.accessToken : null
+
+    console.log('Request interceptor with Access Token', accessToken)
 
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
@@ -52,6 +59,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("response error interceptor")
     console.log(error);
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -72,51 +80,51 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export const requestApi = async ({ url, method, data, token }) => {
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
-  };
+// export const requestApi = async ({ url, method, data, token }) => {
+//   const headers = {
+//     Accept: "application/json",
+//     "Content-Type": "application/json; charset=utf-8",
+//   };
 
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+//   if (token) {
+//     headers["Authorization"] = `Bearer ${token}`;
+//   }
 
-  const config = {
-    url: `${BaseUrl}${url}`,
-    method,
-    headers,
-  };
+//   const config = {
+//     url: `${BaseUrl}${url}`,
+//     method,
+//     headers,
+//   };
 
-  if (data) {
-    config.data = data;
-  }
+//   if (data) {
+//     config.data = data;
+//   }
 
-  console.log(config.url);
+//   console.log(config.url);
 
-  return axios(config)
-    .then((response) => {
-      return { result: response.data, responseStatus: true };
-    })
-    .catch((error) => {
-      console.log(error);
-      if (error.response) {
-        //Request made and server responded
-        return { responseStatus: false, errorMsg: error.response.data };
-      } else if (error.request) {
-        //Request made but no server response
-        return {
-          responseStatus: false,
-          errorMsg: { error: "Server error, try again later" },
-        };
-      } else {
-        return {
-          responseStatus: false,
-          errorMsg: { error: "Server error, try again later" },
-        };
-      }
-    });
-};
+//   return axios(config)
+//     .then((response) => {
+//       return { result: response.data, responseStatus: true };
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       if (error.response) {
+//         //Request made and server responded
+//         return { responseStatus: false, errorMsg: error.response.data };
+//       } else if (error.request) {
+//         //Request made but no server response
+//         return {
+//           responseStatus: false,
+//           errorMsg: { error: "Server error, try again later" },
+//         };
+//       } else {
+//         return {
+//           responseStatus: false,
+//           errorMsg: { error: "Server error, try again later" },
+//         };
+//       }
+//     });
+// };
 
 export const cloudinaryUpload = async ({ files }) => {
   try {
@@ -245,6 +253,8 @@ export const postRequest = async ({ url, data }) => {
 
 export const getRequest = async (url) => {
   try {
+    console.log("request initiated")
+
     const result = await axiosInstance.get(url);
 
     const response = result.data;
