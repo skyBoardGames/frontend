@@ -90,6 +90,7 @@ export default function Register({ navigateTo }) {
       });
       openSuccessModal();
 
+      const otpResponse = await SendEmailOTP(email);
       console.log(otpResponse);
 
       return setApiReqs({ isLoading: false, data: null, errorMsg: null })

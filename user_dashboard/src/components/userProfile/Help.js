@@ -27,9 +27,6 @@ export default function Help() {
   const goToProfile = () => navigateTo("/user-profile");
   const { user } = useUser();
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRhMDU1YzhhYmNmZTM3MTQzMGE1ZDEiLCJpYXQiOjE3MTgyODc5MDMsImV4cCI6MTcxODI4ODgwM30.UVHlxeYOQuIzzZD0ghnpiXWZvhTkgZ3s3lrKmiY9_QA";
-
   useEffect(() => {
     if (user) {
       setEmail(user.email);
@@ -47,7 +44,6 @@ export default function Help() {
     try {
       const response = await postRequest({
         url: "/contact",
-
         data: requestBody,
         token: token,
       });
