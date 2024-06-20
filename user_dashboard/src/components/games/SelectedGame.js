@@ -14,11 +14,14 @@ import { useGames } from "../../utils/hooks";
 import { postRequest } from "../apiRequests/requestApi";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 
+
+
 export default function SelectedGame() {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
   const goToTournaments = ({ user_id, stakeValue }) =>
     navigateTo(`/tournaments/play/${user_id}/${gameId}/${stakeValue}`);
+  const goToAllGames = () => navigateTo('/games')
 
   const params = useParams();
   const { gameId } = params;
@@ -28,6 +31,7 @@ export default function SelectedGame() {
   const stakesNodeRef = useRef(null);
   const showActiveUsersNodeRef = useRef(null);
 
+  const [selectedGame, setSelectedGame] = useState()
   const [apiReqs, setApiReqs] = useState({ isLoading: false, errorMsg: null })
   const [showGames, setShowGames] = useState(true);
   const [showActiveUsers, setShowActiveUsers] = useState(false);
@@ -63,10 +67,26 @@ export default function SelectedGame() {
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
   useEffect(() => {
-    if(apiReqs.data && apiReqs.isLoading){
+    if(apiReqs.isLoading){
       createLobby()
     }
   }, [apiReqs])
+
+  useEffect(() => {
+    if(games){
+      const s_game = games.filter((game) => game.id === gameId);
+      
+      if(s_game[0]){
+        setSelectedGame(s_game[0])
+      
+      } else{
+        goToAllGames()
+      }
+
+    } else{
+      goToAllGames()
+    }
+  }, [games])
 
   const initiateLobbyCreation = () => setApiReqs({ isLoading: true, errorMsg: null })
 
@@ -98,7 +118,7 @@ export default function SelectedGame() {
 
     } catch (error) {
       console.error(error);
-      setApiReqs({ isLoading: false, errorMsg: 'Error getting users' })
+      setApiReqs({ isLoading: false, errorMsg: error.message ? error.message : 'Error getting users' })
     }
   };
 
@@ -127,10 +147,9 @@ export default function SelectedGame() {
   const onSelectUser = (user) =>
     goToTournaments({ user_id: user.user_id, stakeValue });
 
-  if (gameId) {
-    const selectedGame = games?.filter((game) => game.id === gameId);
-    const { id, bgClass, img, title, caption, text, splitTitle1, splitTitle2 } =
-      selectedGame[0];
+  if (selectedGame) {
+
+    const { id, bgClass, img, title, caption, text, splitTitle1, splitTitle2 } = selectedGame
 
     return (
       <div style={{ minHeight: "100vh" }} className="dashboard">

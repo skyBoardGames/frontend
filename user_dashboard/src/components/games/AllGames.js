@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getRequest } from "../apiRequests/requestApi";
 import { useGames } from "../../utils/hooks";
 import { Spinner } from "react-bootstrap";
+import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 
 export default function AllGames() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function AllGames() {
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
+  const [errorMsg, setErrorMsg] = useState(null)
 
   const { games, getGames, loading } = useGames();
 
@@ -38,6 +40,8 @@ export default function AllGames() {
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
   useEffect(() => {
+    setErrorMsg(null)
+
     const get = async () => {
       try {
         await getGames();
@@ -45,7 +49,9 @@ export default function AllGames() {
         // console.log(newArray);
         // setLoading(false);
       } catch (error) {
+        console.log('Error reached')
         console.error(error);
+        setErrorMsg(error.message ? error.message : 'Error loading available games')
       }
     };
 
@@ -146,6 +152,10 @@ export default function AllGames() {
                 {displayGames}
               </div>         
             :   
+            errorMsg
+            ?
+              <CustomErrorMsg errorMsg={errorMsg} verticalPadding={true} />
+            :
               <div className="d-flex align-items-center">
                 <p className="m-0 p-0 small-txt txt-FFF font-weight-500 font-family-poppins">Loading games...</p>
                 <div className="mx-2">

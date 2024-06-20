@@ -4,14 +4,33 @@ import DashboardHero from "../dashboard/DashboardHero/DashboardHero";
 import CollapseBlock from "../dashboard/CollapseBlockLeft/collapseblockleft";
 import AmountPicker from "./auxiliary/AmountPicker";
 import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockright";
-import { usePaystackPayment } from "react-paystack";
+import { PaystackConsumer, usePaystackPayment } from "react-paystack";
 import { postRequest } from "../apiRequests/requestApi";
+import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 
 export default function Deposit() {
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
   const [value, setValue] = useState(2000);
+  const [apiReqs, setApiReqs] = useState({ isLoading: false, data: null, errorMsg: null })
+
+  const [payStackComponentProps, setPayStackComponentProps] = useState({
+    reference: new Date().getTime().toString(),
+    email: "olomufeh@gmail.com",
+    amount: value*100,
+    publicKey: "pk_test_77b7c00c5d7243d94da713ca2c6815eae23f99a5",
+    onSuccess: (reference) => {
+      setApiReqs({
+        isLoading: true, 
+        errorMsg: null, 
+        data: {
+          amount: value
+        }
+      })
+    },
+    onClose: () => setApiReqs({ isLoading: false, data: null, errorMsg: 'Deposit cancelled' })
+  })
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -30,39 +49,35 @@ export default function Deposit() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
-  const config = {
-    reference: new Date().getTime().toString(),
-    email: "olomufeh@gmail.com",
-    amount: 20000,
-    publicKey: "pk_test_77b7c00c5d7243d94da713ca2c6815eae23f99a5",
-  };
+  useEffect(() => {
+    setPayStackComponentProps(prev => ({...prev, amount: value*100}))
+  }, [value])
 
-  const onSuccess = (reference) => {
-    // console.log(reference);
-    alert("Payment Successfuly!");
-  };
+  useEffect(() => {
+    if(apiReqs.data && apiReqs.isLoading){
+      const { data } = apiReqs
+      onDeposit({ requestBody: data })
+    }
+  }, [apiReqs])
 
-  const onClose = () => {
-    alert("Payment UnSuccessfuly!");
-  };
-
-  const initializePayment = usePaystackPayment(config);
-
-  const onDeposit = async (value) => {
+  const onDeposit = async ({ requestBody }) => {
     try {
       const response = await postRequest({
         url: "/payment/deposit",
-        data: value * 100,
+        data: requestBody
       });
 
       const { message, data, success } = response;
 
-      console.log(response);
+      alert(message)
+
+      return setApiReqs({ isLoading: false, data: null, errorMsg: null })
+
     } catch (error) {
       console.error(error);
+
+      return setApiReqs({ isLoading: false, data: null, errorMsg: error.message || 'Deposit error' })
     }
-    config.amount = value * 100;
-    initializePayment(onSuccess, onClose);
   };
 
   return (
@@ -104,13 +119,25 @@ export default function Deposit() {
             Enter Amount
           </p>
 
-          <AmountPicker
-            btnTxt="Next"
-            subTxt="Deposit money from 1k Upwards"
-            btnFunc={onDeposit}
-            value={value}
-            setValue={setValue}
-          />
+          {
+            apiReqs.errorMsg &&
+              <CustomErrorMsg errorMsg={apiReqs.errorMsg} verticalPadding={true} />
+          }
+
+          <PaystackConsumer {...payStackComponentProps}>
+            {({ initializePayment }) => (
+              // initializePayment(onSuccess, onClose)
+              <AmountPicker
+                loading={apiReqs.isLoading}
+                btnTxt="Next"
+                subTxt="Deposit money from 1k Upwards"
+                btnFunc={() => initializePayment()}
+                value={value}
+                setValue={setValue}
+              />              
+            )}
+          </PaystackConsumer>
+
         </div>
 
         <div
