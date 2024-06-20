@@ -80,7 +80,7 @@ export default function Register({ navigateTo }) {
       };
 
       const response = await register(details);
-      const otpResponse = await SendEmailOTP("damitigha@gmail.com");
+    //   const otpResponse = await SendEmailOTP("damitigha@gmail.com");
 
       console.log(response);
 
