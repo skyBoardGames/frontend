@@ -4,7 +4,9 @@ import React, { useEffect } from "react";
 export default function ScrollTo({ children, condition }){
     
     useEffect(() => {
-        window.scrollTo(0, 0)
+        if(condition){
+            window.scrollTo(0, 0)
+        }
     }, [condition])
     
     return (

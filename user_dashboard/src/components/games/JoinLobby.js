@@ -190,14 +190,14 @@ export default function JoinLobby() {
             the pin below
           </p>
 
-          <div className="d-flex col-lg-12 w-100 align-items-center justify-content-between mb-5">
+          <div className="d-lg-flex d-md-flex d-block col-lg-12 w-100 align-items-center justify-content-between mb-5">
             <div
               onClick={routeToEnterPin}
               className={`${
                 activeRoute === "enterPin"
                   ? "bg-BD3193"
                   : "bg-transparent join-lobby-inactive-route"
-              } clickable col-lg-5 p-3`}
+              } clickable col-lg-5 col-md-5 col-12 p-3 mb-lg-0 mb-md-0 mb-4`}
             >
               <p className="m-0 p-0 text-center txt-FFF font-weight-500 regular-txt font-family-poppins">
                 Enter Pin
@@ -209,7 +209,7 @@ export default function JoinLobby() {
                 activeRoute === "qrCode"
                   ? "bg-BD3193"
                   : "bg-transparent join-lobby-inactive-route"
-              } clickable col-lg-5 p-3`}
+              } clickable col-lg-5 col-md-5 col-12 p-3`}
             >
               <p className="m-0 p-0 text-center txt-FFF font-weight-500 regular-txt font-family-poppins">
                 Scan QR Code

@@ -69,7 +69,7 @@ function DashboardHero({ isLeftBlockOpen, isRightBlockOpen }) {
     return (
         <div className='d-flex w-100 align-items-center justify-content-center'>
             <div className='availablegamescontainer'>
-                <div>
+                <div className='col-12'>
                     <Carousel className='w-100'>
                         <Carousel.Item className='bg-img carousel-1-bg mb-5 p-lg-5 p-md-5 p-1'>
                             <div className='px-lg-4 px-md-4 px-2'>
@@ -128,48 +128,55 @@ function DashboardHero({ isLeftBlockOpen, isRightBlockOpen }) {
                 </div>
 
 
-                <div className='d-flex  combinations mb-5'>
-                    <div className='Availabletitle font-family-poppins '>Available Games</div>
-                    <div className='availablegeneral d-flex justify-content-lg-between justify-content-md-between justify-content-center'>
-                        {allGames.slice(0, gamesCount).map((availablegames) => (
-                            <div onClick={() => onSelectGame({ game: availablegames })} className={`clickable ${gamesCount == 5 ? 'col-lg-2 col-md-2' : gamesCount == 4 ? 'col-lg-3 col-md-3' : gamesCount == 3 ? 'col-ld-4 col-md-4' : ''} d-flex align-items-center justify-content-center`}>
-                                <div className={`${gamesCount == 5 ? 'col-lg-12 col-12' : 'col-lg-11 col-md-11'} availableContainer mt-4`} id={availablegames.id}>
-                                    <img src={availablegames.img} className='mb-4'/>
-                                    <div className='d-flex justify-content-between'>
-                                        <div>
-                                            <div className='gamesname mb-2'>{availablegames.title}</div>
-                                            <div className='gameswriteup font-family-poppins extra-small-txt'>{availablegames.caption}</div>
+                <div className='d-flex combinations mb-5'>
+                    <div className='Availabletitle font-family-poppins'>Available Games</div>
+                        <div className='availablegeneral d-flex justify-content-lg-between justify-content-md-between justify-content-center'>
+                            {allGames.slice(0, gamesCount).map((availablegames) => (
+                                <div 
+                                    onClick={() => onSelectGame({ game: availablegames })} 
+                                    className={`col-12 clickable ${gamesCount == 5 ? 'col-lg-2 col-md-2' : gamesCount == 4 ? 'col-lg-3 col-md-3' : gamesCount == 3 ? 'col-lg-4 col-md-4' : ''} d-flex align-items-center justify-content-center`
+                                }>
+                                    <div className={`col-12 ${gamesCount == 5 ? 'col-lg-12' : 'col-lg-11 col-md-11'} availableContainer mt-4`} id={availablegames.id}>
+                                        <div className='col-12'>
+                                            <img src={availablegames.img} className='mb-4 col-12'/>
                                         </div>
-                                        
-                                        <div className='anchorarrow'>
-                                            <CustomSvg name="arrow-right" color={availablegames.arrowColor} width={'16px'} height={'16px'} />
+                                        <div className='d-flex justify-content-between'>
+                                            <div>
+                                                <div className='gamesname mb-2'>{availablegames.title}</div>
+                                                <div className='gameswriteup font-family-poppins extra-small-txt'>{availablegames.caption}</div>
+                                            </div>
+                                            
+                                            <div className='anchorarrow'>
+                                                <CustomSvg name="arrow-right" color={availablegames.arrowColor} width={'16px'} height={'16px'} />
+                                            </div>
+                                            
                                         </div>
-                                        
                                     </div>
                                 </div>
-                            </div>
-                        ) ) }
-                    </div>
+                            ) ) }
+                        </div>
                 </div>
 
                 
 
                 <div>
-                <div className='d-flex justify-content-between mb-3'>
-                    <div className='font-family-poppins topgamertitle'>Top Gamers</div>
-                    <div onClick={goToAllUsers} className='clickable'><p className='font-family-poppins seelink topgamersseeall'> see all <img  src={ph_arrow_right_light} alt='.'/></p></div>
-                </div>
+                    <div className='d-flex justify-content-between mb-3'>
+                        <div className='font-family-poppins topgamertitle'>Top Gamers</div>
+                        <div onClick={goToAllUsers} className='clickable'><p className='font-family-poppins seelink topgamersseeall'> see all <img  src={ph_arrow_right_light} alt='.'/></p></div>
+                    </div>
 
-                <div className='d-flex justify-content-xxxl-center justify-content-between flex-wrap'>
-                    {TopGamers.slice(0, usersCount).map((topgamers) => (
-                        <>
-                        <div className='col-lg-auto col-md-auto col-5 d-flex flex-column align-items-center m-2' id={topgamers.id}>
-                            <img src={topgamers.img} alt={topgamers.gamersname} className='mb-2'/>
-                            <div className=' font-family-poppins txt-FFF'>{topgamers.gamersname}</div>
-                        </div>
-                        </>
-                    ))}
-                </div>
+                    <div className='d-flex justify-content-xxxl-center justify-content-lg-between justify-content-md-between justify-content-between flex-wrap'>
+                        {TopGamers.slice(0, usersCount).map((topgamers) => (
+                            <div className='col-lg-auto col-md-auto col-3 my-2 mx-lg-2 mx-md-2 mx-2 d-flex align-items-center justify-content-center' id={topgamers.id}>
+                                <div className='col-lg-auto col-md-auto col-11 justify-content-center d-flex flex-column align-items-center'>
+                                    <div className='col-12'>
+                                        <img src={topgamers.img} alt={topgamers.gamersname} className='mb-2 col-12'/>
+                                    </div>
+                                    <div className=' font-family-poppins txt-FFF'>{topgamers.gamersname}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
 

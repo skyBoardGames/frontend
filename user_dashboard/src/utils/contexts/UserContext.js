@@ -11,12 +11,14 @@ export const UserContextProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await getRequest("/auth/profile");
-      const userDetails = response?.data;
+      const userDetails = response ? response.data : null
 
       return userDetails;
+
     } catch (error) {
       console.error(error);
-      throw error;
+      // throw error;
+
     } finally {
       setLoading(false);
     }

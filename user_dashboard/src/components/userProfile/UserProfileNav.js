@@ -120,9 +120,21 @@ export default function UserProfileNav({ userLogout }){
 
     return (
         <div className="w-100">
-            <div className="d-lg-block d-md-block d-none">
-                <h1 className='m-0 p-0 mb-4 font-weight-700 font-family-quantico txt-large txt-FFF'>User <span className='create-lobby-title-span'>Profile</span></h1>            
-                <div className="d-flex flex-column justify-content-between">
+            <div className="d-lg-block d-md-block d-block">
+                <div className="d-flex mb-4 pb-3 align-items-center justify-content-between">
+                    <h1 className='m-0 p-0 font-weight-700 font-family-quantico txt-large txt-FFF'>User <span className='create-lobby-title-span'>Profile</span></h1>            
+                    <div 
+                        onClick={openOffCanvasNav}
+                        style={{
+                            opacity: 0.8,
+                            background: 'rgba(189, 49, 147, 0.10)'
+                        }}      
+                        className="clickable d-lg-none d-md-none d-flex align-items-center p-2 justify-content-center rounded-3"
+                    >
+                        <CustomSvg name="settings" />
+                    </div>
+                </div>
+                <div className="d-lg-flex d-md-flex d-none flex-column justify-content-between">
                     <div className="mb-5 pb-5">
                         { displayNavLinks }
                     </div>
@@ -140,11 +152,6 @@ export default function UserProfileNav({ userLogout }){
                     </div>  
                 </div> 
             </div>
-
-            <div className="d-lg-none d-md-none d-block w-100">
-                <FloatingBtn icon="profile" btnFunc={openOffCanvasNav} />
-            </div>  
-
 
             <Offcanvas show={showOffCanvasNav}>
                 <div style={{ backgroundColor: '#130828' }} className='w-100 h-100'>
