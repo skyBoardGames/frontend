@@ -42,10 +42,13 @@ export default function Help() {
 
   const submit = async ({ requestBody }) => {
     try {
+
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+
       const response = await postRequest({
         url: "/contact",
         data: requestBody,
-        token: token,
+        token
       });
       console.log(response);
       alert("Message Successfully delivered");

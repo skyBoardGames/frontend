@@ -5,14 +5,26 @@ import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockrig
 import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { postRequest } from "../apiRequests/requestApi";
+import { Spinner } from "react-bootstrap";
+import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 
 const EnterPin = () => {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
   const goToWaitingRoom = () => navigateTo("/games/waiting-room");
+  
 
+  const [apiReqs, setApiReqs] = useState({ isLoading: false, data: null, errorMsg: null })
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const inputRefs = useRef([]);
+
+  useEffect(() => {
+    if(apiReqs.data && apiReqs.isLoading){
+      const { data } = apiReqs
+
+      submit({ requestBody: data })
+    }
+  }, [apiReqs])
 
   const handleChange = (element, index) => {
     setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
@@ -29,29 +41,51 @@ const EnterPin = () => {
     }
   };
 
-  const submit = async () => {
+  const initiateJoinLobby = () => {
     const lobbycode = otp.join("");
-    console.log(lobbycode);
-    const details = {
-      lobbycode,
-    };
+    setApiReqs({
+      isLoading: true, 
+      data: {
+        lobbycode
+      }, 
+      errorMsg: null
+    })
+
+    return
+  }
+
+  const submit = async ({ requestBody }) => {
     try {
-      const response = await postRequest({ url: "/join-lobby", data: details });
+      const response = await postRequest({ url: "/join-lobby", data: requestBody });
 
       const { message, success } = response;
 
       if (success) {
         goToWaitingRoom();
+        setApiReqs({ isLoading: false, data: null, errorMsg: null })
         return;
       }
 
-      alert(message);
+      return setApiReqs({ isLoading: false, data: null, errorMsg: message })
+
     } catch (error) {
       console.error(error);
+      setApiReqs({ isLoading: false, data: null, errorMsg: error.message ? error.message : 'Error joining lobby' })
+
+      return
     }
   };
+
+  const btnDisabled = otp.join("").length != 6
+
   return (
     <div>
+
+      {
+        apiReqs.errorMsg && 
+          <CustomErrorMsg errorMsg={apiReqs.errorMsg} verticalPadding={true} />
+      }
+
       <div className="d-flex align-items-center justify-content-between mb-4 pb-3">
         {otp.map((data, index) => {
           return (
@@ -71,15 +105,31 @@ const EnterPin = () => {
       </div>
 
       <button
-        onClick={submit}
+        disabled={(apiReqs.isLoading || btnDisabled) ? true : false}
+        style={{
+          opacity: (apiReqs.isLoading || btnDisabled) ? 0.5 : 1
+        }}
+        onClick={initiateJoinLobby}
         className="w-100 bg-BD3193 d-flex align-items-center justify-content-center p-2 mb-5"
       >
-        <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">
-          Enter
-        </p>
-        <div className="m-0 p-0 mx-2 d-flex align-items-center">
-          <CustomSvg name={"arrow-right"} />
-        </div>
+        <>
+          {
+            apiReqs.isLoading
+            ?
+              <div className="py-1">
+                <Spinner size="sm" variant="light" />
+              </div>
+            :
+              <>
+                <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">
+                  Enter
+                </p>
+                <div className="m-0 p-0 mx-2 d-flex align-items-center">
+                  <CustomSvg name={"arrow-right"} />
+                </div>
+              </>
+          }
+        </>
       </button>
 
       <div>
