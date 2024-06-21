@@ -182,7 +182,7 @@ export const deleteRequest = async ({ url, data }) => {
 
     const response = result.data;
 
-    return response;
+  return response;
   } catch (error) {
     console.error(error);
     throw error?.response?.data;

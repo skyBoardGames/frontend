@@ -9,6 +9,7 @@ import SuccessModal from "./auxiliary/SuccessModal";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/hooks";
 import { loginFunc, postRequest } from "../apiRequests";
+import { formatDateString } from "../../utils";
 
 const carouselItems = [
   {
@@ -19,7 +20,7 @@ const carouselItems = [
 ];
 
 export default function Login({}) {
-  const { user } = useUser();
+  const { user, setUserDetails } = useUser();
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
 
@@ -47,11 +48,18 @@ export default function Login({}) {
 
       const response = await loginFunc(details);
       console.log(response);
+
       user.email = email;
 
-      user.tokens = response?.data;
+      user.tokens = response?.data?.tokens;
 
-      sessionStorage.setItem("token", JSON.stringify(response?.data));
+      setUserDetails({
+        ...response?.data?.user,
+        password: null,
+        dob: formatDateString(response.data.user.dob, "short"),
+      });
+
+      sessionStorage.setItem("token", JSON.stringify(response?.data?.tokens));
 
       openSuccessModal();
     } catch (error) {
@@ -75,7 +83,7 @@ export default function Login({}) {
         className="d-flex align-items-center justify-content-center flex-column py-5"
       >
         <div className="col-lg-6 d-flex align-items-center justify-content-center mb-5">
-          <img src={img} className="col-lg-12" />
+          <img src={img} className="col-lg-12" alt="" />
         </div>
 
         <p className="small-txt txt-F7FAFF font-weight-400 line-height-30 m-0 p-0 font-family-poppins text-center">
@@ -90,7 +98,7 @@ export default function Login({}) {
       <div className="d-flex align-items-start flex-column mb-5">
         <div className="d-flex flex-column align-items-center justify-content-center">
           <div className="mb-0 col-lg-8 d-flex align-items-center justify-content-center">
-            <img src={logo} className="col-lg-12" />
+            <img src={logo} className="col-lg-12" alt="" />
           </div>
           <h3 className="regular-txt txt-FFF m-0 p-0 text-center font-family-quantico font-weight-500">
             SkyBoard

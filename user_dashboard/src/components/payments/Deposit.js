@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardHeader from "../dashboard/DashboardHeader/DashboardHeader";
 import DashboardHero from "../dashboard/DashboardHero/DashboardHero";
 import CollapseBlock from "../dashboard/CollapseBlockLeft/collapseblockleft";
@@ -9,28 +10,38 @@ import { postRequest } from "../apiRequests/requestApi";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 
 export default function Deposit() {
+  const navigate = useNavigate();
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
   const [value, setValue] = useState(2000);
-  const [apiReqs, setApiReqs] = useState({ isLoading: false, data: null, errorMsg: null })
+  const [apiReqs, setApiReqs] = useState({
+    isLoading: false,
+    data: null,
+    errorMsg: null,
+  });
 
   const [payStackComponentProps, setPayStackComponentProps] = useState({
     reference: new Date().getTime().toString(),
     email: "olomufeh@gmail.com",
-    amount: value*100,
+    amount: value * 100,
     publicKey: "pk_test_77b7c00c5d7243d94da713ca2c6815eae23f99a5",
     onSuccess: (reference) => {
       setApiReqs({
-        isLoading: true, 
-        errorMsg: null, 
+        isLoading: true,
+        errorMsg: null,
         data: {
-          amount: value
-        }
-      })
+          amount: value * 100,
+        },
+      });
     },
-    onClose: () => setApiReqs({ isLoading: false, data: null, errorMsg: 'Deposit cancelled' })
-  })
+    onClose: () =>
+      setApiReqs({
+        isLoading: false,
+        data: null,
+        errorMsg: "Deposit cancelled",
+      }),
+  });
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -50,33 +61,37 @@ export default function Deposit() {
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
   useEffect(() => {
-    setPayStackComponentProps(prev => ({...prev, amount: value*100}))
-  }, [value])
+    setPayStackComponentProps((prev) => ({ ...prev, amount: value * 100 }));
+  }, [value]);
 
   useEffect(() => {
-    if(apiReqs.data && apiReqs.isLoading){
-      const { data } = apiReqs
-      onDeposit({ requestBody: data })
+    if (apiReqs.data && apiReqs.isLoading) {
+      const { data } = apiReqs;
+      onDeposit({ requestBody: data });
     }
-  }, [apiReqs])
+  }, [apiReqs]);
 
   const onDeposit = async ({ requestBody }) => {
     try {
+      console.log(requestBody);
       const response = await postRequest({
         url: "/payment/deposit",
-        data: requestBody
+        data: requestBody,
       });
 
       const { message, data, success } = response;
 
-      alert(message)
+      alert(message);
 
-      return setApiReqs({ isLoading: false, data: null, errorMsg: null })
-
+      return setApiReqs({ isLoading: false, data: null, errorMsg: null });
     } catch (error) {
       console.error(error);
 
-      return setApiReqs({ isLoading: false, data: null, errorMsg: error.message || 'Deposit error' })
+      return setApiReqs({
+        isLoading: false,
+        data: null,
+        errorMsg: error.message || "Deposit error",
+      });
     }
   };
 
@@ -103,11 +118,11 @@ export default function Deposit() {
 
         <div
           className={`${
-            blocksOpen == "both"
+            blocksOpen === "both"
               ? "col-lg-8 col-md-8"
-              : blocksOpen == "one"
+              : blocksOpen === "one"
               ? "col-lg-9 col-md-9"
-              : blocksOpen == "none"
+              : blocksOpen === "none"
               ? "col-lg-10 col-md-10"
               : ""
           } col-auto px-lg-4 px-md-4 px-0`}
@@ -119,10 +134,12 @@ export default function Deposit() {
             Enter Amount
           </p>
 
-          {
-            apiReqs.errorMsg &&
-              <CustomErrorMsg errorMsg={apiReqs.errorMsg} verticalPadding={true} />
-          }
+          {apiReqs.errorMsg && (
+            <CustomErrorMsg
+              errorMsg={apiReqs.errorMsg}
+              verticalPadding={true}
+            />
+          )}
 
           <PaystackConsumer {...payStackComponentProps}>
             {({ initializePayment }) => (
@@ -134,10 +151,9 @@ export default function Deposit() {
                 btnFunc={() => initializePayment()}
                 value={value}
                 setValue={setValue}
-              />              
+              />
             )}
           </PaystackConsumer>
-
         </div>
 
         <div

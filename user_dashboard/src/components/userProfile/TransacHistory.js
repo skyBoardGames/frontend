@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CustomSvg from "../svgs/CustomSvg";
-import { formatDateDash, formatDateString } from "../../utils";
+import { formatDateDash } from "../../utils";
 import { getRequest } from "../apiRequests/requestApi";
 import { Spinner } from "react-bootstrap";
 
-
 export default function TransacHistory() {
-
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -84,22 +82,22 @@ export default function TransacHistory() {
 
   return (
     <div className="dashboard py-lg-5 py-md-5 my-md-3 my-lg-3 my-0 py-2">
-      {
-        loading 
-        ?
-          <div className="d-flex align-items-center">
-            <p className="m-0 p-0 txt-FFF font-weight-600 font-family-poppins small-txt">Retrieving transactions...</p>
-            <div className="mx-2"><Spinner size="sm" variant="light" /></div>
+      {loading ? (
+        <div className="d-flex align-items-center">
+          <p className="m-0 p-0 txt-FFF font-weight-600 font-family-poppins small-txt">
+            Retrieving transactions...
+          </p>
+          <div className="mx-2">
+            <Spinner size="sm" variant="light" />
           </div>
-        :
-          transactions && transactions.length > 0
-          ?
-            <div>
-              { displayTransacHistory }
-            </div>
-          :
-          <p className="m-0 p-0 txt-FFF font-weight-600 font-family-poppins small-txt">No transactions found</p>
-      }      
+        </div>
+      ) : transactions && transactions.length > 0 ? (
+        <div>{displayTransacHistory}</div>
+      ) : (
+        <p className="m-0 p-0 txt-FFF font-weight-600 font-family-poppins small-txt">
+          No transactions found
+        </p>
+      )}
     </div>
   );
 }

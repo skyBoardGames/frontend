@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/hooks";
 import { formatDateString } from "../../utils";
 
-
 export default function EditProfile() {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
@@ -34,18 +33,18 @@ export default function EditProfile() {
         const result = {
           ...response,
           dob: formatDateString(response?.dob, "short"),
+          avatar: userProfile1,
           bgClass: "bg-FD8D84",
           // profile: userProfile1,
           country: "Nigeria",
         };
         console.log(result);
-        console.log(result?.avatar);
         setUserDetails(result);
       } catch (error) {
         console.log(error);
       }
     };
-    if (!user.username) {
+    if (!user.bgClass) {
       get();
     }
   }, []);
@@ -111,7 +110,7 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <input
                 style={{ width: "100%" }}
-                value={username}
+                defaultValue={username}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
               />
             </div>
@@ -123,7 +122,7 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <input
                 style={{ width: "100%" }}
-                value={phoneNumber}
+                defaultValue={phoneNumber}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
               />
             </div>
@@ -135,7 +134,7 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <input
                 style={{ width: "100%" }}
-                value={dob}
+                defaultValue={dob}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
               />
             </div>
@@ -188,7 +187,7 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <textarea
                 style={{ width: "100%", height: "37vh" }}
-                value={bio}
+                defaultValue={bio}
                 className="p-lg-4 p-md-4 p-2 txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
               />
             </div>
