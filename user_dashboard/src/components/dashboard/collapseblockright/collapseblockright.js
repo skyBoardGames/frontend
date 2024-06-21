@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import logowithname from '../../../assets/images/logowithname.png';
-import { Offcanvas } from 'react-bootstrap';
+import { Offcanvas, Spinner } from 'react-bootstrap';
 import './CollapseBlockright.css';
 import lobby_arrow_right from '../../../assets/images/lobby_arrow_right.svg'
 import JoinLobbyModal from '../../games/auxiliary/JoinLobbyModal';
@@ -8,13 +8,18 @@ import WithdrawModal from '../../payments/WithdrawModal';
 import arrowright from '../../../assets/images/arrowright.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CustomSvg from '../../svgs/CustomSvg';
+import { useUser } from '../../../utils/hooks';
+import { formatDateString } from '../../../utils';
 
 
 
 const Block = ({ 
   handleclose, goToDeposit, goToGames, goToJoinLobby, openWithdrawModal, pathname, joinLobbyModal, withdrawModal,
-  isOpen
+  isOpen, user, loading
 }) => {
+
+  const { walletBalance } = user
+
   return (
     <>
       <div className='collapseback py-3 d-lg-block d-md-block d-none' onClick={handleclose} disabled={!isOpen}>
@@ -22,7 +27,19 @@ const Block = ({
       </div>
         <div className='py-3 colorfuldiv'>
             <p className='total'>Total Amount</p>
-            <p className='nairasymbol'>&#8358;52,000.00</p>
+            <p className='nairasymbol'>
+              {
+                loading
+                ? 
+                  <Spinner size="sm" variant="light" />
+                :
+                typeof walletBalance != 'number'
+                ?
+                  <span>Not signed in</span>
+                :
+                  <span>&#8358;{(Math.round(walletBalance * 100) / 100).toFixed(2)}</span>
+              }
+            </p>
             <div className='d-flex justify-content-between flex-wrap'>
               <p
                 onClick={goToDeposit} 
@@ -67,13 +84,41 @@ function CollapseBlockRight({ setIsRightBlockOpen, isSmallScreen }) {
   const goToGames = () => navigateTo('/games')
   const goToJoinLobby = () => navigateTo('/games/join-lobby')
 
+  const { user, getUser, setUserDetails } = useUser();
+
   const [joinLobbyModal, setJoinLobbyModal] = useState({ visible: false, onHide: null, size: 'md' })
   const [withdrawModal, setWithdrawModal] = useState({ visible: false, onHide: null, size: 'md' })
   const [showOffCanvasBlock, setShowOffCanvasBlock] = useState(false)
-
+  const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(true);
   const [showOpenButton, setShowOpenButton] = useState(false);
 
+  useEffect(() => {
+    const get = async () => {
+      try {
+        setIsLoading(true)
+        const response = await getUser();
+        const result = {
+          ...response,
+          dob: formatDateString(response?.dob, "short"),
+          bgClass: "bg-FD8D84",
+          // profile: userProfile1,
+          country: "Nigeria",
+        };
+        // console.log(result);
+        // console.log(result?.avatar);
+        setUserDetails(result);
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false)
+      }
+    };
+
+    if (!user.username) {
+      get();
+    }
+  }, []);
 
   useEffect(() => {
     if(setIsRightBlockOpen){
@@ -122,6 +167,8 @@ function CollapseBlockRight({ setIsRightBlockOpen, isSmallScreen }) {
             joinLobbyModal={joinLobbyModal}
             withdrawModal={withdrawModal}
             isOpen={isOpen}
+            loading={isLoading}
+            user={user}
           />
         </div>
       )}
@@ -148,6 +195,8 @@ function CollapseBlockRight({ setIsRightBlockOpen, isSmallScreen }) {
                         joinLobbyModal={joinLobbyModal}
                         withdrawModal={withdrawModal}
                         isOpen={isOpen}
+                        user={user}
+                        loading={isLoading}
                       />                        
                     </div>                                    
                 </div>                

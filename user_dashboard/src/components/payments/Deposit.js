@@ -8,6 +8,7 @@ import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockrig
 import { PaystackConsumer, usePaystackPayment } from "react-paystack";
 import { postRequest } from "../apiRequests/requestApi";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
+import { generateRandomId } from "../globals/globals";
 
 export default function Deposit() {
   const navigate = useNavigate();
@@ -21,8 +22,8 @@ export default function Deposit() {
     errorMsg: null,
   });
 
-  const [payStackComponentProps, setPayStackComponentProps] = useState({
-    reference: new Date().getTime().toString(),
+  const payStackComponentProps = {
+    reference: generateRandomId(15),
     email: "olomufeh@gmail.com",
     amount: value * 100,
     publicKey: "pk_test_77b7c00c5d7243d94da713ca2c6815eae23f99a5",
@@ -33,7 +34,7 @@ export default function Deposit() {
         data: {
           amount: value * 100,
         },
-      });
+      });    
     },
     onClose: () =>
       setApiReqs({
@@ -41,7 +42,7 @@ export default function Deposit() {
         data: null,
         errorMsg: "Deposit cancelled",
       }),
-  });
+  }
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -60,9 +61,6 @@ export default function Deposit() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
-  useEffect(() => {
-    setPayStackComponentProps((prev) => ({ ...prev, amount: value * 100 }));
-  }, [value]);
 
   useEffect(() => {
     if (apiReqs.data && apiReqs.isLoading) {
