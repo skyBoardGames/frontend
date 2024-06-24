@@ -11,7 +11,7 @@ import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 import { generateRandomId } from "../globals/globals";
 
 export default function Deposit() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
@@ -34,7 +34,7 @@ export default function Deposit() {
         data: {
           amount: value * 100,
         },
-      });    
+      });
     },
     onClose: () =>
       setApiReqs({
@@ -42,7 +42,7 @@ export default function Deposit() {
         data: null,
         errorMsg: "Deposit cancelled",
       }),
-  }
+  };
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -61,27 +61,28 @@ export default function Deposit() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
+  // useEffect(() => {
+  //   if (apiReqs.data && apiReqs.isLoading) {
+  //     const { data } = apiReqs;
+  //     onDeposit({ requestBody: data });
+  //   }
+  // }, [apiReqs]);
 
-  useEffect(() => {
-    if (apiReqs.data && apiReqs.isLoading) {
-      const { data } = apiReqs;
-      onDeposit({ requestBody: data });
-    }
-  }, [apiReqs]);
-
-  const onDeposit = async ({ requestBody }) => {
+  const onDeposit = async (amount) => {
     try {
-      console.log(requestBody);
+      console.log(amount);
       const response = await postRequest({
         url: "/payment/deposit",
-        data: requestBody,
+        data: { amount: amount * 100 },
       });
 
       const { message, data, success } = response;
 
       alert(message);
 
-      return setApiReqs({ isLoading: false, data: null, errorMsg: null });
+      window.open(data, "_blank", "noopener,noreferrer");
+
+      // return setApiReqs({ isLoading: false, data: null, errorMsg: null });
     } catch (error) {
       console.error(error);
 
@@ -139,19 +140,19 @@ export default function Deposit() {
             />
           )}
 
-          <PaystackConsumer {...payStackComponentProps}>
-            {({ initializePayment }) => (
-              // initializePayment(onSuccess, onClose)
-              <AmountPicker
-                loading={apiReqs.isLoading}
-                btnTxt="Next"
-                subTxt="Deposit money from 1k Upwards"
-                btnFunc={() => initializePayment()}
-                value={value}
-                setValue={setValue}
-              />
-            )}
-          </PaystackConsumer>
+          {/* <PaystackConsumer {...payStackComponentProps}> */}
+          {/* {({ initializePayment }) => ( */}
+          {/* // initializePayment(onSuccess, onClose) */}
+          <AmountPicker
+            loading={apiReqs.isLoading}
+            btnTxt="Next"
+            subTxt="Deposit money from 1k Upwards"
+            btnFunc={() => onDeposit(value)}
+            value={value}
+            setValue={setValue}
+          />
+          {/* )} */}
+          {/* </PaystackConsumer> */}
         </div>
 
         <div
