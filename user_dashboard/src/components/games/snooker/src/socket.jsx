@@ -1,6 +1,6 @@
 import { io } from "socket.io-client"
 
-const dev = `http://localhost:3000/snooker`;
+const dev = `http://localhost:5657/snooker`;
 const prod = `https://new-server-ozkr.onrender.com/snooker`;
 
 const URL = process.env.NODE_ENV === "development" ? dev : prod;
