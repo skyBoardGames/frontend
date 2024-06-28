@@ -9,9 +9,13 @@ import "./index.css";
 import { UserContextProvider } from "./utils/contexts/UserContext";
 import { GamesContextProvider } from "./utils/contexts/GameContext";
 
+// NOTE FROM JOSHUA
+
+// I REMOVED STRICT MODE CAUSE ITS AFFECTING THE SOCKET CONNECTION
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+//   <React.StrictMode>
     <HashRouter>
       <UserContextProvider>
         <GamesContextProvider>
@@ -19,7 +23,7 @@ root.render(
         </GamesContextProvider>
       </UserContextProvider>
     </HashRouter>
-  </React.StrictMode>
+//   </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

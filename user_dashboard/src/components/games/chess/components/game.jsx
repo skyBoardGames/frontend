@@ -131,6 +131,7 @@ export default class Game extends React.Component {
       })
 
       socket.once('start_game', () => {
+        console.log("game is starting");
         this.setState({ canStart: true });
       })
     }
@@ -139,6 +140,8 @@ export default class Game extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log("chess is unmounting");
+
     socket.off('connect', this.onConnect);
 
     socket.disconnect();
