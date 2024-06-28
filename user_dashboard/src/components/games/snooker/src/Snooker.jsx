@@ -3313,7 +3313,7 @@ Game_Singleton.prototype.start = function (divName, canvasName, x, y) {
     console.log("appended stillLoading");
     this.loadAssets();
     this.assetLoadingLoop();
-    window.notStarted = false
+    // window.notStarted = false
 };
 
 Game_Singleton.prototype.initialize = function () {
@@ -3366,6 +3366,7 @@ Game_Singleton.prototype.assetLoadingLoop = function () {
         document.body.removeChild(stillLoading);
         console.log("remove stillLoading");
         Game.initialize();
+        window.notStarted = false
         // requestAnimationFrame(this.mainMenu.load.bind(this.mainMenu));
     }
 };

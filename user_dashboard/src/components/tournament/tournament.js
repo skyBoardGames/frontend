@@ -119,7 +119,7 @@ function Tournaments() {
                         onClick={handleopen}
                         className='w-100 bg-FBBC04 d-flex align-items-center justify-content-center p-2 mb-3'
                     >
-                        <p className='p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1'>Play window.window.Game
+                        <p className='p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1'>Play Game
 </p>
                         <div className='m-0 p-0 mx-2 d-flex align-items-center'>
                             <CustomSvg name={'arrow-right'} color="#000" />
