@@ -1,0 +1,147 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+}
+
+#game-section {
+    touch-action: none;
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    margin: auto;
+}
+
+#scoreBoard {
+    font-size: 10px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+#scoreBoard .score {
+    border: 1px solid black;
+    padding: 0 24px;
+}
+
+#gameBoard {
+    display: grid;
+    justify-content: center;
+    grid-template-rows: repeat(15, 1fr);
+    grid-template-columns: repeat(15, 1fr);
+    gap: 1px;
+    margin-top: 16px;
+}
+
+.boardCell {
+    background-color: #CDC8AB;
+    font-size: 4px;
+    text-align: center;
+    aspect-ratio: 1 / 1;
+}
+
+.boardCell span {
+    position: relative;
+    -webkit-user-select: none;
+    user-select: none;
+    top: 2px;
+}
+
+#wordBoard {
+    display: grid;
+    justify-content: space-evenly;
+    grid-template-rows: repeat(1, 20px);
+    grid-template-columns: repeat(7, 20px);
+    margin-top: 16px;
+}
+
+.game-tile {
+    width: 20px;
+    height: 20px;
+    padding-top: 1px;
+    padding-left: 2px;
+    box-sizing: border-box;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#wordBoard div {
+    width: 20px;
+    height: 20px;
+    padding-top: 1px;
+    padding-left: 2px;
+    box-sizing: border-box;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#wordBoard div span {
+    font-size: 8px;
+}
+
+.game-tile span {
+    font-size: 8px;
+}
+
+#lowerUI button {
+    font-size: 8px;
+}
+
+.turn-div {
+    margin-top: 2rem
+}
+
+.turn-div h5 {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+    padding: 1rem 1rem;
+    box-shadow: 0 0 10px 0px #0000004d;
+}
+
+
+@media screen and (min-width: 530px) {
+    #game-section {
+        width: 40%;
+    }
+
+    #lowerUI button {
+        font-size: 10px;
+    }
+
+    .boardCell span {
+        font-size: 8px;
+    }
+
+    #wordBoard div {
+        font-size: 24px;
+        padding-top: 2px;
+        padding-left: 6px;
+    }
+
+    .game-tile {
+        font-size: 24px;
+        padding-top: 2px;
+        padding-left: 6px;
+    }
+
+    #wordBoard div span {
+        font-size: 16px;
+    }
+
+    .game-tile span {
+        font-size: 16px;
+    }
+}

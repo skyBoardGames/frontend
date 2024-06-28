@@ -20,6 +20,15 @@ import AllTournaments from "./components/tournament/AllTournaments";
 import WatingRoom from "./components/tournament/waitingRoom/watingRoom";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import { useEffect } from "react";
+
+import socket from './socket';
+
+// game imports
+import Game from "./components/games/chess/components/game"
+import { allUsers } from "./components/games/auxiliary/gamesAux";
+import userProfile1 from './assets/images/userProfile1.png'
+
 export default function App() {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
@@ -30,6 +39,60 @@ export default function App() {
     sessionStorage.removeItem("token");
     navigateTo("/login");
   };
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
+        navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+    })
+
+    socket.on('get_active', (arrayOfUserObjects) => {
+        console.log("getting active");
+        
+        allUsers.splice(0);
+  
+        console.log(arrayOfUserObjects);
+  
+        arrayOfUserObjects.forEach(userObject => {
+          // console.log("user active", userObject.socketID);
+  
+  
+          allUsers.unshift({
+            user_id: userObject.userID,
+            name: 'random',
+            wins: 210,
+            profile: userProfile1,
+            bgClass: 'bg-FD8D84'
+          })
+        })
+  
+      })
+  
+    //   socket.on('created', (gameID, userID, roomID) => {
+    //     console.log("lobby created");
+    //     lobby.push({
+    //       gameID: gameID,
+    //       roomID: roomID
+    //     })
+  
+    //     console.log(lobby);
+    //   })
+  
+    //   socket.on('remove', (gameID, roomID) => {
+    //     console.log("lobby removed", gameID, roomID);
+  
+    //     let indexToRemove = 0;
+  
+    //     lobby.forEach((lobbyObj, index) => {
+    //       if(lobbyObj.roomID == roomID) {
+    //         indexToRemove = index;
+    //       }
+    //     })
+  
+    //     lobby.splice(indexToRemove, 1);
+    //   })
+  }, [])
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -110,7 +173,7 @@ export default function App() {
         />
 
         <Route
-          path="/tournaments/play/:user_id/:gameId/:stakeValue"
+          path="/tournaments/play/:user_id/:gameId/:stakeValue/:roomID"
           element={<Tournaments navigateTo={navigateTo} />}
         />
 
@@ -125,6 +188,17 @@ export default function App() {
           path="/deposit"
           element={<Deposit app_navigateTo={navigateTo} />}
         />
+
+        {/* GAMES */}
+
+        <Route
+          path="/games/Chess/"
+          element={<Game />}
+        />
+
+
+
+
       </Routes>
     </ScrollTo>
   );
