@@ -15,7 +15,7 @@ export default class Player {
         return this.totalScore
     }
 
-    setTurnScore(tornScore) {
+    setTurnScore(turnScore) {
         this.turnScore = turnScore;
     }
 }

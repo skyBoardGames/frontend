@@ -266,7 +266,7 @@ export default function SGame() {
                             const alpha = playedTile.getLetter().alphabet;
                             const score = playedTile.getLetter().score;
 
-                            playerLetters
+                            // playerLetters
         
                             playerLetters.push(playedTile.getLetter())
         

@@ -54,7 +54,8 @@ export default function GameLostModal({ modalProps, stakeAmount }){
                                 </div>
                             </div>
                             <div onClick={quitGame} className="d-flex align-items-center p-3 bg-000 clickable mx-1">
-                                <p className="m-0 p-0 txt-FFF font-family-poppins regular-txt font-weight-500">Quit Game</p>
+                                <p className="m-0 p-0 txt-FFF font-family-poppins regular-txt font-weight-500">Quit window.window.Game
+</p>
                                 <div className="mx-1">
                                     <CustomSvg name="arrow-right" color="#FFF" />
                                 </div>
