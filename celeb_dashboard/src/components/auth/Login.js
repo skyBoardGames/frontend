@@ -8,8 +8,9 @@ import { Carousel } from "react-bootstrap";
 import SuccessModal from "./auxiliary/SuccessModal";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/hooks";
-import { loginFunc, postRequest } from "../apiRequests";
+import { loginFunc } from "../apiRequests";
 import { formatDateString } from "../../utils";
+
 
 const carouselItems = [
   {
@@ -20,7 +21,7 @@ const carouselItems = [
 ];
 
 export default function Login({}) {
-  const { user, setUserDetails } = useUser();
+  const { setUserDetails } = useUser();
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
 
@@ -49,10 +50,9 @@ export default function Login({}) {
       const response = await loginFunc(details);
       console.log(response);
 
-      user.email = email;
-
-      user.tokens = response?.data?.tokens;
-
+      if (!response.data.user.isCelebrity) {
+        throw new Error("Is not a Celebrity");
+      }
       setUserDetails({
         ...response?.data?.user,
         password: null,
@@ -63,7 +63,11 @@ export default function Login({}) {
 
       openSuccessModal();
     } catch (error) {
-      console.error(error?.message);
+      const notCelebreityMessage = {
+        message: "Invalid Credentials User is not a celebrity",
+        success: false,
+      };
+      console.error(error?.message || notCelebreityMessage);
     }
   };
 

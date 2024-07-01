@@ -22,7 +22,8 @@ export default function Register({ navigateTo }) {
 
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(null);
-  const [referralCode, setRefferalCode] = useState(null);
+  const [socialMediaPlatform, setSocialMediaPlatform] = useState("");
+  const [socialMediaHandle, setSocialMediaHandle] = useState("");
   const { setUser, user } = useUser();
 
   const submit = async () => {
@@ -31,7 +32,8 @@ export default function Register({ navigateTo }) {
         email,
         password,
         phoneNumber: phoneNumber ?? "09168963528",
-        referralCode,
+        socialMediaPlatform,
+        socialMediaHandle,
       };
 
       console.log(details);
@@ -39,7 +41,7 @@ export default function Register({ navigateTo }) {
 
       console.log(response);
 
-      localStorage.setItem("token", response);
+      localStorage.setItem("token", response?.data);
       setUser(...user, { email: email });
       openSuccessModal();
 
@@ -88,7 +90,7 @@ export default function Register({ navigateTo }) {
         className="d-flex align-items-center justify-content-center flex-column py-5"
       >
         <div className="col-lg-6 d-flex align-items-center justify-content-center mb-5">
-          <img src={img} className="col-lg-12" alt=""/>
+          <img src={img} className="col-lg-12" alt="" />
         </div>
 
         <p className="small-txt txt-F7FAFF font-weight-400 line-height-30 m-0 p-0 font-family-poppins text-center">
@@ -130,6 +132,7 @@ export default function Register({ navigateTo }) {
                 style={{ width: "85%" }}
                 placeholder="Select your social media platform"
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                onChange={(e) => setSocialMediaPlatform(e.target.value)}
               />
               <div
                 style={{ width: "3%" }}
@@ -148,6 +151,7 @@ export default function Register({ navigateTo }) {
                 style={{ width: "92%" }}
                 placeholder="Enter your social media handle"
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                onChange={(e) => setSocialMediaHandle(e.target.value)}
               />
             </div>
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">

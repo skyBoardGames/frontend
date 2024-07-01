@@ -1,4 +1,4 @@
-import helpers from "../helpers/helpers";
+  import helpers from "../helpers/helpers";
 import axios from "axios";
 
 const { apiUrl } = helpers;
@@ -86,7 +86,7 @@ export const loginFunc = async (loginDetails) => {
 export const register = async (registerDetails) => {
   try {
     const result = await axios.post(
-      `${apiUrl}/auth/register/user`,
+      `${apiUrl}/auth/register/celebrity`,
       registerDetails
     );
     const data = result.data;
@@ -182,7 +182,7 @@ export const deleteRequest = async ({ url, data }) => {
 
     const response = result.data;
 
-  return response;
+    return response;
   } catch (error) {
     console.error(error);
     throw error?.response?.data;
