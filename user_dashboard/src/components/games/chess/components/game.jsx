@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import '../index.css';
 import Board from './board.jsx';
@@ -6,19 +6,21 @@ import King from '../pieces/king'
 import FallenSoldierBlock from './fallen-soldier-block.jsx';
 import initialiseChessBoard from '../helpers/board-initialiser.jsx';
 import socket from '../socket/socket';
+import { UserContext } from '../../../../utils/contexts/UserContext';
+import Overhead from './Overhead';
 // import { useParams } from 'react-router-dom';
 
-function generateRandomCode(length) {
-  const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let generatedCode = "";
+// function generateRandomCode(length) {
+//   const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//   let generatedCode = "";
 
-  for (let i = 0; i < length; i++) {
-    let randomIndex = Math.floor(Math.random() * characters.length);
-    generatedCode += characters[randomIndex];
-  }
+//   for (let i = 0; i < length; i++) {
+//     let randomIndex = Math.floor(Math.random() * characters.length);
+//     generatedCode += characters[randomIndex];
+//   }
 
-  return generatedCode;
-};
+//   return generatedCode;
+// };
 
 class WinModal extends React.Component {
   constructor() {
@@ -49,7 +51,6 @@ class Waiting extends React.Component {
     </>
   }
 }
-// TODO: Fix Queen jumping over player
 
 export default class Game extends React.Component {
   constructor() {
@@ -64,6 +65,15 @@ export default class Game extends React.Component {
     const roomID = Array.from(searchParams.entries())[0][1]
 
     console.log(url, Array.from(searchParams.entries()));
+
+    const userData = JSON.parse(sessionStorage.getItem('token'));
+
+    const userContextData = userData;
+
+    console.log(userContextData);
+
+    const avatar = userContextData.user.avatar;
+    const username = userContextData.user.username;
 
     // const roomID = url.pathname.slice(1);
     // const roomID = params.gameID;
@@ -81,7 +91,12 @@ export default class Game extends React.Component {
       you: 1,
       opponentNewPos: 0,
       oppTurnPlayed: false,
-      canStart: false
+      canStart: false,
+      avatar: avatar,
+      username: username,
+      playerOneInfo: {},
+      playerTwoInfo: {},
+      answer: {}
     }
   }
 
@@ -130,9 +145,9 @@ export default class Game extends React.Component {
         this.setState({ you: 2 });
       })
 
-      socket.once('start_game', () => {
+      socket.once('start_game', (playerOneInfo, playerTwoInfo) => {
         console.log("game is starting");
-        this.setState({ canStart: true });
+        this.setState({ canStart: true , playerOneInfo: playerOneInfo, playerTwoInfo: playerTwoInfo});
       })
     }
 
@@ -151,6 +166,7 @@ export default class Game extends React.Component {
 
   // TODO: ADD POSSIBLE MOVES FOR PIECE
   handleClick(i) {
+    if(this.state.winner) return;
     // console.clear();
     const squares = [...this.state.squares];
 
@@ -253,7 +269,7 @@ export default class Game extends React.Component {
         socket.emit("game_over", this.state.roomID, answer.winner)
       }
 
-      this.setState({ winner: true });
+      this.setState({ winner: true , answer: answer});
     }
   }
 
@@ -361,7 +377,7 @@ export default class Game extends React.Component {
 
   render() {
 
-    return this.state.winner ? (<WinModal />) : (
+    return /* this.state.winner ? (<WinModal winnerColor={this.state.answer.winner == 1 ? "white" : "black"} />) : */ (
       !this.state.canStart ? <Waiting /> :
       <div>
         <div className="game">
@@ -383,13 +399,21 @@ export default class Game extends React.Component {
               </div>
             </div>
           </div>
+          <div>
+            <Overhead 
+                playerOneInfo={this.state.playerOneInfo} 
+                playerTwoInfo={this.state.playerTwoInfo} 
+                turn={this.state.turn}
+                winner={{winner: this.state.winner, answer: this.state.answer}}
+            />
+          </div>
 
-          <div className="game-info">
+          {/* <div className="game-info">
             <h3>Turn</h3>
             <div id="player-turn-box" style={{ backgroundColor: this.state.turn }}>
 
             </div>
-            <div className="game-status">{this.state.status}</div>
+            <div className="game-status">{this.state.status}</div> */}
 
             {/* <div className="fallen-soldier-block">
 
@@ -400,7 +424,7 @@ export default class Game extends React.Component {
               }
             </div> */}
 
-          </div>
+          {/* </div> */}
         </div>
 
         {/* <div className="icons-attribution">

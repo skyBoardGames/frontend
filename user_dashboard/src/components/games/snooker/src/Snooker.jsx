@@ -3349,24 +3349,29 @@ Game_Singleton.prototype.initMenus = function(inGame){
 Game_Singleton.prototype.loadSprite = function (imageName) {
     console.log("Loading sprite: " + imageName);
     let image = new Image();
-    image.src = imageName;
     image.onload = function () {
         console.log("image fully loaded", imageName);
         Game.spritesStillLoading -= 1;
     };
+
+    image.src = imageName;
+
     this.spritesStillLoading += 1;
     return image;
 };
 
 Game_Singleton.prototype.assetLoadingLoop = function () {
+    // console.log(Game.spritesStillLoading);
     if (Game.spritesStillLoading > 0) {
+        // console.log("images still loading");
         requestAnimationFrame(Game.assetLoadingLoop);
     }
     else {
+        console.log("images done loading");
         document.body.removeChild(stillLoading);
         console.log("remove stillLoading");
         Game.initialize();
-        window.notStarted = false
+        // window.notStarted = false
         // requestAnimationFrame(this.mainMenu.load.bind(this.mainMenu));
     }
 };
