@@ -22,7 +22,7 @@ export default function TransacHistory() {
 
         const newArray = data.map(({ amount, createdAt, type, ref }) => ({
           ref,
-          amount,
+          amount: amount / 100,
           date: formatDateDash(createdAt),
           type,
         }));

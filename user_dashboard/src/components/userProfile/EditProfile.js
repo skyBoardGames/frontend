@@ -7,9 +7,7 @@ import { FiEye } from "react-icons/fi";
 import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/hooks";
-import { getUserDetails } from "../apiRequests/requestApi";
-import { formatDateString } from "../../utils";
-
+import { patchRequest } from "../apiRequests/requestApi";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -23,36 +21,52 @@ export default function EditProfile() {
   const togglePasswordVisibility = () => setPasswordVisible((prev) => !prev);
   const toggleEditMode = () => setIsEditting((prev) => !prev);
 
-  const { getUser, user, setUserDetails, loading } = useUser();
-
-  useEffect(() => {
-    const get = async () => {
-      try {
-        const response = await getUser();
-        const result = {
-          ...response,
-          dob: formatDateString(response?.dob, "short"),
-          bgClass: "bg-FD8D84",
-          // profile: userProfile1,
-          country: "Nigeria",
-        };
-        // console.log(result);
-        // console.log(result?.avatar);
-        setUserDetails(result);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (!user.username) {
-      get();
-    }
-  }, []);
+  const { user, setUserDetails } = useUser();
 
   const { bgClass, username, avatar, country, email, bio, phoneNumber, dob } =
     user;
 
-  // console.log(user)
+  const [phonenum, setPhoneNumber] = useState(phoneNumber);
+  const [userName, setUserName] = useState(username);
+  const [biography, setBio] = useState(bio);
+  const [date, setDob] = useState(dob);
+
+  useEffect(() => {
+    if (userName == null) {
+      setUserName(username);
+      setPhoneNumber(phoneNumber);
+      setBio(bio);
+      setDob(dob);
+    }
+  }, [user]);
+
+  const update = async () => {
+    console.log("Update started ");
+
+    try {
+      const details = {
+        phoneNumber: phonenum,
+        username: userName,
+        bio: biography,
+        // dob: parseFormattedDateString(date),
+      };
+      const response = await patchRequest("/auth/profile", details);
+
+      console.log(response);
+      const userDetails = {
+        ...user,
+        phoneNumber: phonenum,
+        username: userName,
+        bio: biography,
+      };
+      alert(response?.message);
+      setUserDetails(userDetails);
+      console.log(user);
+      setIsEditting(!isEditting);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -64,7 +78,7 @@ export default function EditProfile() {
                 className={`${bgClass} user-profile-edit-profile-img-container rounded-circle d-flex flex-column align-items-center justify-content-center p-1`}
               >
                 <img
-                  src={avatar}
+                  src={avatar ?? userProfile1}
                   alt="Avatar"
                   width={100}
                   style={{ borderRadius: 30 }}
@@ -81,7 +95,7 @@ export default function EditProfile() {
             </div>
             <div className="mx-2">
               <h5 className="m-0 mb-1 p-0 txt-FFF text-lg-auto text-md-auto text-center font-family-poppins font-weight-600 regular-txt">
-                {username || 'not set'}
+                {username || "not set"}
               </h5>
               <p className="m-0 p-0 txt-FFF opacity-_7 text-lg-auto text-md-auto text-center small-txt font-family-poppins font-weight-300">
                 {country ?? "Country not assigned yet"}
@@ -110,9 +124,11 @@ export default function EditProfile() {
               <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
                 <input
                   style={{ width: "100%" }}
-                  value={username}
-                  contentEditable={isEditting}
+                  defaultValue={userName}
+                  // disabled={isEditting}
+                  disabled={!isEditting}
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                  onChange={(e) => setUserName(e.target.value)}
                 />
               </div>
             </div>
@@ -123,9 +139,10 @@ export default function EditProfile() {
               <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
                 <input
                   style={{ width: "100%" }}
-                  value={phoneNumber}
-                  contentEditable={isEditting}
+                  defaultValue={phonenum}
+                  disabled={!isEditting}
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -136,8 +153,10 @@ export default function EditProfile() {
               <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
                 <input
                   style={{ width: "100%" }}
-                  value={dob ? new Date(dob).toDateString() : ''}
+                  defaultValue={dob ? date : ""}
+                  disabled={!isEditting}
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                  onChange={(e) => setDob(e.target.value)}
                 />
               </div>
             </div>
@@ -149,7 +168,8 @@ export default function EditProfile() {
                 <input
                   type={passwordVisible ? "text" : "password"}
                   style={{ width: "91%" }}
-                  value="**************"
+                  disabled={!isEditting}
+                  defaultValue="**************"
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
                 />
                 <div
@@ -175,7 +195,8 @@ export default function EditProfile() {
                 <input
                   type="email"
                   style={{ width: "100%" }}
-                  value={email}
+                  defaultValue={email}
+                  disabled={!isEditting}
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
                 />
               </div>
@@ -188,8 +209,12 @@ export default function EditProfile() {
               <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
                 <textarea
                   style={{ width: "100%", height: "37vh" }}
-                  value={username ? bio || 'Not set' : "Not Signed in"}
+                  defaultValue={
+                    username ? biography || "Not set" : "Not Signed in"
+                  }
                   className="p-lg-4 p-md-4 p-2 txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                  disabled={!isEditting}
+                  onChange={(e) => setBio(e.target.value)}
                 />
               </div>
             </div>
@@ -197,7 +222,10 @@ export default function EditProfile() {
         </div>
 
         {isEditting && (
-          <button className="w-100 bg-BD3193 d-flex align-items-center justify-content-center p-2 mb-5">
+          <button
+            className="w-100 bg-BD3193 d-flex align-items-center justify-content-center p-2 mb-5"
+            onClick={update}
+          >
             <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">
               Save
             </p>

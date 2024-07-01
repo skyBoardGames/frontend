@@ -3,30 +3,35 @@ import axios from "axios";
 
 const { apiUrl } = helpers;
 
-const refreshToken = async () => {
+export const refreshToken = async () => {
   const token = sessionStorage.getItem("token");
   const tokens = JSON.parse(token);
 
-  const refreshToken = tokens ? tokens.tokens.refreshToken : null
-      
-  console.log("Token refreshed", refreshToken)
+  const refreshToken = tokens ? tokens.refreshToken : null;
+
+  console.log("Token refreshed", refreshToken);
 
   if (!refreshToken) {
     throw new Error("No refresh token available");
   }
 
   try {
-    const result = await axios.post(`${apiUrl}/auth/refresh-tokens`, {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    });
-    const { data } = result.data;
-    sessionStorage.setItem("token", JSON.stringify(data));
-    return data?.accessToken;
-    
+    const result = await axios.post(
+      `${apiUrl}/auth/refresh-tokens`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      }
+    );
+    const { tokens } = result.data;
+
+    console.log(tokens);
+    sessionStorage.setItem("token", JSON.stringify(tokens));
+    return tokens?.accessToken;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     sessionStorage.removeItem("token");
     // throw new Error("Failed to refresh token");
   }
@@ -38,16 +43,16 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-
     const token = sessionStorage.getItem("token");
     const tokens = JSON.parse(token);
 
-    const accessToken = tokens ? tokens.tokens.accessToken : null
+    const accessToken = tokens ? tokens.accessToken : null;
 
-    console.log('Request interceptor with Access Token', accessToken)
+    console.log("Request interceptor with Access Token", accessToken);
 
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
+      console.log(`Bearer ${accessToken}`);
     }
     return config;
   },
@@ -59,7 +64,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.log("response error interceptor")
+    console.log("response error interceptor");
     console.log(error);
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -253,7 +258,7 @@ export const postRequest = async ({ url, data }) => {
 
 export const getRequest = async (url) => {
   try {
-    console.log("request initiated")
+    console.log("request initiated");
 
     const result = await axiosInstance.get(url);
 
@@ -262,6 +267,18 @@ export const getRequest = async (url) => {
     return response;
   } catch (error) {
     console.error(error);
+    throw error.response.data;
+  }
+};
+
+export const patchRequest = async (url, detail) => {
+  try {
+    const result = await axiosInstance.patch(url, detail);
+
+    const response = result.data;
+
+    return response;
+  } catch (error) {
     throw error.response.data;
   }
 };
