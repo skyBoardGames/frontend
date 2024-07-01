@@ -22,8 +22,8 @@ import { UserContext } from "../../utils/contexts/UserContext";
 export default function SelectedGame() {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
-  const goToTournaments = ({ user_id, stakeValue }) =>
-    navigateTo(`/tournaments/play/${user_id}/${gameId}/${stakeValue}`);
+  const goToTournaments = ({ user_id, stakeValue, roomID }) =>
+    navigateTo(`/tournaments/play/${user_id}/${gameId}/${stakeValue}/${roomID}`);
   const goToAllGames = () => navigateTo('/games')
 
   const gameContextData = useContext(GamesContext)
@@ -38,6 +38,7 @@ export default function SelectedGame() {
   const showActiveUsersNodeRef = useRef(null);
 
   const [selectedGame, setSelectedGame] = useState()
+  const [roomId, setRoomId] = useState()
   const [apiReqs, setApiReqs] = useState({ isLoading: false, errorMsg: null })
   const [showGames, setShowGames] = useState(true);
   const [showActiveUsers, setShowActiveUsers] = useState(false);
@@ -118,7 +119,9 @@ export default function SelectedGame() {
 
       console.log(data);
 
-      openActiveUsers();
+      setRoomId(data)
+
+      openActiveUsers(details.wagerAmount);
 
       
 
@@ -158,8 +161,13 @@ export default function SelectedGame() {
   const hideJoinLobbyModal = () =>
     setJoinLobbyModal({ visible: false, onHide: null, size: "md" });
 
-  const onSelectUser = (user) =>
-    goToTournaments({ user_id: user.user_id, stakeValue });
+  const onSelectUser = (user) => {
+    if(roomId && user.user_id && stakeValue){
+      return goToTournaments({ user_id: user.user_id, stakeValue, roomID: roomId });
+    }
+
+    setApiReqs({ isLoading: false, data: null, errorMsg: 'Something went wrong! Try again later' })
+  }
 
   if (selectedGame) {
 

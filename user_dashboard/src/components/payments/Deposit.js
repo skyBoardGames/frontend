@@ -18,31 +18,8 @@ export default function Deposit() {
   const [value, setValue] = useState(2000);
   const [apiReqs, setApiReqs] = useState({
     isLoading: false,
-    data: null,
     errorMsg: null,
   });
-
-  const payStackComponentProps = {
-    reference: generateRandomId(15),
-    email: "olomufeh@gmail.com",
-    amount: value * 100,
-    publicKey: "pk_test_77b7c00c5d7243d94da713ca2c6815eae23f99a5",
-    onSuccess: (reference) => {
-      setApiReqs({
-        isLoading: true,
-        errorMsg: null,
-        data: {
-          amount: value * 100,
-        },
-      });
-    },
-    onClose: () =>
-      setApiReqs({
-        isLoading: false,
-        data: null,
-        errorMsg: "Deposit cancelled",
-      }),
-  };
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -61,12 +38,12 @@ export default function Deposit() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
-  // useEffect(() => {
-  //   if (apiReqs.data && apiReqs.isLoading) {
-  //     const { data } = apiReqs;
-  //     onDeposit({ requestBody: data });
-  //   }
-  // }, [apiReqs]);
+
+  const initiateDeposit = (amount) => {
+    setApiReqs({ isLoading: true, errorMsg: null })
+
+    return onDeposit(amount)
+  }
 
   const onDeposit = async (amount) => {
     try {
@@ -82,13 +59,12 @@ export default function Deposit() {
 
       window.open(data, "_blank", "noopener,noreferrer");
 
-      // return setApiReqs({ isLoading: false, data: null, errorMsg: null });
+      return setApiReqs({ isLoading: false, errorMsg: null });
     } catch (error) {
       console.error(error);
 
       return setApiReqs({
         isLoading: false,
-        data: null,
         errorMsg: error.message || "Deposit error",
       });
     }
@@ -147,7 +123,7 @@ export default function Deposit() {
             loading={apiReqs.isLoading}
             btnTxt="Next"
             subTxt="Deposit money from 1k Upwards"
-            btnFunc={() => onDeposit(value)}
+            btnFunc={initiateDeposit}
             value={value}
             setValue={setValue}
           />

@@ -11,6 +11,33 @@ import socket from "../../socket";
 import { GamesContext } from "../../utils/contexts/GameContext";
 import { UserContext } from "../../utils/contexts/UserContext";
 
+const myLobbies = [
+  {
+    stakeValue: 5000,
+    gameId: 'chess',
+    roomId: "qufh_24J__-!",
+    user_id: "1"
+  },
+  {
+    stakeValue: 5000,
+    gameId: 'chess',
+    roomId: "qufh_24J__-!",
+    user_id: "1"
+  },
+  {
+    stakeValue: 5000,
+    gameId: 'chess',
+    roomId: "qufh_24J__-!",
+    user_id: "1"
+  },
+  {
+    stakeValue: 5000,
+    gameId: 'chess',
+    roomId: "qufh_24J__-!",
+    user_id: "1"
+  },
+]
+
 const EnterPin = () => {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
@@ -160,6 +187,58 @@ const EnterPin = () => {
   );
 };
 
+const MyLobbies = () => {
+  //please note the user id and the myLobbies array are dummy and not valid on the database. They should be replaced with valid data from the database. The user_id specified is that of the opponent!
+
+  const navigate = useNavigate();
+  const navigateTo = (path) => navigate(path);
+  const goToTournaments = ({ user_id, stakeValue, roomID, gameId }) =>
+    navigateTo(`/tournaments/play/${user_id}/${gameId}/${stakeValue}/${roomID}`);
+
+  const displayMyLobbies = myLobbies.map((lobby, i) => {
+    const { roomId, user_id, stakeValue, gameId } = lobby
+
+    const openLobby = () => goToTournaments({ user_id, stakeValue, gameId, roomID: roomId })
+
+    return (
+      <div
+        key={i}
+        className="bg-transparent join-lobby-inactive-route rounded-3 p-2"
+        onClick={openLobby}
+      >
+        <p className="p-0 px-2 m-0 opacity-_8 text-center letter-spacing-_22 line-height-30 font-weight-300 small-txt txt-FFF font-family-poppins">
+          { gameId }          
+        </p>
+      </div>
+    )
+  })
+
+  return (
+    <div>
+      <div>
+        {
+          myLobbies.length > 0
+          ?
+            <>
+              <div
+                className="d-flex align-items-center justify-content-between flex-wrap mb-4"
+              >
+                { displayMyLobbies }
+              </div>
+              <p className="p-0 px-2 m-0 opacity-_8 text-center letter-spacing-_22 line-height-30 font-weight-300 small-txt txt-FFF font-family-poppins">
+                Click to open lobby
+              </p>   
+            </>  
+          :
+            <p className="p-0 px-2 m-0 opacity-_8 text-center letter-spacing-_22 line-height-30 font-weight-300 small-txt txt-FFF font-family-poppins">
+              No Acive Lobby found
+            </p>          
+        }
+      </div>
+    </div>
+  )
+}
+
 const ScanQrCode = () => {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
@@ -216,6 +295,7 @@ export default function JoinLobby() {
 
   const routeToEnterPin = () => setActiveRoute("enterPin");
   const routeToQrCode = () => setActiveRoute("qrCode");
+  const routeToMyLobbies = () => setActiveRoute("myLobbies")
 
   return (
     <div style={{ minHeight: "100vh" }} className="dashboard">
@@ -254,11 +334,28 @@ export default function JoinLobby() {
             Join <span className="create-lobby-title-span">Lobby</span>
           </h1>
           <p className="m-0 p-0 mb-4 regular-txt font-weight-300 font-family-poppins txt-FFF opacity-_7">
-            We’ve sent the pin to your email address. Check your email and enter
-            the pin below
+            {
+              activeRoute == "myLobbies"
+              ?
+                "Lobbies you belong to that are still active"
+              :
+                "We’ve sent the pin to your email address. Check your email and enter the pin below"
+            }
           </p>
 
           <div className="d-lg-flex d-md-flex d-block col-lg-12 w-100 align-items-center justify-content-between mb-5">
+            <div
+              onClick={routeToMyLobbies}
+              className={`${
+                activeRoute === "myLobbies"
+                  ? "bg-BD3193"
+                  : "bg-transparent join-lobby-inactive-route"
+              } clickable col-lg-5 col-md-5 col-12 p-3 mb-lg-0 mb-md-0 mb-4`}
+            >
+              <p className="m-0 p-0 text-center txt-FFF font-weight-500 regular-txt font-family-poppins">
+                My Lobbies
+              </p>
+            </div>            
             <div
               onClick={routeToEnterPin}
               className={`${
@@ -287,6 +384,7 @@ export default function JoinLobby() {
 
           {activeRoute === "enterPin" && <EnterPin />}
           {activeRoute === "qrCode" && <ScanQrCode />}
+          {activeRoute === "myLobbies" && <MyLobbies />}
         </div>
 
         <div
