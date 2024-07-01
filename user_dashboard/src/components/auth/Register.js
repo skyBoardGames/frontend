@@ -83,7 +83,8 @@ export default function Register({ navigateTo }) {
 
       console.log(response);
 
-      localStorage.setItem("token", response);
+      const tokens = {...response.data}
+      localStorage.setItem("token", tokens);
       setUserDetails({
         ...user, email 
       });

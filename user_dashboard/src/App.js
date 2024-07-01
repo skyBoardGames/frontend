@@ -22,23 +22,23 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import { useEffect } from "react";
 
-import socket from './socket';
+import socket from "./socket";
 
 // game imports
-import Game from "./components/games/chess/components/game"
+import Game from "./components/games/chess/components/game";
 import { allUsers } from "./components/games/auxiliary/gamesAux";
-import userProfile1 from './assets/images/userProfile1.png'
+import userProfile1 from "./assets/images/userProfile1.png";
 
 import { RecoilRoot } from "recoil";
 
-import Ludo from './components/games/ludo/src/Ludo';
+import Ludo from "./components/games/ludo/src/Ludo";
 
-import Whot from './components/games/whot/src/pages/PlayFriend/Whot';
-import { Provider } from 'react-redux';
-import store from './components/games/whot/src/redux/playFriendStore';
+import Whot from "./components/games/whot/src/pages/PlayFriend/Whot";
+import { Provider } from "react-redux";
+import store from "./components/games/whot/src/redux/playFriendStore";
 
-import Snooker from './components/games/snooker/src/Snooker';
-import Scrabble from './components/games/scrabble/Scrabble';
+import Snooker from "./components/games/snooker/src/Snooker";
+import Scrabble from "./components/games/scrabble/Scrabble";
 
 export default function App() {
   const navigate = useNavigate();
@@ -51,49 +51,49 @@ export default function App() {
     navigateTo("/login");
   };
 
-  useEffect(() => {
-    socket.connect();
+  // useEffect(() => {
+  //   socket.connect();
 
-    socket.on('connect', () => {
-        console.log("this user", socket.id);
-    })
-  
-    socket.on('disconnect', (_) => {
-        console.log("this user disconnect", _);
-        // console.log("this user disconnect", socket.id);
-    }) 
+  //   socket.on('connect', () => {
+  //       console.log("this user", socket.id);
+  //   })
 
-    socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
-        navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
-    })
+  //   socket.on('disconnect', (_) => {
+  //       console.log("this user disconnect", _);
+  //       // console.log("this user disconnect", socket.id);
+  //   })
 
-    socket.on('get_active', (arrayOfUserObjects) => {
-        console.log("getting active");
-        
-        allUsers.splice(0);
-  
-        console.log(arrayOfUserObjects);
-  
-        arrayOfUserObjects.forEach(userObject => {
-          // console.log("user active", userObject.socketID);
-  
-            allUsers.unshift({
-                user_id: userObject.userID,
-                name: 'random',
-                wins: 210,
-                profile: userProfile1,
-                bgClass: 'bg-FD8D84'
-            })
-        })
-  
-    })
-  
-    return () => {
-        console.log("unmounting disconnecting");
-        socket.disconnect();
-    }
+  //   socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
+  //       navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+  //   })
 
-  }, [])
+  //   socket.on('get_active', (arrayOfUserObjects) => {
+  //       console.log("getting active");
+
+  //       allUsers.splice(0);
+
+  //       console.log(arrayOfUserObjects);
+
+  //       arrayOfUserObjects.forEach(userObject => {
+  //         // console.log("user active", userObject.socketID);
+
+  //           allUsers.unshift({
+  //               user_id: userObject.userID,
+  //               name: 'random',
+  //               wins: 210,
+  //               profile: userProfile1,
+  //               bgClass: 'bg-FD8D84'
+  //           })
+  //       })
+
+  //   })
+
+  //   return () => {
+  //       console.log("unmounting disconnecting");
+  //       socket.disconnect();
+  //   }
+
+  // }, [])
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -142,43 +142,35 @@ export default function App() {
 
         {/* GAMES */}
 
-        <Route
-          path="/games/Chess/"
-          element={<Game />}
-        />
+        <Route path="/games/Chess/" element={<Game />} />
 
-        <Route 
-          path='/games/Ludo/'
+        <Route
+          path="/games/Ludo/"
           element={
             <RecoilRoot>
               <Ludo />
             </RecoilRoot>
           }
-          
         />
-        <Route 
-          path='/games/Whot/'
+        <Route
+          path="/games/Whot/"
           element={
             <Provider store={store}>
               <Whot />
             </Provider>
           }
-          
         />
-        <Route 
-          path='/games/Snooker/'
-          element={<Snooker />}
-          
-        />
-        <Route 
-          path='/games/Scrabble/'
-          element={<Scrabble />}
-          
-        />
+        <Route path="/games/Snooker/" element={<Snooker />} />
+        <Route path="/games/Scrabble/" element={<Scrabble />} />
 
         {/* MAIN APP ROUTES  */}
 
-        <Route path="/" element={<Dashboard navigateTo={navigateTo} />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute element={Dashboard} app_navigateTo={navigateTo} />
+          }
+        />
 
         <Route path="/games" element={<AllGames navigateTo={navigateTo} />} />
 
@@ -217,7 +209,11 @@ export default function App() {
         <Route
           path="/user-profile/*"
           element={
-            <ProtectedRoute element={UserProfile} app_navigateTo={navigateTo} userLogout={userLogout} />
+            <ProtectedRoute
+              element={UserProfile}
+              app_navigateTo={navigateTo}
+              userLogout={userLogout}
+            />
           }
         />
 
@@ -225,7 +221,6 @@ export default function App() {
           path="/deposit"
           element={<Deposit app_navigateTo={navigateTo} />}
         />
-
       </Routes>
     </ScrollTo>
   );

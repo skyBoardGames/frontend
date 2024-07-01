@@ -10,7 +10,7 @@ import SuccessModal from "./auxiliary/SuccessModal";
 import { useNavigate } from "react-router-dom";
 import { loginFunc, refresh } from "../apiRequests/requestApi";
 import { useUser } from "../../utils/hooks";
-import { setCookie } from "../../utils";
+import { formatDateString, setCookie } from "../../utils";
 import * as yup from 'yup'
 import { EMAIL_REGEX } from "../helpers/regex";
 import ScrollTo from "../scroll/ScrollTo";
@@ -69,8 +69,15 @@ export default function Login({}) {
 
       // user.tokens = response?.data;
 
-      sessionStorage.setItem("token", JSON.stringify(response.data));
-      setUserDetails(user)
+      sessionStorage.setItem("token", JSON.stringify(tokens));
+
+      const result = {
+              ...user,
+              dob: formatDateString(user?.dob, "short"),
+              bgClass: "bg-FD8D84",
+              country: "Nigeria",
+            };
+      setUserDetails(result)
 
       openSuccessModal();
 

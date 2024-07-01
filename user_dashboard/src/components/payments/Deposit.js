@@ -9,6 +9,7 @@ import { PaystackConsumer, usePaystackPayment } from "react-paystack";
 import { postRequest } from "../apiRequests/requestApi";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 import { generateRandomId } from "../globals/globals";
+import { useUser } from "../../utils/hooks";
 
 export default function Deposit() {
   // const navigate = useNavigate();
@@ -21,6 +22,8 @@ export default function Deposit() {
     errorMsg: null,
   });
 
+  const { user, setUserDetails } = useUser();
+  
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
       setBlocksOpen("both");
@@ -55,6 +58,13 @@ export default function Deposit() {
 
       const { message, data, success } = response;
 
+      const newUser = {
+        ...user,
+        walletBalance: user?.walletBalance + value * 100,
+      };
+      setUserDetails(newUser);
+
+      console.log(user);
       alert(message);
 
       window.open(data, "_blank", "noopener,noreferrer");
