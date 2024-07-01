@@ -11,8 +11,9 @@ import StepsGrid from "./components/stepsGrid";
 import HomeBox from "./components/homeBox";
 import GameSetup from "./components/gameSetup";
 import { colorMap, moves, playerOrder } from "./config/constants";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import socket from "./socket/socket";
+import Overhead from "./Overhead";
 
 
 function WinModal({ player }) {
@@ -120,6 +121,17 @@ function Ludo() {
   const setCurrentPlayer = useRecoilState(states.currentPlayerState)[1];
   const setCurrentPlayersList = useRecoilState(states.currentPlayersListState)[1];
   const setName = useRecoilState(states.playerName)[1];
+  const [start, setStart] = useState(false);
+  const [playerInfo, setPlayerInfo] = useState({
+    playerOneInfo: {
+        username: '',
+        avatar: ''
+    }, 
+    playerTwoInfo: {
+        username: '',
+        avatar: ''
+    }
+  });
 
   const displayModal = useMemo(() => won.win ? true : false, [won])
 
@@ -144,6 +156,15 @@ function Ludo() {
     // const roomID = url.pathname.slice(1);
 
     console.log(roomID);
+
+    const userData = JSON.parse(sessionStorage.getItem('token'));
+
+    const userContextData = userData;
+
+    console.log(userContextData);
+
+    const username = userContextData.user.username;
+    const avatar = userContextData.user.avatar;
 
 
 
@@ -178,7 +199,7 @@ function Ludo() {
     //   socket.emit("join_room", roomID);
     // }
 
-    socket.emit("create_room", roomID, setup);
+    socket.emit("create_room", roomID, setup, username, avatar);
 
     socket.on("already_created", (serverSetup) => {
       console.log("already created");
@@ -193,6 +214,15 @@ function Ludo() {
       // console.log(currentPlayersList, playersList);
     })
 
+    socket.on('start_game', (playerOneInfo, playerTwoInfo) => {
+        setStart(true);
+
+        setPlayerInfo({
+            playerOneInfo: playerOneInfo,
+            playerTwoInfo: playerTwoInfo
+        })
+    })
+
     return () => {
       socket.close();
     }
@@ -204,12 +234,22 @@ function Ludo() {
       {displayModal && <WinModal player={won.player} />}
       {setup.value == false ? <GameSetup /> : null}
       {
-        setup.value && <>
+        setup.value && start && <>
           <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
             <h2 style={{ display: "inline", fontSize: 24, color: "red" }}>L</h2>
             <h2 style={{ display: "inline", fontSize: 24, color: "#ffeb3b" }}>U</h2>
             <h2 style={{ display: "inline", fontSize: 24, color: "blue" }}>D</h2>
             <h2 style={{ display: "inline", fontSize: 24, color: "green" }}>O</h2>
+          </div>
+          <div>
+            <Overhead 
+                playerOneInfo={playerInfo.playerOneInfo}
+                playerTwoInfo={playerInfo.playerTwoInfo}
+                colors={setup.playersList}
+                // turn={setup.currentPlayer}
+                winner={{winner: false}}
+
+            />
           </div>
           <div style={{
             // height: "89vh",

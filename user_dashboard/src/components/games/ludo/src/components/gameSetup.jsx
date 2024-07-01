@@ -64,8 +64,17 @@ function PlayerButton({ count, setTransClass }) {
         currentPlayer: playersList[0],
         roomID: randomCode
     }
+
+    const userData = JSON.parse(sessionStorage.getItem('token'));
+
+    const userContextData = userData;
+
+    console.log(userContextData);
+
+    const username = userContextData.user.username;
+    const avatar = userContextData.user.avatar;
 		
-	socket.emit("create_room", randomCode, setup);
+	socket.emit("create_room", randomCode, setup, username, avatar);
   };
 
   return (
