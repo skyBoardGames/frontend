@@ -1,0 +1,24 @@
+.waiting {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    backdrop-filter: contrast(0.5);
+}
+
+.waiting > div {
+    margin-top: 5rem;
+    position: relative;
+    z-index: 10;
+    height: 180px;
+    width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    box-shadow: 0 0 20px -10px gray;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

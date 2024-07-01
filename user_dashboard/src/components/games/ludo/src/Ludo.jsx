@@ -14,6 +14,7 @@ import { colorMap, moves, playerOrder } from "./config/constants";
 import { useEffect, useMemo, useState } from "react";
 import socket from "./socket/socket";
 import Overhead from "./Overhead";
+import Waiting from "../../Waiting";
 
 
 function WinModal({ player }) {
@@ -232,6 +233,7 @@ function Ludo() {
   return (
     <div id="ludo-root">
       {displayModal && <WinModal player={won.player} />}
+      {!start && <Waiting />}
       {setup.value == false ? <GameSetup /> : null}
       {
         setup.value && start && <>
