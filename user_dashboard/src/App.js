@@ -20,6 +20,26 @@ import AllTournaments from "./components/tournament/AllTournaments";
 import WatingRoom from "./components/tournament/waitingRoom/watingRoom";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import { useEffect } from "react";
+
+import socket from './socket';
+
+// game imports
+import Game from "./components/games/chess/components/game"
+import { allUsers } from "./components/games/auxiliary/gamesAux";
+import userProfile1 from './assets/images/userProfile1.png'
+
+import { RecoilRoot } from "recoil";
+
+import Ludo from './components/games/ludo/src/Ludo';
+
+import Whot from './components/games/whot/src/pages/PlayFriend/Whot';
+import { Provider } from 'react-redux';
+import store from './components/games/whot/src/redux/playFriendStore';
+
+import Snooker from './components/games/snooker/src/Snooker';
+import Scrabble from './components/games/scrabble/Scrabble';
+
 export default function App() {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
@@ -30,6 +50,50 @@ export default function App() {
     sessionStorage.removeItem("token");
     navigateTo("/login");
   };
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on('connect', () => {
+        console.log("this user", socket.id);
+    })
+  
+    socket.on('disconnect', (_) => {
+        console.log("this user disconnect", _);
+        // console.log("this user disconnect", socket.id);
+    }) 
+
+    socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
+        navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+    })
+
+    socket.on('get_active', (arrayOfUserObjects) => {
+        console.log("getting active");
+        
+        allUsers.splice(0);
+  
+        console.log(arrayOfUserObjects);
+  
+        arrayOfUserObjects.forEach(userObject => {
+          // console.log("user active", userObject.socketID);
+  
+            allUsers.unshift({
+                user_id: userObject.userID,
+                name: 'random',
+                wins: 210,
+                profile: userProfile1,
+                bgClass: 'bg-FD8D84'
+            })
+        })
+  
+    })
+  
+    return () => {
+        console.log("unmounting disconnecting");
+        socket.disconnect();
+    }
+
+  }, [])
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -76,6 +140,42 @@ export default function App() {
 
         <Route path="/select-avatar" element={<SelectAvatar />} />
 
+        {/* GAMES */}
+
+        <Route
+          path="/games/Chess/"
+          element={<Game />}
+        />
+
+        <Route 
+          path='/games/Ludo/'
+          element={
+            <RecoilRoot>
+              <Ludo />
+            </RecoilRoot>
+          }
+          
+        />
+        <Route 
+          path='/games/Whot/'
+          element={
+            <Provider store={store}>
+              <Whot />
+            </Provider>
+          }
+          
+        />
+        <Route 
+          path='/games/Snooker/'
+          element={<Snooker />}
+          
+        />
+        <Route 
+          path='/games/Scrabble/'
+          element={<Scrabble />}
+          
+        />
+
         {/* MAIN APP ROUTES  */}
 
         <Route path="/" element={<Dashboard navigateTo={navigateTo} />} />
@@ -110,7 +210,7 @@ export default function App() {
         />
 
         <Route
-          path="/tournaments/play/:user_id/:gameId/:stakeValue"
+          path="/tournaments/play/:user_id/:gameId/:stakeValue/:roomID"
           element={<Tournaments navigateTo={navigateTo} />}
         />
 
@@ -125,6 +225,7 @@ export default function App() {
           path="/deposit"
           element={<Deposit app_navigateTo={navigateTo} />}
         />
+
       </Routes>
     </ScrollTo>
   );

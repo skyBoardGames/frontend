@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <section id="game-section">
+            <div id="game">
+                <div id="scoreBoard">
+                    <div class="info">
+                        <span>You:</span>
+                        <span class="score">0</span>
+                    </div>
+                    <div class="info">
+                        <span>Opponent:</span>
+                        <span class="score">0</span>
+                    </div>
+                    <div id="lowerUI">
+                        <button>finish turn</button>
+                    </div>
+                </div>
+                <div id="gameBoard">
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                    <div class="boardCell"></div>
+                </div>
+                <div id="wordBoard">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js" type="module"></script>
+</body>
+</html>

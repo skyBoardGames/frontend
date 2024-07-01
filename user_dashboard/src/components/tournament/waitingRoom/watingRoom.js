@@ -31,11 +31,13 @@ function WatingRoom() {
 
     const randomStakeAmount = Math.floor(Math.random() * 25) * 1000
 
-    const waitingTimeout = setTimeout(() => {
-      navigateTo(`/tournaments/play/${randomUserId}/${randomGameId}/${randomStakeAmount}`)
+    
 
-      clearTimeout(waitingTimeout)
-    }, 3000)
+    // const waitingTimeout = setTimeout(() => {
+    //   navigateTo(`/tournaments/play/${randomUserId}/${randomGameId}/${randomStakeAmount}`)
+
+    //   clearTimeout(waitingTimeout)
+    // }, 3000)
   }, [])
 
 

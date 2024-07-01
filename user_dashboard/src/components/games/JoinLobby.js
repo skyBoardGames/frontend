@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import DashboardHeader from "../dashboard/DashboardHeader/DashboardHeader";
 import CollapseBlock from "../dashboard/CollapseBlockLeft/collapseblockleft";
 import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockright";
@@ -7,11 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { postRequest } from "../apiRequests/requestApi";
 import { Spinner } from "react-bootstrap";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
+import socket from "../../socket";
+import { GamesContext } from "../../utils/contexts/GameContext";
+import { UserContext } from "../../utils/contexts/UserContext";
 
 const EnterPin = () => {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
   const goToWaitingRoom = () => navigateTo("/games/waiting-room");
+
+  const gameContextData = useContext(GamesContext)
+  const userContextData = useContext(UserContext)
   
 
   const [apiReqs, setApiReqs] = useState({ isLoading: false, data: null, errorMsg: null })
@@ -21,6 +27,8 @@ const EnterPin = () => {
   useEffect(() => {
     if(apiReqs.data && apiReqs.isLoading){
       const { data } = apiReqs
+
+      console.log(data);
 
       submit({ requestBody: data })
     }
@@ -42,11 +50,12 @@ const EnterPin = () => {
   };
 
   const initiateJoinLobby = () => {
-    const lobbycode = otp.join("");
+    console.log("YH");
+    const lobbyCode = otp.join("");
     setApiReqs({
       isLoading: true, 
       data: {
-        lobbycode
+        lobbyCode
       }, 
       errorMsg: null
     })
@@ -55,14 +64,23 @@ const EnterPin = () => {
   }
 
   const submit = async ({ requestBody }) => {
+    console.log(requestBody);
     try {
       const response = await postRequest({ url: "/join-lobby", data: requestBody });
 
       const { message, success } = response;
 
       if (success) {
-        goToWaitingRoom();
-        setApiReqs({ isLoading: false, data: null, errorMsg: null })
+        const userID = userContextData.user._id
+        socket.emit('lobby-joined', userID, requestBody.lobbyCode, (response) => {
+            const gameName = response.gameName;
+            
+            const lobbyCode = requestBody.lobbyCode;
+    
+            navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+            setApiReqs({ isLoading: false, data: null, errorMsg: null })
+        });
+        // goToWaitingRoom();
         return;
       }
 

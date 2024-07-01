@@ -1,7 +1,7 @@
 import "./css/games.css";
 import CustomSvg from "../svgs/CustomSvg";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import JoinLobbyModal from "./auxiliary/JoinLobbyModal";
 import DashboardHeader from "../dashboard/DashboardHeader/DashboardHeader";
 import { CSSTransition } from "react-transition-group";
@@ -13,6 +13,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGames } from "../../utils/hooks";
 import { postRequest } from "../apiRequests/requestApi";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
+import socket from "../../socket";
+import { GamesContext } from "../../utils/contexts/GameContext";
+import { UserContext } from "../../utils/contexts/UserContext";
 
 
 
@@ -22,6 +25,9 @@ export default function SelectedGame() {
   const goToTournaments = ({ user_id, stakeValue }) =>
     navigateTo(`/tournaments/play/${user_id}/${gameId}/${stakeValue}`);
   const goToAllGames = () => navigateTo('/games')
+
+  const gameContextData = useContext(GamesContext)
+  const userContextData = useContext(UserContext);
 
   const params = useParams();
   const { gameId } = params;
@@ -113,6 +119,14 @@ export default function SelectedGame() {
       console.log(data);
 
       openActiveUsers();
+
+      
+
+      console.log(userContextData);
+
+      const userID = userContextData.user._id
+
+      socket.emit('lobby-created', userID)
 
       setApiReqs({ isLoading: false, errorMsg: null })
 

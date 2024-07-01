@@ -9,17 +9,21 @@ import Ludotournament from '../../assets/images/Ludotournament.png'
 import VS from '../../assets/images/VS.svg'
 import SelectedUserYou from '../../assets/images/SelectedUserYou.svg'
 import CustomSvg from '../svgs/CustomSvg'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { allGames, allUsers } from '../games/auxiliary/gamesAux'
 import GameWonModal from './auxiliary/GameWonModal'
 import GameLostModal from './auxiliary/GameLostModal'
 
 
 function Tournaments() {
+  const navigate = useNavigate();
+  const navigateTo = (path) => navigate(path);
 
   const params = useParams()
 
-  const { gameId, user_id, stakeValue } = params
+  const { gameId, user_id, stakeValue, roomID } = params
+
+  const goToGame = () => navigateTo(`/games/${gameId}?roomID=${roomID}`)
 
   const opponentInfo = allUsers.filter(user => user.user_id == user_id)[0]
   const gameInfo = allGames.filter(game => game.id == gameId)[0]
@@ -60,8 +64,12 @@ function Tournaments() {
   }, [isLeftBlockOpen, isRightBlockOpen])  
 
   const handleopen = () => {
-    setOpenGames(true);
+    // setOpenGames(true);
+    goToGame();
+    
     setTournamentvs(false);
+
+
   }
 
   const openGameWonModal = () => setGameWonModal({ visible: true, onHide: hideGameWonModal, size: 'md' })
@@ -111,7 +119,8 @@ function Tournaments() {
                         onClick={handleopen}
                         className='w-100 bg-FBBC04 d-flex align-items-center justify-content-center p-2 mb-3'
                     >
-                        <p className='p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1'>Play Game</p>
+                        <p className='p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1'>Play Game
+</p>
                         <div className='m-0 p-0 mx-2 d-flex align-items-center'>
                             <CustomSvg name={'arrow-right'} color="#000" />
                         </div>
