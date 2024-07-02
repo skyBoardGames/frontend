@@ -8,5 +8,5 @@
 // ADDED NEW SERVER BUT STILL USE OLD ONE FOR DEV UNTIL HTTPS IS MADE AVAILABLE
 
 export default {
-  apiUrl: "https://skyboard-api.onrender.com/api"
+  apiUrl: "http://skyboardgames.com/api"
 };

@@ -20,18 +20,40 @@ export default function ShareModal({ modalProps }) {
 
   const ShareButton = () => {
     const message = encodeURIComponent(
-      `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
+      `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode?.code}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
     );
     // const link = encodeURIComponent("https://example.com");
-    const whatsappUrl = `https://wa.me/?text=${message}%`;
+    const whatsappUrl = `https://wa.me/?text=${message}`;
 
     window.open(whatsappUrl, "_blank");
   };
 
+  const tiktokShare = () => {
+    handleCopy();
+    window.open("https://www.tiktok.com/", "_blank");
+  };
+
+  const facebookShare = () => {
+    handleCopy();
+    window.open("https://web.facebook.com/", "_blank");
+  };
+
+  const twitterShare = () => {
+    handleCopy();
+    window.open("https://x.com/", "_blank");
+  };
+
+  const instagramShare = () => {
+    handleCopy();
+    window.open("https://www.instagram.com/", "_blank");
+  };
+
   const handleCopy = () => {
+    console.log(lobbyCode);
     navigator.clipboard
       .writeText(
-        `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
+        `You are invited to play ${gameId} with ${user?.username}.
+         This is the lobby code ${lobbyCode?.code}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
       )
       .then(() => {
         alert("Text copied to clipboard!");
@@ -50,17 +72,17 @@ export default function ShareModal({ modalProps }) {
     {
       name: "Twitter",
       img: twitter,
-      share: handleCopy,
+      share: twitterShare,
     },
     {
       name: "Facebook",
       img: facebook,
-      share: handleCopy,
+      share: facebookShare,
     },
     {
       name: "Instagram",
       img: instagram,
-      share: handleCopy,
+      share: instagramShare,
     },
   ];
 
@@ -73,7 +95,7 @@ export default function ShareModal({ modalProps }) {
     {
       name: "Tiktok",
       img: tiktok,
-      share: handleCopy,
+      share: tiktokShare,
     },
     {
       name: "Chat",

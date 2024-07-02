@@ -54,53 +54,53 @@ export default function App() {
     navigateTo("/login");
   };
 
-  const userContext = useContext(UserContext)
+  const userContext = useContext(UserContext);
 
-// PLEASE DONT REMOVE (FOR DEVELOPMENT)
+  // PLEASE DONT REMOVE (FOR DEVELOPMENT)
 
-//   useEffect(() => {
-//     socket.connect();
+  //   useEffect(() => {
+  //     socket.connect();
 
-//     socket.on('connect', () => {
-//         console.log("this user", socket.id);
-//     })
+  //     socket.on('connect', () => {
+  //         console.log("this user", socket.id);
+  //     })
 
-//     socket.on('disconnect', (_) => {
-//         console.log("this user disconnect", _);
-//         // console.log("this user disconnect", socket.id);
-//     })
+  //     socket.on('disconnect', (_) => {
+  //         console.log("this user disconnect", _);
+  //         // console.log("this user disconnect", socket.id);
+  //     })
 
-//     socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
-//         navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
-//     })
+  //     socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
+  //         navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+  //     })
 
-//     socket.on('get_active', (arrayOfUserObjects) => {
-//         console.log("getting active");
+  //     socket.on('get_active', (arrayOfUserObjects) => {
+  //         console.log("getting active");
 
-//         allUsers.splice(0);
+  //         allUsers.splice(0);
 
-//         console.log(arrayOfUserObjects);
+  //         console.log(arrayOfUserObjects);
 
-//         arrayOfUserObjects.forEach(userObject => {
-//           // console.log("user active", userObject.socketID);
+  //         arrayOfUserObjects.forEach(userObject => {
+  //           // console.log("user active", userObject.socketID);
 
-//             allUsers.unshift({
-//                 user_id: userObject.userID,
-//                 name: 'random',
-//                 wins: 210,
-//                 profile: userProfile1,
-//                 bgClass: 'bg-FD8D84'
-//             })
-//         })
+  //             allUsers.unshift({
+  //                 user_id: userObject.userID,
+  //                 name: 'random',
+  //                 wins: 210,
+  //                 profile: userProfile1,
+  //                 bgClass: 'bg-FD8D84'
+  //             })
+  //         })
 
-//     })
+  //     })
 
-//     return () => {
-//         console.log("unmounting disconnecting");
-//         socket.disconnect();
-//     }
+  //     return () => {
+  //         console.log("unmounting disconnecting");
+  //         socket.disconnect();
+  //     }
 
-//   }, [])
+  //   }, [])
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -149,7 +149,10 @@ export default function App() {
 
         {/* GAMES */}
 
-        <Route path="/games/Chess/" element={<Game user={userContext.user} />} />
+        <Route
+          path="/games/Chess/"
+          element={<Game user={userContext.user} />}
+        />
 
         <Route
           path="/games/Ludo/"
@@ -168,7 +171,10 @@ export default function App() {
           }
         />
         <Route path="/games/Snooker/" element={<Snooker />} />
-        <Route path="/games/Scrabble/" element={<Scrabble user={userContext.user}/>} />
+        <Route
+          path="/games/Scrabble/"
+          element={<Scrabble user={userContext.user} />}
+        />
 
         {/* MAIN APP ROUTES  */}
 
@@ -179,11 +185,18 @@ export default function App() {
           }
         />
 
-        <Route path="/games" element={<AllGames navigateTo={navigateTo} />} />
+        <Route
+          path="/games"
+          element={
+            <ProtectedRoute element={AllGames} app_navigateTo={navigateTo} />
+          }
+        />
 
         <Route
           path="/games/waiting-room"
-          element={<WatingRoom navigateTo={navigateTo} />}
+          element={
+            <ProtectedRoute element={WatingRoom} app_navigateTo={navigateTo} />
+          }
         />
 
         <Route
@@ -195,19 +208,31 @@ export default function App() {
 
         <Route
           path="/games/selected-game/:gameId"
-          element={<SelectedGame navigateTo={navigateTo} />}
+          element={
+            <ProtectedRoute
+              element={SelectedGame}
+              app_navigateTo={navigateTo}
+            />
+          }
         />
 
         <Route path="/chat" element={<Chat navigateTo={navigateTo} />} />
 
         <Route
           path="/all-users"
-          element={<AllUsers navigateTo={navigateTo} />}
+          element={
+            <ProtectedRoute element={AllUsers} app_navigateTo={navigateTo} />
+          }
         />
 
         <Route
           path="/tournaments"
-          element={<AllTournaments navigateTo={navigateTo} />}
+          element={
+            <ProtectedRoute
+              element={AllTournaments}
+              app_navigateTo={navigateTo}
+            />
+          }
         />
 
         <Route
