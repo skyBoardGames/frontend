@@ -26,6 +26,8 @@ export default function SelectedGame() {
     );
   const goToAllGames = () => navigateTo("/games");
 
+  const { setLobbyCode, setGameId } = useGames();
+
   const gameContextData = useContext(GamesContext);
   const userContextData = useContext(UserContext);
 
@@ -115,7 +117,8 @@ export default function SelectedGame() {
 
       const { data, message } = response;
       alert(message);
-
+      setLobbyCode(data);
+      setGameId(gameId);
       console.log(data);
 
       setRoomId(data);

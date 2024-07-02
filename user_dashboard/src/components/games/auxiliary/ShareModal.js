@@ -8,79 +8,84 @@ import sms from "../../../assets/images/sms.png";
 import instagram from "../../../assets/images/instagram.png";
 import yahooMail from "../../../assets/images/yahooMail.png";
 import whatsApp from "../../../assets/images/whatsApp.png";
-
-const ShareButton = () => {
-  const message = encodeURIComponent("Check out this amazing link!");
-  const link = encodeURIComponent("https://example.com");
-  const whatsappUrl = `https://wa.me/?text=${message}%20${link}`;
-
-  window.open(whatsappUrl, "_blank");
-};
+import { useGames, useUser } from "../../../utils/hooks";
 
 const dummy = () => {
-  console.log("Just a dummy");
+  console.log("Just a handleCopy");
 };
-
-const handleCopy = () => {
-  navigator.clipboard
-    .writeText(
-      "You are invited to play /Game/ with /user/ This is the lobby code. Register and supply the code at this link https://skyboard.com/games/join-lobby"
-    )
-    .then(() => {
-      alert("Text copied to clipboard!");
-    })
-    .catch((err) => {
-      console.error("Failed to copy: ", err);
-    });
-};
-
-const mediaHandles1 = [
-  {
-    name: "WhatsApp",
-    img: whatsApp,
-    share: ShareButton,
-  },
-  {
-    name: "Twitter",
-    img: twitter,
-    share: dummy,
-  },
-  {
-    name: "Facebook",
-    img: facebook,
-    share: dummy,
-  },
-  {
-    name: "Instagram",
-    img: instagram,
-    share: dummy,
-  },
-];
-
-const mediaHandles2 = [
-  {
-    name: "Yahoo",
-    img: yahooMail,
-    share: dummy,
-  },
-  {
-    name: "Tiktok",
-    img: tiktok,
-    share: dummy,
-  },
-  {
-    name: "Chat",
-    img: sms,
-    share: dummy,
-  },
-  {
-    name: "WeChat",
-    img: weChat,
-    share: dummy,
-  },
-];
 
 export default function ShareModal({ modalProps }) {
+  const { lobbyCode, gameId } = useGames();
+  const { user } = useUser();
+
+  const ShareButton = () => {
+    const message = encodeURIComponent(
+      `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
+    );
+    // const link = encodeURIComponent("https://example.com");
+    const whatsappUrl = `https://wa.me/?text=${message}%`;
+
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(
+        `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
+      )
+      .then(() => {
+        alert("Text copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
+
+  const mediaHandles1 = [
+    {
+      name: "WhatsApp",
+      img: whatsApp,
+      share: ShareButton,
+    },
+    {
+      name: "Twitter",
+      img: twitter,
+      share: handleCopy,
+    },
+    {
+      name: "Facebook",
+      img: facebook,
+      share: handleCopy,
+    },
+    {
+      name: "Instagram",
+      img: instagram,
+      share: handleCopy,
+    },
+  ];
+
+  const mediaHandles2 = [
+    {
+      name: "Yahoo",
+      img: yahooMail,
+      share: handleCopy,
+    },
+    {
+      name: "Tiktok",
+      img: tiktok,
+      share: handleCopy,
+    },
+    {
+      name: "Chat",
+      img: sms,
+      share: handleCopy,
+    },
+    {
+      name: "WeChat",
+      img: weChat,
+      share: handleCopy,
+    },
+  ];
   if (modalProps) {
     const { visible, onHide, size } = modalProps;
 

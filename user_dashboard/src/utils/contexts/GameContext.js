@@ -5,6 +5,8 @@ export const GamesContext = createContext();
 export const GamesContextProvider = ({ children }) => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [lobbyCode, setLobbyCode] = useState("");
+  const [gameId, setGameId] = useState("");
 
   const getGames = async () => {
     try {
@@ -48,6 +50,10 @@ export const GamesContextProvider = ({ children }) => {
         games,
         getGames,
         loading,
+        lobbyCode,
+        setLobbyCode,
+        gameId,
+        setGameId,
       }}
     >
       {children}
