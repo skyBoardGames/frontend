@@ -53,8 +53,8 @@ class Waiting extends React.Component {
 }
 
 export default class Game extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     
     const url = new URL(window.location)
 
@@ -65,15 +65,15 @@ export default class Game extends React.Component {
     const roomID = Array.from(searchParams.entries())[0][1]
 
     console.log(url, Array.from(searchParams.entries()));
+    
+    // const userData = JSON.parse(sessionStorage.getItem('token'));
 
-    const userData = JSON.parse(sessionStorage.getItem('token'));
+    // const userContextData = userData;
 
-    const userContextData = userData;
+    // console.log(userContextData);
 
-    console.log(userContextData);
-
-    const avatar = userContextData.user.avatar;
-    const username = userContextData.user.username;
+    const avatar = props.user.avatar;
+    const username = props.user.username;
 
     // const roomID = url.pathname.slice(1);
     // const roomID = params.gameID;

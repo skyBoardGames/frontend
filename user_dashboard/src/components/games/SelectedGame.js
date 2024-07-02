@@ -113,7 +113,7 @@ export default function SelectedGame() {
         url: "/create-lobby",
         data: details,
       });
-      console.log(response);
+      console.log("response from create lobby", response);
 
       const { data, message } = response;
       alert(message);
@@ -122,6 +122,8 @@ export default function SelectedGame() {
       console.log(data);
 
       setRoomId(data);
+
+      alert("Share code to your friend " + data.code);
 
       openActiveUsers(details.wagerAmount);
 

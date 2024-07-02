@@ -1,12 +1,13 @@
 import { io } from "socket.io-client";
 
-const dev = "http://localhost:5657/chess";
-const prod = "https://new-server-ozkr.onrender.com/chess";
+const dev = `http://skyboardgames.com`;
+const prod = "http://skyboardgames.com";
 
 const URL = process.env.NODE_ENV === "development" ? dev : prod;
 
-const socket = io(URL, {
-    autoConnect: false
+const socket = io(URL + '/chess', {
+    autoConnect: false,
+    path: '/games/socket.io'
 });
 
 export default socket;

@@ -1,12 +1,13 @@
 import { io } from "socket.io-client"
 
-const dev = `http://localhost:5657/scrabble`;
-const prod = `https://new-server-ozkr.onrender.com/scrabble`;
+const dev = `http://skyboardgames.com`;
+const prod = "http://skyboardgames.com";
 
 const URL = process.env.NODE_ENV === "development" ? dev : prod;
 
-const socket = io(URL, {
-    autoConnect: false
+const socket = io(URL + '/scrabble', {
+    autoConnect: false,
+    path: '/games/socket.io'
 });
 
 export default socket;

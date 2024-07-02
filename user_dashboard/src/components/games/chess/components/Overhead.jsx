@@ -18,7 +18,7 @@ export default class Overhead extends React.Component {
                             <img src={this.props.playerOneInfo.avatar} />
                         </div>
                         <div>
-                            <p>{this.props.playerTwoInfo.username}</p>
+                            <p>{this.props.playerOneInfo.username}</p>
                         </div>
                         <div className='chess-color' style={{backgroundColor: "white"}}></div>
                     </div>

@@ -3,7 +3,7 @@ import SGame from "./SGame";
 import { useEffect } from "react";
 import socket from "./socket";
 
-export default function Scrabble() {
+export default function Scrabble(props) {
     useEffect(() => {
         return () => {
             socket.disconnect();
@@ -12,7 +12,7 @@ export default function Scrabble() {
 
     return (
         <>
-            <SGame />
+            <SGame user={props.user} />
         </>
     )
 }

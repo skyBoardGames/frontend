@@ -116,7 +116,7 @@ function Emulation() {
   );
 }
 
-function Ludo() {
+function Ludo(props) {
   const [won, setWon] = useRecoilState(states.wonState);
   const [setup, setSetup] = useRecoilState(states.setupState);
   const setCurrentPlayer = useRecoilState(states.currentPlayerState)[1];
@@ -164,10 +164,8 @@ function Ludo() {
 
     console.log(userContextData);
 
-    const username = userContextData.user.username;
-    const avatar = userContextData.user.avatar;
-
-
+    const username = props.user.username;
+    const avatar = props.user.avatar;
 
     // if (roomID != "") {
     //   socket.emit("join_room", roomID);

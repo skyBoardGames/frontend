@@ -20,7 +20,8 @@ import AllTournaments from "./components/tournament/AllTournaments";
 import WatingRoom from "./components/tournament/waitingRoom/watingRoom";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-import { useEffect } from "react";
+// PLEASE DONT REMOVE (FOR DEVELOPMENT)
+import { useContext, useEffect } from "react";
 
 import socket from "./socket";
 
@@ -39,6 +40,8 @@ import store from "./components/games/whot/src/redux/playFriendStore";
 
 import Snooker from "./components/games/snooker/src/Snooker";
 import Scrabble from "./components/games/scrabble/Scrabble";
+// PLEASE DONT REMOVE (FOR DEVELOPMENT)
+import { UserContext } from "./utils/contexts/UserContext";
 
 export default function App() {
   const navigate = useNavigate();
@@ -51,49 +54,51 @@ export default function App() {
     navigateTo("/login");
   };
 
-  // useEffect(() => {
-  //   socket.connect();
+// PLEASE DONT REMOVE (FOR DEVELOPMENT)
 
-  //   socket.on('connect', () => {
-  //       console.log("this user", socket.id);
-  //   })
+//   useEffect(() => {
+//     socket.connect();
 
-  //   socket.on('disconnect', (_) => {
-  //       console.log("this user disconnect", _);
-  //       // console.log("this user disconnect", socket.id);
-  //   })
+//     socket.on('connect', () => {
+//         console.log("this user", socket.id);
+//     })
 
-  //   socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
-  //       navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
-  //   })
+//     socket.on('disconnect', (_) => {
+//         console.log("this user disconnect", _);
+//         // console.log("this user disconnect", socket.id);
+//     })
 
-  //   socket.on('get_active', (arrayOfUserObjects) => {
-  //       console.log("getting active");
+//     socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
+//         navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+//     })
 
-  //       allUsers.splice(0);
+//     socket.on('get_active', (arrayOfUserObjects) => {
+//         console.log("getting active");
 
-  //       console.log(arrayOfUserObjects);
+//         allUsers.splice(0);
 
-  //       arrayOfUserObjects.forEach(userObject => {
-  //         // console.log("user active", userObject.socketID);
+//         console.log(arrayOfUserObjects);
 
-  //           allUsers.unshift({
-  //               user_id: userObject.userID,
-  //               name: 'random',
-  //               wins: 210,
-  //               profile: userProfile1,
-  //               bgClass: 'bg-FD8D84'
-  //           })
-  //       })
+//         arrayOfUserObjects.forEach(userObject => {
+//           // console.log("user active", userObject.socketID);
 
-  //   })
+//             allUsers.unshift({
+//                 user_id: userObject.userID,
+//                 name: 'random',
+//                 wins: 210,
+//                 profile: userProfile1,
+//                 bgClass: 'bg-FD8D84'
+//             })
+//         })
 
-  //   return () => {
-  //       console.log("unmounting disconnecting");
-  //       socket.disconnect();
-  //   }
+//     })
 
-  // }, [])
+//     return () => {
+//         console.log("unmounting disconnecting");
+//         socket.disconnect();
+//     }
+
+//   }, [])
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -142,13 +147,13 @@ export default function App() {
 
         {/* GAMES */}
 
-        <Route path="/games/Chess/" element={<Game />} />
+        <Route path="/games/Chess/" element={<Game user={userContext.user} />} />
 
         <Route
           path="/games/Ludo/"
           element={
             <RecoilRoot>
-              <Ludo />
+              <Ludo user={userContext.user} />
             </RecoilRoot>
           }
         />
@@ -161,7 +166,7 @@ export default function App() {
           }
         />
         <Route path="/games/Snooker/" element={<Snooker />} />
-        <Route path="/games/Scrabble/" element={<Scrabble />} />
+        <Route path="/games/Scrabble/" element={<Scrabble user={userContext.user}/>} />
 
         {/* MAIN APP ROUTES  */}
 

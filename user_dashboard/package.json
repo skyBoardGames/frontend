@@ -1,6 +1,5 @@
 {
   "name": "skyboard",
-  "homepage": "https://benny506.github.io/skyboard/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

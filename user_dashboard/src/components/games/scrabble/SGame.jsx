@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import Overhead from "./Overhead"
 
 import socket from "./socket"
 
@@ -11,8 +12,29 @@ import Word from "./Word.js";
 import Bag from "./Bag.js";
 
 import dictionary from "./dictionary.js"
+import Waiting from "../Waiting";
 
-export default function SGame() {
+export default function SGame(props) {
+    const [playerInfo, setPlayerInfo] = useState({
+        playerOneInfo: {
+            username: '',
+            socketID: '',
+            avatar: ''
+        },
+        playerTwoInfo: {
+            username: '',
+            socketID: '',
+            avatar: ''
+        }
+    })
+
+    const [start, setStart] = useState(false);
+
+    // const [currentTurn, setCurrentTurn] = useState(0);
+    const currentTurn = {
+        turn: 0
+    }
+
     useEffect(() => {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -109,7 +131,16 @@ export default function SGame() {
         }
         
         function joinGame(socket, roomID) {
-            socket.emit('join_game', roomID)
+            const userData = JSON.parse(sessionStorage.getItem('token'));
+
+            const userContextData = userData;
+
+            console.log(userContextData);
+
+            const username = props.user.username;
+            const avatar = props.user.avatar;
+
+            socket.emit('join_game', roomID, username, avatar)
         }
         
         socket.connect();
@@ -140,6 +171,15 @@ export default function SGame() {
             console.log(finalLetters);
         
             startGame(finalLetters);
+        })
+
+        socket.on('start_game', (playerOneInfo, playerTwoInfo) => {
+            setPlayerInfo({
+                playerOneInfo: playerOneInfo,
+                playerTwoInfo: playerTwoInfo
+            })
+
+            setStart(true);
         })
         
         function startGame(finalLetters = [new Letter()]) {
@@ -335,6 +375,8 @@ export default function SGame() {
         
                 const x1 = currentElement.getBoundingClientRect().x;
                 const y1 = currentElement.getBoundingClientRect().y;
+
+                // console.log("tile coord", x1, y1);
                 
                 for(let i = 0; i < grid.children.length; ++i) {
                     const currentCell = grid.children.item(i);
@@ -342,6 +384,8 @@ export default function SGame() {
         
                     const x2 = currentCell.getBoundingClientRect().x;
                     const y2 = currentCell.getBoundingClientRect().y;
+
+                    // console.log(x2, y2);
         
                     if(isColliding(x1, y1, 20, 20, x2, y2, 20, 20)) {
                         collision = true;
@@ -1151,6 +1195,9 @@ export default function SGame() {
                 playerTurn = playerTurn == 0 ? 1 : 0;
         
                 currentPlayer = players[playerTurn];
+
+                // setCurrentTurn(playerTurn);
+                currentTurn.turn = playerTurn;
             }
         }
     }, [])
@@ -1158,8 +1205,14 @@ export default function SGame() {
     return (
         <>
             <main>
+                {!start && <Waiting />}
                 <section id="game-section">
                     <div id="game">
+                        <Overhead
+                            playerOneInfo={playerInfo.playerOneInfo} playerTwoInfo={playerInfo.playerTwoInfo}
+                            winner={{winner: false}}
+                            turn={currentTurn}
+                        />
                         <div id="scoreBoard">
                             <div class="info">
                                 <span>You:</span>
@@ -1409,11 +1462,11 @@ export default function SGame() {
                             <div></div>
                             <div></div>
                         </div>
-                        <div className="turn-div">
+                        {/* <div className="turn-div">
                             <div>
                                 <h5>Your Turn, press finish turn to end turn</h5>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </section>
             </main>
