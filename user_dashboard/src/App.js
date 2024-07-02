@@ -54,6 +54,8 @@ export default function App() {
     navigateTo("/login");
   };
 
+  const userContext = useContext(UserContext)
+
 // PLEASE DONT REMOVE (FOR DEVELOPMENT)
 
 //   useEffect(() => {
