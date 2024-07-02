@@ -4,14 +4,14 @@ import carouselImg1 from "../../assets/images/registerCarouselImg1.png";
 import CustomSvg from "../svgs/CustomSvg";
 import { useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { Formik, ErrorMessage } from 'formik'
+import { Formik, ErrorMessage } from "formik";
 import { Carousel, Spinner } from "react-bootstrap";
 import SuccessModal from "./auxiliary/SuccessModal";
-import { useNavigate } from "react-router-dom";
-import { loginFunc, refresh } from "../apiRequests/requestApi";
+import { useLocation, useNavigate } from "react-router-dom";
+import { loginFunc } from "../apiRequests/requestApi";
 import { useUser } from "../../utils/hooks";
-import { formatDateString, setCookie } from "../../utils";
-import * as yup from 'yup'
+import { formatDateString } from "../../utils";
+import * as yup from "yup";
 import { EMAIL_REGEX } from "../helpers/regex";
 import ScrollTo from "../scroll/ScrollTo";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
@@ -27,14 +27,20 @@ const carouselItems = [
 export default function Login({}) {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
 
   const goToForgotPassword = () => navigateTo("/forgot-password");
   const goToDashboard = () => navigateTo("/");
   const goToRegister = () => navigateTo("/register");
 
-
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [apiReqs, setApiReqs] = useState({ isLoading: false, data: null, errorMsg: null })
+  const [apiReqs, setApiReqs] = useState({
+    isLoading: false,
+    data: null,
+    errorMsg: null,
+  });
   const [successModal, setSuccessModal] = useState({
     visible: false,
     onHide: null,
@@ -43,28 +49,31 @@ export default function Login({}) {
 
   useEffect(() => {
     console.log("YH");
-    if(apiReqs.data && apiReqs.isLoading){
-      const { data } = apiReqs
+    if (apiReqs.data && apiReqs.isLoading) {
+      const { data } = apiReqs;
 
-      submit({ requestBody: data })
+      submit({ requestBody: data });
     }
-  }, [apiReqs])
+  }, [apiReqs]);
 
   const { setUserDetails } = useUser();
 
   const validationSchema = yup.object().shape({
-    email: yup.string().matches(EMAIL_REGEX, "Must be a valid email").required("Email required"),
-    password: yup.string().required('Password required')
-  })
+    email: yup
+      .string()
+      .matches(EMAIL_REGEX, "Must be a valid email")
+      .required("Email required"),
+    password: yup.string().required("Password required"),
+  });
 
   const submit = async ({ requestBody }) => {
     try {
-      const { email, password } = requestBody
+      const { email, password } = requestBody;
 
       const response = await loginFunc(requestBody);
 
-      const { tokens, user } = response.data
-      
+      const { tokens, user } = response.data;
+
       // user.email = email;
 
       // user.tokens = response?.data;
@@ -72,26 +81,26 @@ export default function Login({}) {
       sessionStorage.setItem("token", JSON.stringify(tokens));
 
       const result = {
-              ...user,
-              dob: formatDateString(user?.dob, "short"),
-              bgClass: "bg-FD8D84",
-              country: "Nigeria",
-            };
-      setUserDetails(result)
+        ...user,
+        dob: formatDateString(user?.dob, "short"),
+        bgClass: "bg-FD8D84",
+        country: "Nigeria",
+      };
+      setUserDetails(result);
 
       openSuccessModal();
 
-      setApiReqs({ isLoading: false, data: null, errorMsg: null })
+      setApiReqs({ isLoading: false, data: null, errorMsg: null });
 
-
+      navigate(from, { replace: true });
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
-      setApiReqs({ 
+      setApiReqs({
         isLoading: false,
         data: null,
-        errorMsg: error && error.message ? error.message : 'Unexpected error'
-      })
+        errorMsg: error && error.message ? error.message : "Unexpected error",
+      });
     }
 
     return;
@@ -124,9 +133,7 @@ export default function Login({}) {
   });
 
   return (
-    <ScrollTo
-      condition={apiReqs.errorMsg}
-    >
+    <ScrollTo condition={apiReqs.errorMsg}>
       <div className="register-bg py-4 px-lg-5 px-md-5 px-3">
         <div className="d-flex align-items-start flex-column mb-5">
           <div className="d-flex flex-column align-items-center justify-content-center">
@@ -179,26 +186,35 @@ export default function Login({}) {
               <div className="login-or-line col-lg-5 col-md-5 col-5" />
             </div>
 
-            {
-              apiReqs.errorMsg && <CustomErrorMsg errorMsg={apiReqs.errorMsg} verticalPadding={true} />
-            }
+            {apiReqs.errorMsg && (
+              <CustomErrorMsg
+                errorMsg={apiReqs.errorMsg}
+                verticalPadding={true}
+              />
+            )}
 
             <Formik
               validationSchema={validationSchema}
-
               initialValues={{
-                email: '', password: ''
+                email: "",
+                password: "",
               }}
-
               onSubmit={(values) => {
                 setApiReqs({
-                  isLoading: true, 
+                  isLoading: true,
                   data: values,
-                  errorMsg: null
-                })
+                  errorMsg: null,
+                });
               }}
             >
-              {({ values, dirty, isValid, handleBlur, handleChange, handleSubmit }) => (
+              {({
+                values,
+                dirty,
+                isValid,
+                handleBlur,
+                handleChange,
+                handleSubmit,
+              }) => (
                 <>
                   <div className="mb-3 w-100">
                     <div className="mb-4">
@@ -216,12 +232,12 @@ export default function Login({}) {
                           className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
                         />
                       </div>
-                      <ErrorMessage 
-                            name="email" 
-                            render={
-                                errorMsg => <CustomErrorMsg errorMsg={errorMsg} />
-                                } 
-                        />                    
+                      <ErrorMessage
+                        name="email"
+                        render={(errorMsg) => (
+                          <CustomErrorMsg errorMsg={errorMsg} />
+                        )}
+                      />
                     </div>
                     <div className="mb-4">
                       <div className="d-flex align-items-center register-input-container justify-content-between p-2">
@@ -250,12 +266,12 @@ export default function Login({}) {
                           )}
                         </div>
                       </div>
-                      <ErrorMessage 
-                            name="password" 
-                            render={
-                                errorMsg => <CustomErrorMsg errorMsg={errorMsg} />
-                                } 
-                        />                    
+                      <ErrorMessage
+                        name="password"
+                        render={(errorMsg) => (
+                          <CustomErrorMsg errorMsg={errorMsg} />
+                        )}
+                      />
                     </div>
                   </div>
 
@@ -278,25 +294,25 @@ export default function Login({}) {
                     <button
                       type="submit"
                       onClick={handleSubmit}
-                      disabled={(!(isValid && dirty) || apiReqs.isLoading) ? true : false}
+                      disabled={
+                        !(isValid && dirty) || apiReqs.isLoading ? true : false
+                      }
                       className="clickable w-100 bg-BD3193 d-flex align-items-center justify-content-center p-2"
                     >
-                      {
-                        apiReqs.isLoading
-                        ?
-                          <div className="py-1">
-                            <Spinner size="sm" variant="light" />
+                      {apiReqs.isLoading ? (
+                        <div className="py-1">
+                          <Spinner size="sm" variant="light" />
+                        </div>
+                      ) : (
+                        <>
+                          <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">
+                            Login
+                          </p>
+                          <div className="m-0 p-0 mx-2 d-flex align-items-center">
+                            <CustomSvg name={"arrow-right"} />
                           </div>
-                        :
-                          <>
-                            <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">
-                              Login
-                            </p>
-                            <div className="m-0 p-0 mx-2 d-flex align-items-center">
-                              <CustomSvg name={"arrow-right"} />
-                            </div>                        
-                          </>
-                      }
+                        </>
+                      )}
                     </button>
                   </div>
                 </>

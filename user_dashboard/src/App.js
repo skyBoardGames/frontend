@@ -181,7 +181,9 @@ export default function App() {
 
         <Route
           path="/games/join-lobby"
-          element={<JoinLobby navigateTo={navigateTo} />}
+          element={
+            <ProtectedRoute element={JoinLobby} app_navigateTo={navigateTo} />
+          }
         />
 
         <Route
@@ -219,7 +221,9 @@ export default function App() {
 
         <Route
           path="/deposit"
-          element={<Deposit app_navigateTo={navigateTo} />}
+          element={
+            <ProtectedRoute element={Deposit} app_navigateTo={navigateTo} />
+          }
         />
       </Routes>
     </ScrollTo>

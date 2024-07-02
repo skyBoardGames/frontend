@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import DashboardHeader from "../dashboard/DashboardHeader/DashboardHeader";
 import DashboardHero from "../dashboard/DashboardHero/DashboardHero";
 import CollapseBlock from "../dashboard/CollapseBlockLeft/collapseblockleft";
@@ -12,7 +11,6 @@ import { generateRandomId } from "../globals/globals";
 import { useUser } from "../../utils/hooks";
 
 export default function Deposit() {
-  // const navigate = useNavigate();
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
@@ -23,7 +21,7 @@ export default function Deposit() {
   });
 
   const { user, setUserDetails } = useUser();
-  
+
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
       setBlocksOpen("both");
@@ -41,12 +39,11 @@ export default function Deposit() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
-
   const initiateDeposit = (amount) => {
-    setApiReqs({ isLoading: true, errorMsg: null })
+    setApiReqs({ isLoading: true, errorMsg: null });
 
-    return onDeposit(amount)
-  }
+    return onDeposit(amount);
+  };
 
   const onDeposit = async (amount) => {
     try {

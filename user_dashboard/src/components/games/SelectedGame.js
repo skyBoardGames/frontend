@@ -17,16 +17,16 @@ import socket from "../../socket";
 import { GamesContext } from "../../utils/contexts/GameContext";
 import { UserContext } from "../../utils/contexts/UserContext";
 
-
-
 export default function SelectedGame() {
   const navigate = useNavigate();
   const navigateTo = (path) => navigate(path);
   const goToTournaments = ({ user_id, stakeValue, roomID }) =>
-    navigateTo(`/tournaments/play/${user_id}/${gameId}/${stakeValue}/${roomID}`);
-  const goToAllGames = () => navigateTo('/games')
+    navigateTo(
+      `/tournaments/play/${user_id}/${gameId}/${stakeValue}/${roomID}`
+    );
+  const goToAllGames = () => navigateTo("/games");
 
-  const gameContextData = useContext(GamesContext)
+  const gameContextData = useContext(GamesContext);
   const userContextData = useContext(UserContext);
 
   const params = useParams();
@@ -37,9 +37,9 @@ export default function SelectedGame() {
   const stakesNodeRef = useRef(null);
   const showActiveUsersNodeRef = useRef(null);
 
-  const [selectedGame, setSelectedGame] = useState()
-  const [roomId, setRoomId] = useState()
-  const [apiReqs, setApiReqs] = useState({ isLoading: false, errorMsg: null })
+  const [selectedGame, setSelectedGame] = useState();
+  const [roomId, setRoomId] = useState();
+  const [apiReqs, setApiReqs] = useState({ isLoading: false, errorMsg: null });
   const [showGames, setShowGames] = useState(true);
   const [showActiveUsers, setShowActiveUsers] = useState(false);
   const [showBtns, setShowBtns] = useState(true);
@@ -74,28 +74,27 @@ export default function SelectedGame() {
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
   useEffect(() => {
-    if(apiReqs.isLoading){
-      createLobby()
+    if (apiReqs.isLoading) {
+      createLobby();
     }
-  }, [apiReqs])
+  }, [apiReqs]);
 
   useEffect(() => {
-    if(games){
+    if (games) {
       const s_game = games.filter((game) => game.id === gameId);
-      
-      if(s_game[0]){
-        setSelectedGame(s_game[0])
-      
-      } else{
-        goToAllGames()
+
+      if (s_game[0]) {
+        setSelectedGame(s_game[0]);
+      } else {
+        goToAllGames();
       }
-
-    } else{
-      goToAllGames()
+    } else {
+      goToAllGames();
     }
-  }, [games])
+  }, [games]);
 
-  const initiateLobbyCreation = () => setApiReqs({ isLoading: true, errorMsg: null })
+  const initiateLobbyCreation = () =>
+    setApiReqs({ isLoading: true, errorMsg: null });
 
   const createLobby = async () => {
     const selectedGame = games?.filter((game) => game.id === gameId);
@@ -119,23 +118,23 @@ export default function SelectedGame() {
 
       console.log(data);
 
-      setRoomId(data)
+      setRoomId(data);
 
       openActiveUsers(details.wagerAmount);
 
-      
-
       console.log(userContextData);
 
-      const userID = userContextData.user._id
+      const userID = userContextData.user._id;
 
-      socket.emit('lobby-created', userID)
+      socket.emit("lobby-created", userID);
 
-      setApiReqs({ isLoading: false, errorMsg: null })
-
+      setApiReqs({ isLoading: false, errorMsg: null });
     } catch (error) {
       console.error(error);
-      setApiReqs({ isLoading: false, errorMsg: error.message ? error.message : 'Error getting users' })
+      setApiReqs({
+        isLoading: false,
+        errorMsg: error.message ? error.message : "Error getting users",
+      });
     }
   };
 
@@ -162,16 +161,24 @@ export default function SelectedGame() {
     setJoinLobbyModal({ visible: false, onHide: null, size: "md" });
 
   const onSelectUser = (user) => {
-    if(roomId && user.user_id && stakeValue){
-      return goToTournaments({ user_id: user.user_id, stakeValue, roomID: roomId });
+    if (roomId && user.user_id && stakeValue) {
+      return goToTournaments({
+        user_id: user.user_id,
+        stakeValue,
+        roomID: roomId,
+      });
     }
 
-    setApiReqs({ isLoading: false, data: null, errorMsg: 'Something went wrong! Try again later' })
-  }
+    setApiReqs({
+      isLoading: false,
+      data: null,
+      errorMsg: "Something went wrong! Try again later",
+    });
+  };
 
   if (selectedGame) {
-
-    const { id, bgClass, img, title, caption, text, splitTitle1, splitTitle2 } = selectedGame
+    const { id, bgClass, img, title, caption, text, splitTitle1, splitTitle2 } =
+      selectedGame;
 
     return (
       <div style={{ minHeight: "100vh" }} className="dashboard">
@@ -196,11 +203,11 @@ export default function SelectedGame() {
 
           <div
             className={`${
-              blocksOpen == "both"
+              blocksOpen === "both"
                 ? "col-lg-8 col-md-8"
-                : blocksOpen == "one"
+                : blocksOpen === "one"
                 ? "col-lg-9 col-md-9"
-                : blocksOpen == "none"
+                : blocksOpen === "none"
                 ? "col-lg-10 col-md-10"
                 : ""
             } col-auto px-lg-4 px-md-4 px-0`}
@@ -210,7 +217,11 @@ export default function SelectedGame() {
                 <div className="d-flex align-items-center justify-content-stretch">
                   <div className="w-100">
                     <div className="d-flex align-items-center justify-content-center create-lobby-bg col-lg-12 col-md-12 col-12 mb-3">
-                      <img src={img} className="col-lg-12 col-md-12 col-12" />
+                      <img
+                        src={img}
+                        className="col-lg-12 col-md-12 col-12"
+                        alt=""
+                      />
                     </div>
 
                     <h1 className="m-0 p-0 mb-3 font-weight-700 font-family-quantico txt-large txt-FFF">
@@ -264,10 +275,12 @@ export default function SelectedGame() {
                           Select Stake Amount
                         </p>
 
-                        {
-                          apiReqs.errorMsg &&
-                            <CustomErrorMsg errorMsg={apiReqs.errorMsg} verticalPadding={true} />
-                        }
+                        {apiReqs.errorMsg && (
+                          <CustomErrorMsg
+                            errorMsg={apiReqs.errorMsg}
+                            verticalPadding={true}
+                          />
+                        )}
 
                         <AmountPicker
                           btnTxt="Select Player"
