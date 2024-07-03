@@ -1,6 +1,6 @@
 {
   "name": "skyboard_celeb",
-  "homepage": "https://benny506.github.io/skyboard_celeb/",
+  "homepage": "http://skyboardgames.com/celeb_dashboard"
   "version": "0.1.0",
   "private": true,
   "dependencies": {
