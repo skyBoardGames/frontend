@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-// const dev = "http://localhost:5657/ludo";
+// const dev = "http://localhost";
 // const prod = "https://new-server-ozkr.onrender.com/ludo";
 
 const dev = `http://skyboardgames.com`;

@@ -1,7 +1,5 @@
 import { io } from "socket.io-client"
 
-// const dev = `http://localhost:5657/`;
-// const dev = `http://localhost/games/`;
 // const dev = `http://localhost`;
 const dev = `http://skyboardgames.com`;
 // const dev = `http://127.0.0.1:3000/`;

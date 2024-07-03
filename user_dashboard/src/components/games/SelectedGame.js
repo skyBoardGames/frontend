@@ -123,7 +123,7 @@ export default function SelectedGame() {
 
       setRoomId(data);
 
-      alert("Share code to your friend " + data.code);
+    //   alert("Share code to your friend " + data.code);
 
       openActiveUsers(details.wagerAmount);
 
