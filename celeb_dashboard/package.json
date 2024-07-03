@@ -1,6 +1,6 @@
 {
   "name": "skyboard_celeb",
-  "homepage": "http://skyboardgames.com/celeb_dashboard",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
