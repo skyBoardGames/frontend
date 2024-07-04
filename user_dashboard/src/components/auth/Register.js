@@ -71,13 +71,15 @@ export default function Register({ navigateTo }) {
       // const month = dateParts[1];
       // const year = dateParts[0];
 
-      const formattedDate = new Date(dob).toLocaleDateString()
+      const formattedDate = new Date(dob).toLocaleDateString('en-US')
 
       const details = {
         ...requestBody,
         dob: formattedDate,
         referralCode,
       };
+
+      console.log(details);
 
       const response = await register(details);
 

@@ -65,7 +65,7 @@ export default function EmailVerification({ type }) {
     const code = otp.join("");
 
     setCode(code);
-    setApiReqs({ isLoading: true, data: { code }, errorMsg: null })
+    setApiReqs({ isLoading: true, data: { otp: code }, errorMsg: null })
   }
 
   const submitOtp = async ({ requestBody }) => {
@@ -75,6 +75,8 @@ export default function EmailVerification({ type }) {
         email: user?.email,
         ...requestBody
       };
+
+      console.log(details);
 
       const response = await verifyOTP(details);
 

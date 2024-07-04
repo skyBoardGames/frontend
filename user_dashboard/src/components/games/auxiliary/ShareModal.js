@@ -20,7 +20,7 @@ export default function ShareModal({ modalProps }) {
 
   const ShareButton = () => {
     const message = encodeURIComponent(
-      `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode?.code}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
+      `You are invited to play ${gameId} with ${user?.username} This is the lobby code ${lobbyCode?.code}. Register and supply the code at this link http://skyboardgames.com/user_dashboard/#/games/join-lobby`
     );
     // const link = encodeURIComponent("https://example.com");
     const whatsappUrl = `https://wa.me/?text=${message}`;
@@ -53,7 +53,7 @@ export default function ShareModal({ modalProps }) {
     navigator.clipboard
       .writeText(
         `You are invited to play ${gameId} with ${user?.username}.
-         This is the lobby code ${lobbyCode?.code}. Register and supply the code at this link https://skyboard.com/games/join-lobby`
+         This is the lobby code ${lobbyCode?.code}. Register and supply the code at this link http://skyboardgames.com/user_dashboard/#/games/join-lobby`
       )
       .then(() => {
         alert("Text copied to clipboard!");
