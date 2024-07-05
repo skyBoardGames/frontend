@@ -204,9 +204,7 @@ export const SendEmailOTP = async (email) => {
 
 export const verifyOTP = async (details) => {
   try {
-    const result = await axiosInstance.post(`/auth/verify-email-otp`, {
-      details,
-    });
+    const result = await axiosInstance.post(`/auth/verify-email-otp`, details);
     const data = result.data;
 
     return data;

@@ -30,6 +30,18 @@ export default function EditProfile() {
   const [userName, setUserName] = useState(username);
   const [biography, setBio] = useState(bio);
   const [date, setDob] = useState(dob);
+  const [changedInputs, setChangedInputs] = useState({});
+
+  const handleChange = (e, set) => {
+    const { name, value } = e.target;
+
+    set(value);
+
+    setChangedInputs((prevChanges) => ({
+      ...prevChanges,
+      [name]: value,
+    }));
+  };
 
   useEffect(() => {
     if (userName == null) {
@@ -41,23 +53,16 @@ export default function EditProfile() {
   }, [user]);
 
   const update = async () => {
-    console.log("Update started ");
-
     try {
-      const details = {
-        phoneNumber: phonenum,
-        username: userName,
-        bio: biography,
-        // dob: parseFormattedDateString(date),
-      };
-      const response = await patchRequest("/auth/profile", details);
+      console.log("Update started ");
+
+      console.log(changedInputs);
+      const response = await patchRequest("/auth/profile", changedInputs);
 
       console.log(response);
       const userDetails = {
         ...user,
-        phoneNumber: phonenum,
-        username: userName,
-        bio: biography,
+        ...changedInputs,
       };
       alert(response?.message);
       setUserDetails(userDetails);
@@ -125,10 +130,11 @@ export default function EditProfile() {
                 <input
                   style={{ width: "100%" }}
                   defaultValue={userName}
+                  name="username"
                   // disabled={isEditting}
                   disabled={!isEditting}
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
-                  onChange={(e) => setUserName(e.target.value)}
+                  onChange={(e) => handleChange(e, setUserName)}
                 />
               </div>
             </div>
@@ -140,9 +146,10 @@ export default function EditProfile() {
                 <input
                   style={{ width: "100%" }}
                   defaultValue={phonenum}
+                  name="phoneNumber"
                   disabled={!isEditting}
                   className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={(e) => handleChange(e, setPhoneNumber)}
                 />
               </div>
             </div>
@@ -212,9 +219,10 @@ export default function EditProfile() {
                   defaultValue={
                     username ? biography || "Not set" : "Not Signed in"
                   }
+                  name="bio"
                   className="p-lg-4 p-md-4 p-2 txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
                   disabled={!isEditting}
-                  onChange={(e) => setBio(e.target.value)}
+                  onChange={(e) => handleChange(e, setBio)}
                 />
               </div>
             </div>
