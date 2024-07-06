@@ -18,6 +18,7 @@
 
 .ludo-overhead-turn {
     border: 1px solid black;
+    animation: glow 1s infinite alternate;
 }
 
 .ludo-prof1, .ludo-prof2 {

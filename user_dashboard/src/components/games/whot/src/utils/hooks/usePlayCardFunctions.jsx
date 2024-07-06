@@ -26,7 +26,8 @@ function usePlayCardFunctions({
   const playUserCard = () => {
     dispatch(removeUserCard({ shape, number }));
     dispatch(updateActiveCard({ shape, number }));
-    if (number === 1 || number === 8) {
+    // if (number === 1 || number === 8) {
+    if (number === 1) {
       dispatch(setInfoText(infoTextValues.opponentSuspended));
       return;
     }
@@ -61,7 +62,8 @@ function usePlayCardFunctions({
     setTimeout(() => {
       dispatch(removeOpponentCard({ shape, number }));
       dispatch(updateActiveCard({ shape, number }));
-      if (number === 1 || number === 8) {
+    //   if (number === 1 || number === 8) {
+      if (number === 1) {
         return;
       }
 

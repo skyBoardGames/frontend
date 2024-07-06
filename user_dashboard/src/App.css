@@ -274,3 +274,13 @@
 .letter-spacing-_12{
   letter-spacing: 0.12px;
 }
+
+/* FOR GAME */
+@keyframes glow {
+    from {
+      box-shadow: 0 0 10px -10px purple;
+    }
+    to {
+      box-shadow: 0 0 10px 5px purple;
+    }
+}

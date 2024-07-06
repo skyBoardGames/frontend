@@ -167,7 +167,7 @@ export default function App() {
           path="/games/Whot/"
           element={
             <Provider store={store}>
-              <Whot />
+              <Whot user={userContext.user}/>
             </Provider>
           }
         />
