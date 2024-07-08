@@ -1,17 +1,32 @@
 import React, { useState } from "react";
 import CustomSvg from "../../svgs/CustomSvg";
+import { Spinner } from "react-bootstrap";
 
 
-export default function AmountPicker({ btnTxt, btnFunc, subTxt, minAmount, maxAmount, optionContainerClass, btnClass }){
+export default function AmountPicker({ btnTxt, btnFunc, subTxt, minAmount, maxAmount, optionContainerClass, btnClass, value, setValue, loading }){
 
-    const [value, setValue] = useState(minAmount || 5000)
+    const [val, setVal] = useState(minAmount)
 
-    const onIncrement = () => value < (maxAmount || 25000) && setValue(prev => prev + 1000)
-    const onDecrement = () => value > (minAmount || 5000) && setValue(prev => prev - 1000)
+    const onIncrement = () => {
+        if(setValue){
+            return value < (maxAmount || 25000) && setValue(prev => prev + 1000)
+        
+        } else{
+            return val < (maxAmount || 25000) &&  setVal(prev => prev + 1000)
+        }
+    }
+    const onDecrement = () => {
+        if(setValue){
+            return value > (minAmount || 5000) && setValue(prev => prev - 1000)
+        
+        } else{
+            return val > (minAmount || 5000) && setVal(prev => prev - 1000)
+        }
+    }
 
-    const resetValue = amount => setValue(amount)
+    const resetValue = amount => setValue ? setValue(amount) : setVal(amount)
  
-    const submitValue = () => btnFunc && btnFunc(value)
+    const submitValue = () => btnFunc && btnFunc(setValue ? value : val)
 
     return (
         <div>
@@ -26,7 +41,7 @@ export default function AmountPicker({ btnTxt, btnFunc, subTxt, minAmount, maxAm
                 </div>
 
                 <div className='col-lg-5'>
-                    <p className='m-0 p-0 mb-3 pb-2 text-center txt-FFF regular-txt font-weight-600 font-family-poppins create-lobby-stake-txt'>{value}</p>
+                    <p className='m-0 p-0 mb-3 pb-2 text-center txt-FFF regular-txt font-weight-600 font-family-poppins create-lobby-stake-txt'>{setValue ? value : val}</p>
                     
                     <div className='d-flex align-items-center justify-content-between mb-4'>
                         <div 
@@ -63,12 +78,28 @@ export default function AmountPicker({ btnTxt, btnFunc, subTxt, minAmount, maxAm
             </div>
             <button 
                 onClick={submitValue}
-                className={`${btnClass ? btnClass : 'bg-EAD3AB'} w-100 d-flex align-items-center justify-content-center p-2 mb-3`}
+                disabled={(loading) ? true : false}
+                style={{
+                    opacity: (loading) ? 0.5 : 1
+                }}
+                className='w-100 bg-FBBC04 d-flex align-items-center justify-content-center p-2 mb-3'
             >
-                <p className='p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1'>{btnTxt}</p>
-                <div className='m-0 p-0 mx-2 d-flex align-items-center'>
-                    <CustomSvg name={'arrow-right'} color="#000" />
-                </div>
+                <>
+                    {
+                        loading 
+                        ?
+                            <div className="py-1">
+                                <Spinner size="sm" variant="light" />
+                            </div>
+                        :
+                            <>
+                                <p className='p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1'>{btnTxt}</p>
+                                <div className='m-0 p-0 mx-2 d-flex align-items-center'>
+                                    <CustomSvg name={'arrow-right'} color="#000" />
+                                </div>                            
+                            </>
+                    }
+                </>   
             </button>                        
         </div>
     )
