@@ -1,16 +1,17 @@
 .scrabble-overhead-wrapper {
-    background-color: #E3E3E3;
+    /* background-color: #E3E3E3; */
 }
 
 .scrabble-overhead-wrapper p {
     margin-bottom: 0;
-    line-height: 20px;
+    line-height: 10px;
+    font-size: 10px;
 }
 
 .scrabble-overhead {
     display: flex;
     width: 100vw;
-    height: 9rem;
+    height: 4rem;
     justify-content: space-between;
     padding: 0 1rem;
     position: relative;
@@ -23,7 +24,9 @@
 
 .scrabble-prof1, .scrabble-prof2 {
     padding-top: 0.5rem;
-    flex-basis: 30%;
+    width: 50px;
+    height: 50px;
+    /* flex-basis: 30%; */
     text-align: center;
 }
 

@@ -9,7 +9,7 @@ export default function Overhead({ playerOneInfo, playerTwoInfo, turn, winner })
             <div className='scrabble-overhead-wrapper'>
                 <div className='scrabble-overhead'>
                     <div /*style={{border: winner.winner && winner.answer.winner == 1 ? "4px solid green" : ""}} */
-                        className={`scrabble-prof1 ${/*!winner.winner && */ turn.turn == 0 ? 'scrabble-overhead-turn' : ''}`}
+                        className={`scrabble-prof1 ${/*!winner.winner && */ turn == 0 ? 'scrabble-overhead-turn' : ''}`}
                     >
                         <div>
                             <img src={playerOneInfo.avatar} />
@@ -26,7 +26,7 @@ export default function Overhead({ playerOneInfo, playerTwoInfo, turn, winner })
                         </div>
                     }
                     <div /*style={{border: winner.winner && winner.answer.winner == 2 ? "1px solid green" : ""}} */
-                        className={`scrabble-prof2 ${/*!winner.winner && */ turn.turn == 1 ? 'scrabble-overhead-turn' : ''}`}
+                        className={`scrabble-prof2 ${/*!winner.winner && */ turn == 1 ? 'scrabble-overhead-turn' : ''}`}
                     >
                         <div>
                             <img src={playerTwoInfo.avatar} />

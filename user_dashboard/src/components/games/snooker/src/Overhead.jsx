@@ -2,17 +2,17 @@ import "./overhead.css"
 
 import React, { useEffect, useState } from "react";
 
-export default function Overhead({ Game, /*playerOneInfo, playerTwoInfo,*/ turn, winner }) {
-    const [playerOneInfo, setPlayerOneInfo] = useState({
-        username: '',
-        socketID: '',
-        avatar: ''
-    })
-    const [playerTwoInfo, setPlayerTwoInfo] = useState({
-        username: '',
-        socketID: '',
-        avatar: ''
-    })
+export default function Overhead({ /*Game,*/ playerOneInfo, playerTwoInfo, turn, winner }) {
+    // const [playerOneInfo, setPlayerOneInfo] = useState({
+    //     username: '',
+    //     socketID: '',
+    //     avatar: ''
+    // })
+    // const [playerTwoInfo, setPlayerTwoInfo] = useState({
+    //     username: '',
+    //     socketID: '',
+    //     avatar: ''
+    // })
 
     // const [turn, setTurn] = useState(0);
 
@@ -29,16 +29,16 @@ export default function Overhead({ Game, /*playerOneInfo, playerTwoInfo,*/ turn,
     //     }
     // })
 
-    useEffect(() => {
-        Game.socket.once('start_game', (playerOneInfo, playerTwoInfo) => {
-            console.log("start game");
-            Game.mainLoop();
-            window.notStarted = false
+    // useEffect(() => {
+    //     Game.socket.once('start_game', (playerOneInfo, playerTwoInfo) => {
+    //         console.log("start game");
+    //         Game.mainLoop();
+    //         window.notStarted = false
 
-            setPlayerOneInfo(playerOneInfo)
-            setPlayerTwoInfo(playerTwoInfo)
-        })
-    }, [])
+    //         setPlayerOneInfo(playerOneInfo)
+    //         setPlayerTwoInfo(playerTwoInfo)
+    //     })
+    // }, [])
 
     useEffect(() => {
         // console.log("overhead turn", Game.policy.playerTurn);
