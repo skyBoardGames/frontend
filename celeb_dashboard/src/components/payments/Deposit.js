@@ -6,11 +6,17 @@ import AmountPicker from "./auxiliary/AmountPicker";
 import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockright";
 import { usePaystackPayment } from "react-paystack";
 import { postRequest } from "../apiRequests";
+import CustomErrorMsg from "../CustomErrorMsg/CustomErrorMsg";
 
 export default function Deposit() {
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
+  const [value, setValue] = useState(2000);
+  const [apiReqs, setApiReqs] = useState({
+    isLoading: false,
+    errorMsg: null,
+  });
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -47,6 +53,12 @@ export default function Deposit() {
 
   const initializePayment = usePaystackPayment(config);
 
+  const initiateDeposit = (amount) => {
+    setApiReqs({ isLoading: true, errorMsg: null });
+
+    return onDeposit(amount);
+  };
+
   const onDeposit = async (amount) => {
     try {
       console.log(amount);
@@ -61,6 +73,8 @@ export default function Deposit() {
 
       window.PaystackPop(data, "_blank", "noopener,noreferrer");
 
+      return setApiReqs({ isLoading: false, errorMsg: null });
+
     //   const handler = window.PaystackPop.setup({
     //     key: 'your-public-key-here', // Replace with your public key
     //     email: 'customer@example.com',
@@ -74,6 +88,11 @@ export default function Deposit() {
       // return setApiReqs({ isLoading: false, data: null, errorMsg: null });
     } catch (error) {
       console.error(error);
+
+      return setApiReqs({
+        isLoading: false,
+        errorMsg: error.message || "Deposit error",
+      });
     }
   };
 
@@ -116,12 +135,22 @@ export default function Deposit() {
             Enter Amount
           </p>
 
+          {apiReqs.errorMsg && (
+            <CustomErrorMsg
+              errorMsg={apiReqs.errorMsg}
+              verticalPadding={true}
+            />
+          )}          
+
           <AmountPicker
+            loading={apiReqs.isLoading}
             btnTxt="Next"
             subTxt="Deposit money from 1k Upwards"
-            btnFunc={onDeposit}
+            btnFunc={initiateDeposit}
             optionContainerClass={"deposit-option-container"}
             btnClass={"bg-73CD02"}
+            value={value}
+            setValue={setValue}
           />
         </div>
 

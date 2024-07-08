@@ -52,6 +52,7 @@ export default function Help() {
       });
       console.log(response);
       alert("Message Successfully delivered");
+      setApiReqs({ isLoading: false, data: null, errorMsg: null })
       goToProfile();
 
     } catch (error) {
