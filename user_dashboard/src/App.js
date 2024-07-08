@@ -171,7 +171,7 @@ export default function App() {
             </Provider>
           }
         />
-        <Route path="/games/Snooker/" element={<Snooker />} />
+        <Route path="/games/Snooker/" element={<Snooker user={userContext.user} />} />
         <Route
           path="/games/Scrabble/"
           element={<Scrabble user={userContext.user} />}

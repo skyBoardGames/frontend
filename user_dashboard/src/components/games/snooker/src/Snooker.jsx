@@ -1,11 +1,12 @@
 // import './App.css'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import socket from './socket'
 
 // import socket from "../socket";
 
 import './script/Global.js';
+import Overhead from './Overhead';
 
 // import './script/system/Keys.js';
 
@@ -2666,6 +2667,8 @@ GamePolicy.prototype.updateTurnOutcome = function(){
             }
         }
 
+        window.Game.socket.emit('winner', window.Game.roomID, winner);
+
         // window.Game.socket.emit('winner', window.Game.roomID, winner);
 
         return;
@@ -3288,6 +3291,9 @@ function Game_Singleton() {
     //     autoConnect: false
     // })
 
+    this.username = '';
+    this.avatar = '';
+
     this.socket = socket
 
     this.packetData = {
@@ -3306,7 +3312,9 @@ function Game_Singleton() {
     }
 }
 
-Game_Singleton.prototype.start = function (divName, canvasName, x, y) {
+Game_Singleton.prototype.start = function (divName, canvasName, x, y, username, avatar) {
+    this.username = username;
+    this.avatar = avatar
     this.size = new window.Vector2(x,y);
     Canvas2D.initialize(divName, canvasName);
     document.body.appendChild(stillLoading);
@@ -3404,8 +3412,8 @@ function getRoomID() {
     // return roomID;
 }
 
-function joinGame(socket, roomID) {
-    socket.emit('join_game', roomID)
+function joinGame(socket, roomID, username, avatar) {
+    socket.emit('join_game', roomID, username, avatar)
 
     Game.roomID = roomID;
 }
@@ -3463,7 +3471,7 @@ Game_Singleton.prototype.startNewGame = function(){
 
         const roomID = getRoomID();
 
-        joinGame(Game.socket, roomID);
+        joinGame(Game.socket, roomID, Game.username, Game.avatar);
 
         Game.socket.once('joined_game', () => {
             console.log("you joined game");
@@ -3471,7 +3479,7 @@ Game_Singleton.prototype.startNewGame = function(){
             Game.playerNumber = 1;
         })
 
-        Game.socket.once('start_game', () => {
+        Game.socket.once('start_game', (playerOneInfo, playerTwoInfo) => {
             console.log("start game");
             Game.mainLoop();
             window.notStarted = false
@@ -3772,7 +3780,21 @@ powerDiv.addEventListener("touchend", (e) => {
 
 // import './script/Assets.js'
 
-function Snooker() {
+function Snooker(props) {
+
+    // const [playerInfo, setPlayerInfo] = useState({
+    //     playerOneInfo: {
+    //         username: '',
+    //         socketID: '',
+    //         avatar: ''
+    //     },
+    //     playerTwoInfo: {
+    //         username: '',
+    //         socketID: '',
+    //         avatar: ''
+    //     }
+    // })
+    const [playerTurn, setPlayerTurn] = useState(0);
 
     // console.log(Game);
     // useScript('../src/components/games/snooker/script/lib/LAB.min.js');
@@ -3800,6 +3822,9 @@ function Snooker() {
             setTimeout(() => {
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                 console.log(isMobile);
+                const username = props.user.username;
+                const avatar = props.user.avatar;
+
                 if(isMobile) {
                     console.log("yh");
                     const _canvas = document.getElementById("screen");
@@ -3822,10 +3847,10 @@ function Snooker() {
                     // Game.start('gameArea','screen', 1500 * 0.5, 825 * 0.5);
                     // Game.start('gameArea','screen', window.innerHeight + 300, window.innerWidth);
                     // Game.socket = socket;
-                    Game.start('gameArea','screen', 1500, 825);
+                    Game.start('gameArea','screen', 1500, 825, username, avatar);
                 }
                 else {
-                    Game.start('gameArea','screen', 1500, 825);
+                    Game.start('gameArea','screen', 1500, 825, username, avatar);
                 }
         
                 document.getElementById('gameArea').style.backgroundColor = "black";
@@ -3850,7 +3875,8 @@ function Snooker() {
     }, [])
 
     return (
-        <>
+        <>  
+            <Overhead Game={Game} /*playerOneInfo={playerInfo.playerOneInfo} playerTwoInfo={playerInfo.playerTwoInfo}*/ turn={playerTurn} />
             <div id="gameArea">
                 <canvas id="screen" width="2000" height="1000" onContextMenu={() => false}></canvas>
             </div>  
