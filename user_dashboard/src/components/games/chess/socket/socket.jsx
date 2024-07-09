@@ -1,8 +1,8 @@
 import { io } from "socket.io-client";
 
 // const dev = `http://localhost`;
-const dev = `http://skyboardgames.com`;
-const prod = "http://skyboardgames.com";
+const dev = `https://skyboardgames.com`;
+const prod = "https://skyboardgames.com";
 
 const URL = process.env.NODE_ENV === "development" ? dev : prod;
 
