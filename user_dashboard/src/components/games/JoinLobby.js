@@ -60,7 +60,7 @@ const EnterPin = () => {
 
       console.log(data);
 
-      submit({ requestBody: data });
+      submit(data);
     }
   }, [apiReqs]);
 
@@ -93,7 +93,7 @@ const EnterPin = () => {
     return;
   };
 
-  const submit = async ({ requestBody }) => {
+  const submit = async (requestBody) => {
     console.log(requestBody);
     try {
       const response = await postRequest({

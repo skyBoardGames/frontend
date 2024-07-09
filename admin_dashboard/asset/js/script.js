@@ -1,55 +1,57 @@
 // length for otp code
 function moveFocus(currentDigit) {
-    const currentInput = document.getElementById(`digit${currentDigit}`);
-    if (currentInput.value.length === 1 && currentDigit < 5) {
-        document.getElementById(`digit${currentDigit + 1}`).focus();
-    }
+  const currentInput = document.getElementById(`digit${currentDigit}`);
+  if (currentInput.value.length === 1 && currentDigit < 5) {
+    document.getElementById(`digit${currentDigit + 1}`).focus();
+  }
 }
 
 // countdown for otp
-document.addEventListener("DOMContentLoaded", function() {
-    var countdownElement = document.getElementById('countdown');
-    var request_count= document.getElementById('request_count')
-    var resendLink = document.getElementById('resend-link');
-    var countdown = 10;
+document.addEventListener("DOMContentLoaded", function () {
+  var countdownElement = document.getElementById("countdown");
+  var request_count = document.getElementById("request_count");
+  var resendLink = document.getElementById("resend-link");
+  var countdown = 10;
 
-    var interval = setInterval(function() {
-        countdown--;
-        countdownElement.textContent = countdown + 's';
+  if (!countdownElement) {
+    return;
+  }
+  var interval = setInterval(function () {
+    countdown--;
+    countdownElement.textContent = countdown + "s";
 
-        if (countdown <= 0) {
-            clearInterval(interval);
-            request_count.style.display = 'none';
-            resendLink.style.display = 'inline';
-        }
-    }, 1000);
+    if (countdown <= 0) {
+      clearInterval(interval);
+      request_count.style.display = "none";
+      resendLink.style.display = "inline";
+    }
+  }, 1000);
 });
 
 // show and hide password
-document.addEventListener("DOMContentLoaded", function() {
-    var passwordField = document.getElementById('password-field');
-    var togglePassword = document.getElementById('toggle-password');
+document.addEventListener("DOMContentLoaded", function () {
+  var passwordField = document.getElementById("password-field");
+  var togglePassword = document.getElementById("toggle-password");
 
-    togglePassword.addEventListener('click', function() {
-        var type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
+  togglePassword.addEventListener("click", function () {
+    var type =
+      passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
 
-        // Optionally, you can change the SVG icon or styles here to indicate the state
-        // Example: toggling a class or changing the path data
-    });
+    // Optionally, you can change the SVG icon or styles here to indicate the state
+    // Example: toggling a class or changing the path data
+  });
 });
 
 // loadingImage
-document.addEventListener("DOMContentLoaded", function() {
-    var loadingImage = document.getElementById('loading');
-    if (loadingImage) {
-        setTimeout(function() {
-            window.location.href = '../index.html'; // Replace with your target URL
-        }, 6000); // 5000 milliseconds = 5 seconds
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  var loadingImage = document.getElementById("loading");
+  if (loadingImage) {
+    setTimeout(function () {
+      window.location.href = "../admin_dashboard/index.html"; // Replace with your target URL
+    }, 6000); // 5000 milliseconds = 5 seconds
+  }
 });
-
-
 
 // // Dummy data for demonstration
 // const data = {
@@ -148,4 +150,3 @@ document.addEventListener("DOMContentLoaded", function() {
 // });
 
 // pop up form
-

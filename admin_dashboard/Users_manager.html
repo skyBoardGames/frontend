@@ -14,7 +14,7 @@
     <body>
         <nav class="navbar   justify-content-between container">
             <a class="navbar-brand fs-4 logoBox" href="#">
-                <img src="asset/images/logo.png" style="width:50%"> 
+                <img src="asset/images/logo.png" style="width:50%" alt=""> 
                 <span class="caption p-sm-0">SkyBoard</span>   
               </a>
 
@@ -64,8 +64,8 @@
                             </clipPath>
                             </defs>
                             </svg>                          <div class="summery-info text-center mx-2">
-                            <p class="text-secondary">Admin Users</p>
-                          <h4 class="text-white">2</h4>
+                            <p class="text-secondary">Regular Users</p>
+                          <h4 class="text-white" id="regularNum">2</h4>
                           </div>
                     </div>
                     <div class="summery-box d-flex">
@@ -86,7 +86,7 @@
                             </svg>
                           <div class="summery-info text-center mx-2">
                             <p class="text-secondary">Celebrity Users</p>
-                          <h4 class="text-white">40</h4>
+                          <h4 class="text-white" id="celebNum"></h4>
                           </div>
                     </div>
                     <div class="summery-box d-flex">
@@ -131,7 +131,7 @@
                           </svg>
                           <div class="summery-info text-center mx-2">
                             <p class="text-secondary">Admin Users</p>
-                          <h4 class="text-white">2</h4>
+                          <h4 class="text-white" id="adminNum"></h4>
                           </div>
                     </div>
             </section>
@@ -155,13 +155,13 @@
                         <th>Type</th>
                         <th>Status</th>
                       </tr>
-                      <tr class="show">
+                      <tr class="show" id="user1">
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="user-icon teal my-2">
                               <img src="asset/images/userProfile6.png" alt="" class="w-100 mx-auto">
                             </div>
-                            <p class="mx-2 my-2">JanieX</p>
+                            <p class="user mx-2 my-2">JanieX</p>
                           </div>
                         </td>
                         <td><p class="mx-2 my-2">janiex@gmail.com</p></td>
@@ -169,7 +169,7 @@
                         <td><p class="mx-2 my-2">Regular</p></td>
                         <td><button class="activated">Active</button></td>
                       </tr>
-                      <tr class="show">
+                      <tr class="show" id="user2">
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="user-icon my-2 rose">
@@ -183,7 +183,7 @@
                         <td><p class="mx-2 my-2">Celebrity</p></td>
                         <td><button class="Deleted">Deleted</button></td>
                       </tr>
-                      <tr class="show">
+                      <tr class="show" id="user3">
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="user-icon peach my-2">
@@ -197,7 +197,7 @@
                         <td><p class="mx-2 my-2">Regular</p></td>
                         <td><button class="activated">Active</button></td>
                       </tr>
-                      <tr class="show">
+                      <tr class="show" id="user4">
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="user-icon my-2 teal">
@@ -211,13 +211,13 @@
                         <td><p class="mx-2 my-2">Celebrity</p></td>
                         <td><button class="Deleted">Deleted</button></td>
                       </tr>
-                      <tr class="show">
+                      <tr class="show" id="user5">
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="user-icon peach my-2">
                               <img src="asset/images/userProfile2.png" alt="" class="w-100 mx-auto">
                             </div>
-                            <p class="mx-2 my-2">JanieX</p>
+                            <p class=" user mx-2 my-2">JanieX</p>
                           </div>
                         </td>
                         <td><p class="mx-2 my-2">janiex@gmail.com</p></td>
@@ -315,7 +315,7 @@
 
           </div>
   
-
+          <script src="asset/js/usermanager.js"></script>
         <script src="asset/js/bootstrap.min.js"></script>
         <script src="asset/js/script.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
