@@ -1,10 +1,10 @@
 import { io } from "socket.io-client"
 
 // const dev = `http://localhost`;
-const dev = `http://skyboardgames.com`;
+const dev = `https://skyboardgames.com`;
 // const dev = `http://127.0.0.1:3000/`;
 // const dev = `http://192.168.8.100:3000/`;
-const prod = `http://skyboardgames.com`;
+const prod = `https://skyboardgames.com`;
 
 const URL = process.env.NODE_ENV === "development" ? dev : prod;
 

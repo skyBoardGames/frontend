@@ -18,6 +18,7 @@
 
 .overhead-turn {
     border: 1px solid black;
+    animation: glow 1s infinite alternate;
 }
 
 .prof1, .prof2 {

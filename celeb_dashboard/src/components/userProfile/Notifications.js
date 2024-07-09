@@ -7,10 +7,12 @@ import logo from "../../assets/images/logowithname.png";
 import CustomSvg from "../svgs/CustomSvg";
 import { deleteRequest, getRequest } from "../apiRequests";
 import { formatDateString } from "../../utils";
+import { Spinner } from "react-bootstrap";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const get = async () => {
       try {
@@ -110,9 +112,20 @@ export default function Notifications() {
   return (
     <div className="dashboard py-lg-5 py-md-5 my-md-3 my-lg-3 my-0 py-2">
       {loading ? (
-        <div className="txt-FFF">Retrieving transactions</div>
+        <div className="d-flex align-items-center">
+          <p className="m-0 p-0 txt-FFF font-weight-600 font-family-poppins small-txt">
+            Retrieving notifications...
+          </p>
+          <div className="mx-2">
+            <Spinner size="sm" variant="light" />
+          </div>
+        </div>
+      ) : notifications && notifications.length > 0 ? (
+        <div>{displayNotifications}</div>
       ) : (
-        displayNotifications ?? <div className="txt-FFF">No transactions</div>
+        <p className="m-0 p-0 txt-FFF font-weight-600 font-family-poppins small-txt">
+          No notifications found
+        </p>
       )}
     </div>
   );

@@ -57,50 +57,51 @@ export default function App() {
   const userContext = useContext(UserContext);
 
   // PLEASE DONT REMOVE (FOR DEVELOPMENT)
+  // COMMENT OUT IF I PUSH WITHOUT DOING SO
 
-  //   useEffect(() => {
-  //     socket.connect();
+    useEffect(() => {
+      socket.connect();
 
-  //     socket.on('connect', () => {
-  //         console.log("this user", socket.id);
-  //     })
+      socket.on('connect', () => {
+          console.log("this user", socket.id);
+      })
 
-  //     socket.on('disconnect', (_) => {
-  //         console.log("this user disconnect", _);
-  //         // console.log("this user disconnect", socket.id);
-  //     })
+      socket.on('disconnect', (_) => {
+          console.log("this user disconnect", _);
+          // console.log("this user disconnect", socket.id);
+      })
 
-  //     socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
-  //         navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
-  //     })
+      socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
+          navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
+      })
 
-  //     socket.on('get_active', (arrayOfUserObjects) => {
-  //         console.log("getting active");
+      socket.on('get_active', (arrayOfUserObjects) => {
+          console.log("getting active");
 
-  //         allUsers.splice(0);
+          allUsers.splice(0);
 
-  //         console.log(arrayOfUserObjects);
+          console.log(arrayOfUserObjects);
 
-  //         arrayOfUserObjects.forEach(userObject => {
-  //           // console.log("user active", userObject.socketID);
+          arrayOfUserObjects.forEach(userObject => {
+            // console.log("user active", userObject.socketID);
 
-  //             allUsers.unshift({
-  //                 user_id: userObject.userID,
-  //                 name: 'random',
-  //                 wins: 210,
-  //                 profile: userProfile1,
-  //                 bgClass: 'bg-FD8D84'
-  //             })
-  //         })
+              allUsers.unshift({
+                  user_id: userObject.userID,
+                  name: 'random',
+                  wins: 210,
+                  profile: userProfile1,
+                  bgClass: 'bg-FD8D84'
+              })
+          })
 
-  //     })
+      })
 
-  //     return () => {
-  //         console.log("unmounting disconnecting");
-  //         socket.disconnect();
-  //     }
+      return () => {
+          console.log("unmounting disconnecting");
+          socket.disconnect();
+      }
 
-  //   }, [])
+    }, [])
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -166,11 +167,11 @@ export default function App() {
           path="/games/Whot/"
           element={
             <Provider store={store}>
-              <Whot />
+              <Whot user={userContext.user}/>
             </Provider>
           }
         />
-        <Route path="/games/Snooker/" element={<Snooker />} />
+        <Route path="/games/Snooker/" element={<Snooker user={userContext.user} />} />
         <Route
           path="/games/Scrabble/"
           element={<Scrabble user={userContext.user} />}

@@ -95,7 +95,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 const getTransactions = async () => {
-    console.log("waslkdlk");
   const tbody = document.getElementById("transacTable");
   console.log(tbody);
   const response = customFetch(

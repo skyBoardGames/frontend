@@ -6,10 +6,10 @@ export default function Overhead({ playerOneInfo, playerTwoInfo, turn, winner })
 
     return (
         <>
-            <div className='scrabble-overhead-wrapper'>
-                <div className='scrabble-overhead'>
-                    <div /*style={{border: winner.winner && winner.answer.winner == 1 ? "4px solid green" : ""}} */
-                        className={`scrabble-prof1 ${/*!winner.winner && */ turn == 0 ? 'scrabble-overhead-turn' : ''}`}
+            <div className='whot-overhead-wrapper'>
+                <div className='whot-overhead'>
+                    <div style={{border: winner.answer && winner.winner == "user" ? "4px solid green" : ""}}
+                        className={`whot-prof1 ${/*!winner.winner && */ turn == 1 ? 'whot-overhead-turn' : ''}`}
                     >
                         <div>
                             <img src={playerOneInfo.avatar} />
@@ -17,16 +17,16 @@ export default function Overhead({ playerOneInfo, playerTwoInfo, turn, winner })
                         <div>
                             <p>{playerOneInfo.username}</p>
                         </div>
-                        {/* <div className='scrabble-color' style={{backgroundColor: colors[0]}}></div> */}
+                        {/* <div className='whot-color' style={{backgroundColor: colors[0]}}></div> */}
                     </div>
                     {
-                        winner.winner && 
+                        winner.answer && 
                         <div>
                             <p>Game Won</p>
                         </div>
                     }
-                    <div /*style={{border: winner.winner && winner.answer.winner == 2 ? "1px solid green" : ""}} */
-                        className={`scrabble-prof2 ${/*!winner.winner && */ turn == 1 ? 'scrabble-overhead-turn' : ''}`}
+                    <div style={{border: winner.answer && winner.winner == "opponent" ? "1px solid green" : ""}}
+                        className={`whot-prof2 ${/*!winner.winner && */ turn == 2 ? 'whot-overhead-turn' : ''}`}
                     >
                         <div>
                             <img src={playerTwoInfo.avatar} />
@@ -34,7 +34,7 @@ export default function Overhead({ playerOneInfo, playerTwoInfo, turn, winner })
                         <div>
                             <p>{playerTwoInfo.username}</p>
                         </div>
-                        {/* <div className='scrabble-color' style={{backgroundColor: colors[1]}}></div> */}
+                        {/* <div className='whot-color' style={{backgroundColor: colors[1]}}></div> */}
                     </div>
                 </div>
             </div>

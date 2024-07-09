@@ -1,10 +1,18 @@
-import React from "react";
+import React from 'react'
 
 
-export default function CustomErrorMsg({ errorMsg, isCentered }){
+export default function CustomErrorMsg({ errorMsg, noCenter, verticalPadding }){
     return (
-        <div className="my-3">
-            <p className={`${isCentered && 'text-center'} font-family-poppins small-txt font-weight-500 txt-DC1212`}>{errorMsg}</p>
-        </div>
+        <p 
+            style={{
+                textAlign: noCenter ? 'start' : 'center'
+            }}
+            className={`
+                ${verticalPadding && 'py-3'}
+                m-0 p-0 py-2 txt-DC1212 small-txt font-weight-500 font-family-poppins
+            `}
+        >
+            {errorMsg}
+        </p>
     )
 }

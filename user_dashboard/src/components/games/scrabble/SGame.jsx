@@ -30,10 +30,10 @@ export default function SGame(props) {
 
     const [start, setStart] = useState(false);
 
-    // const [currentTurn, setCurrentTurn] = useState(0);
-    const currentTurn = {
-        turn: 0
-    }
+    const [currentTurn, setCurrentTurn] = useState(0);
+    // const currentTurn = {
+    //     turn: 0
+    // }
 
     useEffect(() => {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -152,6 +152,19 @@ export default function SGame(props) {
         joinGame(socket, roomID);
         
         let canPlay = true;
+
+        const listeners = []
+
+        function removeAllListeners() {
+            console.log("removing listeners");
+            listeners.forEach(listener => {
+                listener.element.removeEventListener(listener.eventType, listener.handler)
+            })
+
+            listeners.splice(0, listeners.length)
+
+            console.log("done");
+        }
 
         // startGame(LetterFactory.genLetters());
         
@@ -287,8 +300,21 @@ export default function SGame(props) {
         
                 collidingTiles.splice(0, collidingTiles.length);
             }
+
+            function notMobileDown(currentElement, onMove, e) {
+                tileOnTouchStart(e, currentElement)
+                currentElement.addEventListener('mousemove', onMove)
+            }
+
+            function notMobileUp(currentElement, currentLetter, onMove, e) {
+                tileOnTouchEnd(e, currentElement, currentLetter)
+                currentElement.removeEventListener('mousemove', onMove);
+            }
+
+            // let notMobileDown = desk.bind(null, )
+
         
-            function tileOnTouchStart(e, currentElement) {
+            function tileOnTouchStart(currentElement, e) {
                 // e.preventDefault();
                 currentElement.style.zIndex = 1;
                 if(!canPlay) return;
@@ -341,7 +367,7 @@ export default function SGame(props) {
                 }
             }
         
-            function tileOnTouchMove(e, currentElement) {
+            function tileOnTouchMove(currentElement, e) {
                 if(!canPlay) return;
                 if(isMobile) {
                     currentElement.style.left = e.touches[0].clientX - 10 + "px";
@@ -367,7 +393,7 @@ export default function SGame(props) {
                 // }
             }
         
-            function tileOnTouchEnd(e, currentElement, currentLetter) {
+            function tileOnTouchEnd(currentElement, currentLetter, e) {
                 console.log("touchend");
                 currentElement.style.zIndex = 0;
                 if(!canPlay) return;
@@ -507,25 +533,78 @@ export default function SGame(props) {
                 const onMove = function(e) {
                     tileOnTouchMove(e, currentElement);
                 }
-        
-                currentElement.addEventListener(`${isMobile ? 'touchstart' : 'mousedown'}`, (e) => {
-                    tileOnTouchStart(e, currentElement)
-                    if(!isMobile) {
-                        currentElement.addEventListener('mousemove', onMove)
-                    }
-                })
 
-                if(isMobile) {
-                    currentElement.addEventListener('touchmove', onMove)
+                if(!isMobile) {
+                    const boundDown = notMobileDown.bind(null, currentElement, onMove)
+                    currentElement.addEventListener('mousedown', boundDown)
+
+                    listeners.push(
+                        {
+                            element: currentElement,
+                            eventType: 'mousedown',
+                            handler: boundDown
+                        }
+                    )
+
+                    const boundUp = notMobileUp.bind(null, currentElement, currentLetter, onMove)
+                    currentElement.addEventListener('mouseup', boundUp)
+
+                    listeners.push(
+                        {
+                            element: currentElement,
+                            eventType: 'mouseup',
+                            handler: boundUp
+                        }
+                    )
+                }
+                else {
+                    const boundStart = tileOnTouchStart.bind(null, currentElement);
+                    const boundMove = tileOnTouchMove.bind(null, currentElement)
+                    const boundEnd = tileOnTouchEnd.bind(null, currentElement, currentLetter)
+
+                    currentElement.addEventListener('touchstart', boundStart)
+
+                    listeners.push({
+                        element: currentElement,
+                        eventType: 'touchstart',
+                        handler: boundStart
+                    })
+
+                    currentElement.addEventListener('touchmove', boundMove)
+
+                    listeners.push({
+                        element: currentElement,
+                        eventType: 'touchmove',
+                        handler: boundMove
+                    })
+
+                    currentElement.addEventListener('touchend', boundEnd)
+
+                    listeners.push({
+                        element: currentElement,
+                        eventType: 'touchend',
+                        handler: boundEnd
+                    })
                 }
         
+                // currentElement.addEventListener(`${isMobile ? 'touchstart' : 'mousedown'}`, (e) => {
+                //     tileOnTouchStart(e, currentElement)
+                //     if(!isMobile) {
+                //         currentElement.addEventListener('mousemove', onMove)
+                //     }
+                // })
+
+                // if(isMobile) {
+                //     currentElement.addEventListener('touchmove', onMove)
+                // }
         
-                currentElement.addEventListener(`${isMobile ? 'touchend' : 'mouseup'}`, (e) => {
-                    tileOnTouchEnd(e, currentElement, currentLetter)
-                    if(!isMobile) {
-                        currentElement.removeEventListener('mousemove', onMove);
-                    }
-                })
+        
+                // currentElement.addEventListener(`${isMobile ? 'touchend' : 'mouseup'}`, (e) => {
+                //     tileOnTouchEnd(e, currentElement, currentLetter)
+                //     if(!isMobile) {
+                //         currentElement.removeEventListener('mousemove', onMove);
+                //     }
+                // })
             }
         
             const playTurnButton = document.querySelector('#lowerUI button');
@@ -719,6 +798,8 @@ export default function SGame(props) {
                     letterDiv.style.position = "relative"
                     letterDiv.style.backgroundImage = `url('${newLetter.bg}')`
                     letterDiv.innerHTML = `${newLetter.alphabet}<span>${newLetter.score}</span>`
+
+                    
         
                     wordBoard.appendChild(letterDiv)
 
@@ -726,24 +807,77 @@ export default function SGame(props) {
                         tileOnTouchMove(e, letterDiv);
                     }
 
-                    letterDiv.addEventListener(`${isMobile ? 'touchstart' : 'mousedown'}`, (e) => {
-                        tileOnTouchStart(e, letterDiv)
-                        if(!isMobile) {
-                            letterDiv.addEventListener('mousemove', onMove)
-                        }
-                    })
+                    if(!isMobile) {
+                        const boundDown = notMobileDown.bind(null, letterDiv, onMove)
+                        letterDiv.addEventListener('mousedown', boundDown)
     
-                    if(isMobile) {
-                        letterDiv.addEventListener('touchmove', onMove)
+                        listeners.push(
+                            {
+                                element: letterDiv,
+                                eventType: 'mousedown',
+                                handler: boundDown
+                            }
+                        )
+    
+                        const boundUp = notMobileUp.bind(null, letterDiv, newLetter, onMove)
+                        letterDiv.addEventListener('mouseup', boundUp)
+    
+                        listeners.push(
+                            {
+                                element: letterDiv,
+                                eventType: 'mouseup',
+                                handler: boundUp
+                            }
+                        )
                     }
+                    else {
+                        const boundStart = tileOnTouchStart.bind(null, letterDiv);
+                        const boundMove = tileOnTouchMove.bind(null, letterDiv)
+                        const boundEnd = tileOnTouchEnd.bind(null, letterDiv, newLetter)
+    
+                        letterDiv.addEventListener('touchstart', boundStart)
+    
+                        listeners.push({
+                            element: letterDiv,
+                            eventType: 'touchstart',
+                            handler: boundStart
+                        })
+    
+                        letterDiv.addEventListener('touchmove', boundMove)
+    
+                        listeners.push({
+                            element: letterDiv,
+                            eventType: 'touchmove',
+                            handler: boundMove
+                        })
+    
+                        letterDiv.addEventListener('touchend', boundEnd)
+    
+                        listeners.push({
+                            element: letterDiv,
+                            eventType: 'touchend',
+                            handler: boundEnd
+                        })
+                    }
+
+                    // letterDiv.addEventListener(`${isMobile ? 'touchstart' : 'mousedown'}`, (e) => {
+                    //     tileOnTouchStart(e, letterDiv)
+                    //     if(!isMobile) {
+                    //         letterDiv.addEventListener('mousemove', onMove)
+                    //     }
+                    // })
+    
+                    // if(isMobile) {
+                    //     letterDiv.addEventListener('touchmove', onMove)
+                    // }
             
             
-                    letterDiv.addEventListener(`${isMobile ? 'touchend' : 'mouseup'}`, (e) => {
-                        tileOnTouchEnd(e, letterDiv, newLetter)
-                        if(!isMobile) {
-                            letterDiv.removeEventListener('mousemove', onMove);
-                        }
-                    })
+                    // letterDiv.addEventListener(`${isMobile ? 'touchend' : 'mouseup'}`, (e) => {
+                    //     tileOnTouchEnd(e, letterDiv, newLetter)
+                    //     if(!isMobile) {
+                    //         letterDiv.removeEventListener('mousemove', onMove);
+                    //     }
+                    // })
         
                     // letterDiv.addEventListener('touchstart', (e) => tileOnTouchStart(e, letterDiv))
         
@@ -1196,9 +1330,16 @@ export default function SGame(props) {
         
                 currentPlayer = players[playerTurn];
 
-                // setCurrentTurn(playerTurn);
-                currentTurn.turn = playerTurn;
+                setCurrentTurn(playerTurn);
+                // currentTurn. = playerTurn;
             }
+        }
+
+        return () => {
+            socket.disconnect();
+            socket.removeAllListeners()
+            console.log("disconnected");
+            removeAllListeners();
         }
     }, [])
 

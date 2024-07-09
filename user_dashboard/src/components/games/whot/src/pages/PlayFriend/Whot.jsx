@@ -22,9 +22,24 @@ import { useParams, useSearchParams } from "react-router-dom";
 import socket from "../../socket/socket";
 import { generateRandomCode } from "../../utils/functions/generateRandomCode";
 import useIsGameOver from "../../utils/hooks/useIsGameOver";
+import Overhead from "../../../Overhead";
 
-function Whot() {
+function Whot({user}) {
   let [searchParams, setSearchParams] = useSearchParams();
+  const [turn, setTurn] = useState(1)
+
+    const [playerInfo, setPlayerInfo] = useState({
+        playerOneInfo: {
+            username: '',
+            socketID: '',
+            avatar: ''
+        },
+        playerTwoInfo: {
+            username: '',
+            socketID: '',
+            avatar: ''
+        }
+    })
 
   console.log(searchParams);
 
@@ -84,13 +99,26 @@ function Whot() {
 
     socket.connect();
 
-    socket.emit("join_room", { room_id, storedId });
+    const username = user.username;
+    const avatar = user.avatar;
+
+    socket.emit("join_room", { room_id, storedId, username, avatar });
     socket.on("dispatch", handleDispatch);
     socket.on("error", handleError);
     socket.on("disconnect", handleDisconnect);
     socket.on("connect", handleConnect);
     socket.on("opponentOnlineStateChanged", handleOpponentOnlineState);
     socket.on("confirmOnlineState", handleConfirmOnlineState);
+    socket.on("start", (playerOneInfo, playerTwoInfo) => {
+        setPlayerInfo({
+            playerOneInfo: playerOneInfo,
+            playerTwoInfo: playerTwoInfo
+        })
+    })
+
+    socket.on('change_turn', (newTurn) => {
+        setTurn(newTurn)
+    })
 
     return () => {
       socket.disconnect();
@@ -123,13 +151,14 @@ function Whot() {
   return (
     <Flipper flipKey={[...userCards, ...opponentCards]}>
       <div className="App-whot">
+        <Overhead playerOneInfo={playerInfo.playerOneInfo} playerTwoInfo={playerInfo.playerTwoInfo} turn={turn} winner={isGameOver()} />
         <OpponentCards />
         <CenterArea />
         <UserCards />
-        <InfoArea />
+        {/* <InfoArea /> */}
         <GameOver />
         <Preloader />
-        <OnlineIndicators onlineState={onlineState} />
+        {/* <OnlineIndicators onlineState={onlineState} /> */}
       </div>
     </Flipper>
   );
