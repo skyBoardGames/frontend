@@ -52,7 +52,7 @@ body {
 @media screen and (max-width: 650px) {
   .App-whot {
     padding: 10px 30px;
-    padding-top: 80px;
+    padding-top: 40px;
   }
   .scroll-container .grid {
     padding-bottom: 7px;
