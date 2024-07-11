@@ -4,7 +4,9 @@ export const GamesContext = createContext();
 
 export const GamesContextProvider = ({ children }) => {
   const [games, setGames] = useState([]);
+  const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [makeTournament, setMakeTournament] = useState({});
 
   const getGames = async () => {
     try {
@@ -17,7 +19,7 @@ export const GamesContextProvider = ({ children }) => {
 
       const data = response.data;
 
-      const newArray = data.map(({ image, _id, name, description }) => ({
+      const newArray = data.map(({ image, _id, name, description, maxPlayers }) => ({
         _id,
         id: name?.toLowerCase(),
         img: image,
@@ -27,14 +29,36 @@ export const GamesContextProvider = ({ children }) => {
         arrowColor: "#2796CE",
         text: description,
         splitTitle1: name,
+        maxPlayers,
         splitTitle2: "Game",
       }));
 
       setGames(newArray);
 
       console.log(newArray);
-
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const getTournaments = async () => {
+    try {
+      const response = await getRequest("/celebrity/tournaments");
+      console.log(response);
+
+      if (!response.data) {
+        setTournaments(null);
+      }
+
+      const data = response.data;
+
+      setTournaments(data);
+
+      console.log(tournaments);
+
+      console.log(data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -45,9 +69,13 @@ export const GamesContextProvider = ({ children }) => {
   return (
     <GamesContext.Provider
       value={{
+        tournaments,
+        getTournaments,
         games,
         getGames,
         loading,
+        makeTournament,
+        setMakeTournament,
       }}
     >
       {children}

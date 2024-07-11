@@ -1,4 +1,4 @@
-  import helpers from "../helpers/helpers";
+import helpers from "../helpers/helpers";
 import axios from "axios";
 
 const { apiUrl } = helpers;
@@ -8,19 +8,26 @@ const refreshToken = async () => {
   const tokens = JSON.parse(token);
   const refreshToken = tokens?.refreshToken;
 
+  console.log(refreshToken);
   if (!refreshToken) {
     throw new Error("No refresh token available");
   }
 
   try {
-    const result = await axios.post(`${apiUrl}/auth/refresh-tokens`, {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    });
-    const { data } = result.data;
-    sessionStorage.setItem("token", JSON.stringify(data));
-    return data?.accessToken;
+    const result = await axios.post(
+      `${apiUrl}/auth/refresh-tokens`,
+      undefined,
+      {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      }
+    );
+    const { tokens } = result.data;
+
+    console.log(tokens);
+    sessionStorage.setItem("token", JSON.stringify(tokens));
+    return tokens?.accessToken;
   } catch (error) {
     sessionStorage.removeItem("token");
     throw new Error("Failed to refresh token");
@@ -35,7 +42,6 @@ axiosInstance.interceptors.request.use(
   async (config) => {
     const token = sessionStorage.getItem("token");
     const tokens = JSON.parse(token);
-
     const accessToken = tokens?.accessToken;
 
     if (accessToken) {
@@ -57,6 +63,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const newAccessToken = await refreshToken();
+        console.log("New Access Token", newAccessToken);
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${newAccessToken}`;
@@ -73,7 +80,12 @@ axiosInstance.interceptors.response.use(
 
 export const loginFunc = async (loginDetails) => {
   try {
-    const result = await axios.post(`${apiUrl}/auth/login`, loginDetails);
+    const result = await axios.post(`${apiUrl}/auth/login`, loginDetails, {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
     const data = result.data;
 
     return data;
@@ -186,5 +198,17 @@ export const deleteRequest = async ({ url, data }) => {
   } catch (error) {
     console.error(error);
     throw error?.response?.data;
+  }
+};
+
+export const patchRequest = async (url, detail) => {
+  try {
+    const result = await axiosInstance.patch(url, detail);
+
+    const response = result.data;
+
+    return response;
+  } catch (error) {
+    throw error.response.data;
   }
 };

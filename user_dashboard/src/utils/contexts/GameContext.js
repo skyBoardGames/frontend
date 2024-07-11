@@ -6,6 +6,7 @@ export const GamesContextProvider = ({ children }) => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lobbyCode, setLobbyCode] = useState("");
+  const [tournaments, setTournaments] = useState([]);
   const [gameId, setGameId] = useState("");
 
   const getGames = async () => {
@@ -44,6 +45,29 @@ export const GamesContextProvider = ({ children }) => {
     }
   };
 
+  const getTournaments = async () => {
+    try {
+      const response = await getRequest("/tournaments?pageNo=1");
+      console.log(response);
+
+      if (!response.data) {
+        setTournaments(null);
+      }
+
+      const data = response.data;
+
+      setTournaments(data);
+
+      console.log(tournaments);
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <GamesContext.Provider
       value={{
@@ -54,6 +78,8 @@ export const GamesContextProvider = ({ children }) => {
         setLobbyCode,
         gameId,
         setGameId,
+        tournaments,
+        getTournaments,
       }}
     >
       {children}

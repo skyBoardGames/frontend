@@ -55,7 +55,7 @@ export default function EmailVerification({ type }) {
 
       const details = {
         email: user?.email,
-        code,
+        otp: code,
       };
 
       console.log(details);
@@ -79,7 +79,6 @@ export default function EmailVerification({ type }) {
       console.error(error);
     }
   };
-
 
   return (
     <div className="email-verify-bg py-4 px-lg-5 px-md-5 px-3">

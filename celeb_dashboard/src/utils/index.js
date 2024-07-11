@@ -7,7 +7,6 @@ export function formatDateString(isoString, month) {
   return date.toLocaleDateString("en-US", options);
 }
 
-
 // this is for the one with dashes
 export function formatDateDash(isoString) {
   const date = new Date(isoString);
@@ -16,3 +15,28 @@ export function formatDateDash(isoString) {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 }
+
+export const convertToISOWithGivenTime = (dateString, timeString) => {
+  const date = new Date(dateString);
+
+  const [hours, minutes] = timeString.split(":").map(Number);
+
+  date.setUTCHours(hours, minutes, 0, 0);
+
+  const isoString = date.toISOString();
+
+  return isoString;
+};
+
+export const addOneWeekToISO = (isoString) => {
+  // Create a new Date object from the ISO string
+  const date = new Date(isoString);
+
+  // Add one week (7 days) to the date
+  date.setUTCDate(date.getUTCDate() + 7);
+
+  // Get the new ISO string
+  const newISOString = date.toISOString();
+
+  return newISOString;
+};

@@ -5,6 +5,7 @@ import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockrig
 import { allGames } from "./auxiliary/gamesAux";
 import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
+import { useGames } from "../../utils/hooks";
 
 export default function AllGames() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function AllGames() {
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
   const [isRightBlockOpen, setIsRightBlockOpen] = useState(true);
   const [blocksOpen, setBlocksOpen] = useState("both");
+  const { games, getGames, loading } = useGames();
 
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
@@ -31,7 +33,24 @@ export default function AllGames() {
     }
   }, [isLeftBlockOpen, isRightBlockOpen]);
 
-  const displayGames = allGames.map((game, i) => {
+  useEffect(() => {
+    // setErrorMsg(null)
+
+    const get = async () => {
+      try {
+        if (games.length === 0) await getGames();
+        console.log(games);
+      } catch (error) {
+        console.log("Error reached");
+        console.error(error);
+        // setErrorMsg(error.message ? error.message : 'Error loading available games')
+      }
+    };
+
+    get();
+  }, []);
+
+  const displayGames = games.map((game, i) => {
     const { bgClass, title, img, caption, arrowColor, id } = game;
 
     const selectGame = () => navigateTo(`/games/selected-game/${id}`);

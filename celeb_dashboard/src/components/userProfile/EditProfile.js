@@ -8,6 +8,7 @@ import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/hooks";
 import { formatDateString } from "../../utils";
+import { patchRequest } from "../apiRequests";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -24,6 +25,27 @@ export default function EditProfile() {
   const toggleEditMode = () => setIsEditting((prev) => !prev);
 
   const { getUser, user, setUserDetails, loading } = useUser();
+
+  const [changedInputs, setChangedInputs] = useState({});
+
+  const { bgClass, username, avatar, country, email, bio, phoneNumber, dob } =
+    user;
+
+  const [phonenum, setPhoneNumber] = useState(phoneNumber);
+  const [userName, setUserName] = useState(username);
+  const [biography, setBio] = useState(bio);
+  const [date, setDob] = useState(dob);
+
+  const handleChange = (e, set) => {
+    const { name, value } = e.target;
+
+    set(value);
+
+    setChangedInputs((prevChanges) => ({
+      ...prevChanges,
+      [name]: value,
+    }));
+  };
 
   useEffect(() => {
     const get = async () => {
@@ -49,8 +71,26 @@ export default function EditProfile() {
     }
   }, []);
 
-  const { bgClass, username, avatar, country, email, bio, phoneNumber, dob } =
-    user;
+  const update = async () => {
+    try {
+      console.log("Update started ");
+
+      console.log(changedInputs);
+      const response = await patchRequest("/auth/profile", changedInputs);
+
+      console.log(response);
+      const userDetails = {
+        ...user,
+        ...changedInputs,
+      };
+      alert(response?.message);
+      setUserDetails(userDetails);
+      console.log(user);
+      setIsEditting(!isEditting);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="dashboard py-lg-5 py-md-5 my-md-3 my-lg-3 my-0 py-2">
@@ -110,8 +150,12 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <input
                 style={{ width: "100%" }}
-                defaultValue={username}
+                defaultValue={userName}
+                name="username"
+                // disabled={isEditting}
+                disabled={!isEditting}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                onChange={(e) => handleChange(e, setUserName)}
               />
             </div>
           </div>
@@ -122,8 +166,11 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <input
                 style={{ width: "100%" }}
-                defaultValue={phoneNumber}
+                defaultValue={phonenum}
+                name="phoneNumber"
+                disabled={!isEditting}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                onChange={(e) => handleChange(e, setPhoneNumber)}
               />
             </div>
           </div>
@@ -134,8 +181,10 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <input
                 style={{ width: "100%" }}
-                defaultValue={dob}
+                defaultValue={dob ? date : ""}
+                disabled={!isEditting}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                onChange={(e) => setDob(e.target.value)}
               />
             </div>
           </div>
@@ -147,7 +196,8 @@ export default function EditProfile() {
               <input
                 type={passwordVisible ? "text" : "password"}
                 style={{ width: "91%" }}
-                value="**************"
+                disabled={!isEditting}
+                defaultValue="**************"
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
               />
               <div
@@ -174,7 +224,8 @@ export default function EditProfile() {
               <input
                 type="email"
                 style={{ width: "100%" }}
-                value={email}
+                defaultValue={email}
+                disabled={!isEditting}
                 className="txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
               />
             </div>
@@ -187,8 +238,13 @@ export default function EditProfile() {
             <div className="mb-4 d-flex align-items-center register-input-container justify-content-between p-2">
               <textarea
                 style={{ width: "100%", height: "37vh" }}
-                defaultValue={bio}
+                defaultValue={
+                  username ? biography || "Not set" : "Not Signed in"
+                }
+                name="bio"
                 className="p-lg-4 p-md-4 p-2 txt-FFF mx-lg-0 mx-md-0 mx-4 regular-txt font-family-quantico"
+                disabled={!isEditting}
+                onChange={(e) => handleChange(e, setBio)}
               />
             </div>
           </div>
@@ -196,7 +252,10 @@ export default function EditProfile() {
       </div>
 
       {isEditting && (
-        <button className="w-100 bg-73CD02 d-flex align-items-center justify-content-center p-2 mb-5">
+        <button
+          className="w-100 bg-73CD02 d-flex align-items-center justify-content-center p-2 mb-5"
+          onClick={update}
+        >
           <p className="p-0 m-0 small-txt txt-000 font-weight-500 font-family-poppins mx-1">
             Save Changes
           </p>

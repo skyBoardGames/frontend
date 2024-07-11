@@ -7,6 +7,7 @@ import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockrig
 import { usePaystackPayment } from "react-paystack";
 import { postRequest } from "../apiRequests";
 import CustomErrorMsg from "../CustomErrorMsg/CustomErrorMsg";
+import { useUser } from "../../utils/hooks";
 
 export default function Deposit() {
   const [isLeftBlockOpen, setIsLeftBlockOpen] = useState(true);
@@ -18,6 +19,7 @@ export default function Deposit() {
     errorMsg: null,
   });
 
+  const { user, setUserDetails } = useUser();
   useEffect(() => {
     if (isLeftBlockOpen && isRightBlockOpen) {
       setBlocksOpen("both");
@@ -61,7 +63,6 @@ export default function Deposit() {
 
   const onDeposit = async (amount) => {
     try {
-      console.log(amount);
       const response = await postRequest({
         url: "/payment/deposit",
         data: { amount: amount * 100 },
@@ -69,22 +70,29 @@ export default function Deposit() {
 
       const { message, data, success } = response;
 
+      const newUser = {
+        ...user,
+        walletBalance: user?.walletBalance + value * 100,
+      };
+      setUserDetails(newUser);
+
+      console.log(user);
       alert(message);
 
-      window.PaystackPop(data, "_blank", "noopener,noreferrer");
+      window.open(data, "_blank", "noopener,noreferrer");
 
       return setApiReqs({ isLoading: false, errorMsg: null });
 
-    //   const handler = window.PaystackPop.setup({
-    //     key: 'your-public-key-here', // Replace with your public key
-    //     email: 'customer@example.com',
-    //     amount: 10000, // Amount in kobo (e.g., 10000 kobo = 100 NGN)
-    //     currency: 'NGN',
-    //     // callback: handlePaystackSuccess,
-    //     // onClose: handlePaystackClose,
-    //   });
+      //   const handler = window.PaystackPop.setup({
+      //     key: 'your-public-key-here', // Replace with your public key
+      //     email: 'customer@example.com',
+      //     amount: 10000, // Amount in kobo (e.g., 10000 kobo = 100 NGN)
+      //     currency: 'NGN',
+      //     // callback: handlePaystackSuccess,
+      //     // onClose: handlePaystackClose,
+      //   });
 
-    //   handler.openIframe();
+      //   handler.openIframe();
       // return setApiReqs({ isLoading: false, data: null, errorMsg: null });
     } catch (error) {
       console.error(error);
@@ -140,7 +148,7 @@ export default function Deposit() {
               errorMsg={apiReqs.errorMsg}
               verticalPadding={true}
             />
-          )}          
+          )}
 
           <AmountPicker
             loading={apiReqs.isLoading}

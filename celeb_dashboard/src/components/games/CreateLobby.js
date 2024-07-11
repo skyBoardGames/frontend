@@ -5,6 +5,7 @@ import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockrig
 import CustomSvg from "../svgs/CustomSvg";
 import { useNavigate, useParams } from "react-router-dom";
 import { postRequest } from "../apiRequests";
+import { useGames } from "../../utils/hooks";
 
 const CreatePin = ({ gameId }) => {
   const navigate = useNavigate();
@@ -14,6 +15,12 @@ const CreatePin = ({ gameId }) => {
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const inputRefs = useRef([]);
+
+  const { makeTournament } = useGames();
+
+  useEffect(() => {
+    console.log(makeTournament);
+  }, []);
 
   const handleChange = (element, index) => {
     setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);

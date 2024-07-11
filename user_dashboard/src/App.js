@@ -59,49 +59,49 @@ export default function App() {
   // PLEASE DONT REMOVE (FOR DEVELOPMENT)
   // COMMENT OUT IF I PUSH WITHOUT DOING SO
 
-    useEffect(() => {
-      socket.connect();
+  useEffect(() => {
+    socket.connect();
 
-      socket.on('connect', () => {
-          console.log("this user", socket.id);
-      })
+    socket.on("connect", () => {
+      console.log("this user", socket.id);
+    });
 
-      socket.on('disconnect', (_) => {
-          console.log("this user disconnect", _);
-          // console.log("this user disconnect", socket.id);
-      })
+    socket.on("disconnect", (_) => {
+      console.log("this user disconnect", _);
+      // console.log("this user disconnect", socket.id);
+    });
 
-      socket.on('opponent-joined-lobby', (userID, gameName, lobbyCode) => {
-          navigateTo(`/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`)
-      })
+    socket.on("opponent-joined-lobby", (userID, gameName, lobbyCode) => {
+      navigateTo(
+        `/tournaments/play/${userID}/${gameName}/${1000}/${lobbyCode}`
+      );
+    });
 
-      socket.on('get_active', (arrayOfUserObjects) => {
-          console.log("getting active");
+    socket.on("get_active", (arrayOfUserObjects) => {
+      console.log("getting active");
 
-          allUsers.splice(0);
+      allUsers.splice(0);
 
-          console.log(arrayOfUserObjects);
+      console.log(arrayOfUserObjects);
 
-          arrayOfUserObjects.forEach(userObject => {
-            // console.log("user active", userObject.socketID);
+      arrayOfUserObjects.forEach((userObject) => {
+        // console.log("user active", userObject.socketID);
 
-              allUsers.unshift({
-                  user_id: userObject.userID,
-                  name: 'random',
-                  wins: 210,
-                  profile: userProfile1,
-                  bgClass: 'bg-FD8D84'
-              })
-          })
+        allUsers.unshift({
+          user_id: userObject.userID,
+          name: "random",
+          wins: 210,
+          profile: userProfile1,
+          bgClass: "bg-FD8D84",
+        });
+      });
+    });
 
-      })
-
-      return () => {
-          console.log("unmounting disconnecting");
-          socket.disconnect();
-      }
-
-    }, [])
+    return () => {
+      console.log("unmounting disconnecting");
+      socket.disconnect();
+    };
+  }, []);
 
   // const goToLogin = () => {
   //   const isVerified = sessionStorage.getItem("token")
@@ -167,11 +167,14 @@ export default function App() {
           path="/games/Whot/"
           element={
             <Provider store={store}>
-              <Whot user={userContext.user}/>
+              <Whot user={userContext.user} />
             </Provider>
           }
         />
-        <Route path="/games/Snooker/" element={<Snooker user={userContext.user} />} />
+        <Route
+          path="/games/Snooker/"
+          element={<Snooker user={userContext.user} />}
+        />
         <Route
           path="/games/Scrabble/"
           element={<Scrabble user={userContext.user} />}
@@ -182,38 +185,35 @@ export default function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute element={Dashboard} app_navigateTo={navigateTo} />
+            <ProtectedRoute element={Dashboard} navigateTo={navigateTo} />
           }
         />
 
         <Route
           path="/games"
           element={
-            <ProtectedRoute element={AllGames} app_navigateTo={navigateTo} />
+            <ProtectedRoute element={AllGames} navigateTo={navigateTo} />
           }
         />
 
         <Route
           path="/games/waiting-room"
           element={
-            <ProtectedRoute element={WatingRoom} app_navigateTo={navigateTo} />
+            <ProtectedRoute element={WatingRoom} navigateTo={navigateTo} />
           }
         />
 
         <Route
           path="/games/join-lobby"
           element={
-            <ProtectedRoute element={JoinLobby} app_navigateTo={navigateTo} />
+            <ProtectedRoute element={JoinLobby} navigateTo={navigateTo} />
           }
         />
 
         <Route
           path="/games/selected-game/:gameId"
           element={
-            <ProtectedRoute
-              element={SelectedGame}
-              app_navigateTo={navigateTo}
-            />
+            <ProtectedRoute element={SelectedGame} navigateTo={navigateTo} />
           }
         />
 
@@ -222,17 +222,14 @@ export default function App() {
         <Route
           path="/all-users"
           element={
-            <ProtectedRoute element={AllUsers} app_navigateTo={navigateTo} />
+            <ProtectedRoute element={AllUsers} navigateTo={navigateTo} />
           }
         />
 
         <Route
           path="/tournaments"
           element={
-            <ProtectedRoute
-              element={AllTournaments}
-              app_navigateTo={navigateTo}
-            />
+            <ProtectedRoute element={AllTournaments} navigateTo={navigateTo} />
           }
         />
 
@@ -246,7 +243,7 @@ export default function App() {
           element={
             <ProtectedRoute
               element={UserProfile}
-              app_navigateTo={navigateTo}
+              navigateTo={navigateTo}
               userLogout={userLogout}
             />
           }
@@ -254,9 +251,7 @@ export default function App() {
 
         <Route
           path="/deposit"
-          element={
-            <ProtectedRoute element={Deposit} app_navigateTo={navigateTo} />
-          }
+          element={<ProtectedRoute element={Deposit} navigateTo={navigateTo} />}
         />
       </Routes>
     </ScrollTo>

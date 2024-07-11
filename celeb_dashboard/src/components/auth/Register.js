@@ -8,6 +8,7 @@ import { Carousel } from "react-bootstrap";
 import SuccessModal from "./auxiliary/SuccessModal";
 import { register, SendEmailOTP } from "../apiRequests";
 import { useUser } from "../../utils/hooks";
+import { formatDateString } from "../../utils";
 
 const carouselItems = [
   {
@@ -24,7 +25,7 @@ export default function Register({ navigateTo }) {
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [socialMediaPlatform, setSocialMediaPlatform] = useState("");
   const [socialMediaHandle, setSocialMediaHandle] = useState("");
-  const { setUser, user } = useUser();
+  const { setUserDetails, user } = useUser();
 
   const submit = async () => {
     try {
@@ -41,8 +42,12 @@ export default function Register({ navigateTo }) {
 
       console.log(response);
 
-      localStorage.setItem("token", response?.data);
-      setUser(...user, { email: email });
+      sessionStorage.setItem("token", JSON.stringify(response?.data?.tokens));
+      setUserDetails({
+        ...response?.data?.user,
+        password: null,
+        dob: formatDateString(response.data.user.dob, "short"),
+      });
       openSuccessModal();
 
       const otpResponse = await SendEmailOTP(email);
