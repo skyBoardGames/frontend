@@ -4,6 +4,7 @@
     width: 100%;
     z-index: 10;
     backdrop-filter: contrast(0.5);
+    left: 0;
 }
 
 .waiting > div {

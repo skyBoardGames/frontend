@@ -8,6 +8,7 @@ import initialiseChessBoard from '../helpers/board-initialiser.jsx';
 import socket from '../socket/socket';
 import { UserContext } from '../../../../utils/contexts/UserContext';
 import Overhead from './Overhead';
+import Won from '../../Won.jsx';
 // import { useParams } from 'react-router-dom';
 
 // function generateRandomCode(length) {
@@ -220,6 +221,7 @@ export default class Game extends React.Component {
         console.log("after check");
 
         if (isCheckMe) {
+          console.log("check");
           this.setState(oldState => ({
             status: "Wrong selection. Choose valid source and destination again. Now you have a check!",
             sourceSelection: -1,
@@ -301,14 +303,22 @@ export default class Game extends React.Component {
       return isItPossible;
     }
 
+    let positionsCanBeKilled = []
+
     let every = true;
 
     for (let i = 0; i < subs.length; ++i) {
       const pos = this.getKingPosition(squares, player == 1 ? 2 : 1);
 
+      console.log("current king pos: ", pos);
+
       const newPos = pos + subs[i];
 
+      console.log("pos to check: " + newPos);
+
       if (newPos < 0 || newPos > 63) continue;
+      // check if king can also move to valid position
+      if(squares[newPos] != null) continue;
 
       const mine = squares.map((square, index) => {
         if (square && square.getPlayer() == player) {
@@ -316,13 +326,17 @@ export default class Game extends React.Component {
         }
       }).filter(val => val)
 
-      // console.log(mine);
+      console.log(mine);
 
       const result = mine.some(obj => myPieceKillKing(obj.piece, obj.piecePos, newPos, squares))
 
       console.log("can a piece kill in: " + newPos + " ", result);
 
       // const result = myPieceKillKing(mine.piece, mine.piecePos, newPos, squares);
+
+      if(result == true) {
+        positionsCanBeKilled.push(newPos);
+      }
 
       if (result == false) {
         every = false;
@@ -333,6 +347,35 @@ export default class Game extends React.Component {
       // if()
     }
 
+    if(every && positionsCanBeKilled.length > 1) {
+      // check if member piece can block
+      console.log("check if member piece can block");
+
+      const opponentsPieces = squares.map((square, index) => {
+        if (square && square.getPlayer() != player) {
+          return { piece: square, piecePos: index }
+        }
+      }).filter(val => val && !(val.piece instanceof King))
+
+      console.log("opps pieces", opponentsPieces);
+
+      console.log("positions can be killed: ", positionsCanBeKilled);
+
+      const final = positionsCanBeKilled.every(pos => (
+        opponentsPieces.some(opp => opp.piece.isMovePossible(opp.piecePos, pos, squares))
+      ));
+
+      console.log("is there hope?: ", final);
+
+      if(!final) {
+        console.log("actually over for you");
+      }
+      else {
+        every = false;
+      }
+    }
+
+
     gameOver = isCheck && every;
 
     console.log("Is Game Over?: ", gameOver);
@@ -341,6 +384,7 @@ export default class Game extends React.Component {
       return { gameOver: true, winner: Number(player) };
     }
     else {
+      positionsCanBeKilled.splice(0, positionsCanBeKilled.length)
       return { gameOver: false, winner: 0 };
     }
 
@@ -406,6 +450,9 @@ export default class Game extends React.Component {
                 turn={this.state.turn}
                 winner={{winner: this.state.winner, answer: this.state.answer}}
             />
+          </div>
+          <div>
+            {this.state.winner && <Won />}
           </div>
 
           {/* <div className="game-info">
