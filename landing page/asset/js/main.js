@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // popup ends
 
 // Submit WaitList form
-const apiUrl = "https://skyboard-api.onrender.com";
+const apiUrl = "https://skyboardgames.com/api";
 var waitListForm = document.getElementById("waitForm");
 var waitName = document.getElementById("waitName");
 var waitEmail = document.getElementById("waitEmail");
@@ -81,12 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const celebDashboardRoute = document.querySelector(".celeb-dashboard-route");
 
   userDashboardRoute.addEventListener("click", () => {
-    window.location.href = "https://benny506.github.io/skyboard/#/register";
+    window.location.href = "https://skyboardgames.com/user_dashboard/";
   });
 
   celebDashboardRoute.addEventListener("click", () => {
-    window.location.href =
-      "https://benny506.github.io/skyboard_celeb/#/register";
+    window.location.href = "https://skyboardgames.com/celeb_dashboard/";
   });
 });
 
