@@ -10,7 +10,7 @@ import AmountPicker from "../payments/auxiliary/AmountPicker";
 import CollapseBlock from "../dashboard/CollapseBlockLeft/collapseblockleft";
 import CollapseBlockRight from "../dashboard/collapseblockright/collapseblockright";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGames } from "../../utils/hooks";
+import { useGames, useUser } from "../../utils/hooks";
 import { postRequest } from "../apiRequests/requestApi";
 import CustomErrorMsg from "../errorMsg/CustomErrorMsg";
 import socket from "../../socket";
@@ -27,6 +27,7 @@ export default function SelectedGame() {
   const goToAllGames = () => navigateTo("/games");
 
   const { setLobbyCode, setGameId } = useGames();
+  const { setUserDetails, user } = useUser();
 
   const gameContextData = useContext(GamesContext);
   const userContextData = useContext(UserContext);
@@ -114,6 +115,13 @@ export default function SelectedGame() {
         data: details,
       });
       console.log("response from create lobby", response);
+      console.log(user);
+      const newUser = {
+        ...user,
+        walletBalance: user.walletBalance - value * 100,
+      };
+
+      setUserDetails(newUser);
 
       const { data, message } = response;
       alert(message);
@@ -123,7 +131,7 @@ export default function SelectedGame() {
 
       setRoomId(data);
 
-    //   alert("Share code to your friend " + data.code);
+      //   alert("Share code to your friend " + data.code);
 
       openActiveUsers(details.wagerAmount);
 
@@ -165,14 +173,20 @@ export default function SelectedGame() {
   const hideJoinLobbyModal = () =>
     setJoinLobbyModal({ visible: false, onHide: null, size: "md" });
 
+  const goToGame = () => navigateTo(`/games/${gameId}?roomID=${roomId._id}`);
+
   const onSelectUser = (user) => {
-    if (roomId && user.user_id && stakeValue) {
-      return goToTournaments({
-        user_id: user.user_id,
-        stakeValue,
-        roomID: roomId,
-      });
-    }
+    // if (roomId && user.user_id && stakeValue) {
+    // console.log(roomId);
+
+    // return goToTournaments({
+    //   user_id: user.user_id,
+    //   stakeValue,
+    //   roomID: roomId._id,
+    // });
+
+    goToGame();
+    // }
 
     setApiReqs({
       isLoading: false,
