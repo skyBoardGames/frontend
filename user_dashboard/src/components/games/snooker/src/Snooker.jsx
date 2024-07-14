@@ -7373,11 +7373,11 @@ function Snooker(props) {
         
         Game.loadAssets = function () {
             let loadSprite = function (sprite) {
-                return Game.loadSprite("assets/sprites/" + sprite);
+                return Game.loadSprite("/user_dashboard/assets/sprites/" + sprite);
             };
         
              let loadSound = function (sound) {
-                return new Audio("assets/sounds/" + sound);
+                return new Audio("/user_dashboard/assets/sounds/" + sound);
             };
         
             sprites.ball0 = loadSprite("balls/0.png");
