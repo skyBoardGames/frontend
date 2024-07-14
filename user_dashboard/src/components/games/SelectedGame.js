@@ -173,7 +173,7 @@ export default function SelectedGame() {
   const hideJoinLobbyModal = () =>
     setJoinLobbyModal({ visible: false, onHide: null, size: "md" });
 
-  const goToGame = () => navigateTo(`/games/${gameId}?roomID=${roomId._id}`);
+  const goToGame = () => navigateTo(`/games/${gameId}?roomID=${roomId.code}`);
 
   const onSelectUser = (user) => {
     // if (roomId && user.user_id && stakeValue) {
