@@ -7372,12 +7372,14 @@ function Snooker(props) {
         window.Game = Game;
         
         Game.loadAssets = function () {
+            let url = process.env.NODE_ENV == "development" ? "" : "/user_dashboard";
+
             let loadSprite = function (sprite) {
-                return Game.loadSprite("/user_dashboard/assets/sprites/" + sprite);
+                return Game.loadSprite(url + "/assets/sprites/" + sprite);
             };
         
              let loadSound = function (sound) {
-                return new Audio("/user_dashboard/assets/sounds/" + sound);
+                return new Audio(url + "/assets/sounds/" + sound);
             };
         
             sprites.ball0 = loadSprite("balls/0.png");
