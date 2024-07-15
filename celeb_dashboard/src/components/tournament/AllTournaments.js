@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { allGames, allUsers } from "../games/auxiliary/gamesAux";
 import { useGames } from "../../utils/hooks";
 
+
 function AllTournaments() {
   const [openGames, setOpenGames] = useState(false);
   const [tournamentvs, setTournamentvs] = useState(true);
@@ -93,54 +94,64 @@ function AllTournaments() {
                 } col-auto px-lg-4 px-md-4 px-0`}
               >
                 <div className="selectedgeneral d-flex flex-column">
-                  <div className="selectedtext font-family-Quantico">
-                    A list of all available tournaments will show here
-                  </div>
-                  {tournaments.map((tournament, i) => {
-                    const { name } = tournament;
-                    console.log(name);
-                    return (
-                      <div
-                        className={`${
-                          blocksOpen == "none"
-                            ? "col-lg-3 col-md-3"
-                            : blocksOpen == "one"
-                            ? "col-lg-4 col-md-4"
-                            : blocksOpen == "both" && "col-lg-4 col-md-4"
-                        } col-12 bg-2796CE`}
-                      >
-                        <div
-                          key={i}
-                          // onClick={selectGame}
-                          className={`p-3 clickable col-lg-11 col-md-11 col-12 mb-4`}
-                        >
-                          {/* <div className="col-lg-12 col-md-12 col-12 mb-3">
-                        <img src={img} className="col-lg-12 col-md-12 col-12" alt="" />
-                      </div> */}
 
-                          <div className="d-flex align-items-center justify-content-between">
-                            <div>
-                              <h4 className="m-0 p-0 mb-3 txt-000 font-family-quantico regular-txt font-weight-700">
-                                {name}
-                              </h4>
-                              {/* <p className="m-0 p-0 small-txt font-family-poppins txt-000 font-weight-300">
-                            {caption}
-                          </p> */}
-                            </div>
+                  {
+                    tournaments && tournaments.length === 0
+                    ?
+                      <div className="selectedtext font-family-Quantico">
+                        No tournaments found
+                      </div>   
+                    :
+                      tournaments.map((tournament, i) => {
+                        const {
+                          name,
+                          gateFee,
+                          registrationDeadline,
+                          noOfWinners,
+                        } = tournament;
+                        return (
+                          <div>
+                            <div
+                              key={i}
+                              // onClick={selectGame}
+                              style={{
+                                borderBottomWidth: 0.5, borderBottomColor: '#fff', paddingBottom: '10px'
+                              }}
+                              className={`p-3 col-lg-12 col-md-12 col-12 mb-4 d-flex align-items-center justify-content-between`}
+                            >
+                              <div className="col-lg-7">
+                                <h4 className="m-0 p-0 mb-3 txt-FFF text-capitalize font-family-quantico medium-txt font-weight-700">
+                                  {name}
+                                </h4>
+                                <p className="m-0 p-0 regular-txt font-family-poppins txt-FFF font-weight-500">
+                                  <span>Gate fee:</span> <span className="txt-BD3193"> {`${gateFee / 100 ?? "0"}`} </span>
+                                </p>
+                                <p className="m-0 p-0 regular-txt font-family-poppins txt-FFF font-weight-500">
+                                  <span>Resgistration Deadline:</span> <span className="txt-BD3193"> </span>
+                                </p>
+                                <p className="m-0 p-0 regular-txt font-family-poppins txt-FFF font-weight-500">
+                                  <span className="txt-BD3193"> {noOfWinners} </span> <span>Winners</span>
+                                </p>
+                              </div>
 
-                            <div className="p-2 d-flex align-items-center justify-content-center bg-000 rounded-circle">
-                              <CustomSvg
-                                color="#2796CE"
-                                name="arrow-right"
-                                width={12}
-                                height={12}
-                              />
+                              <button
+                                style={{
+                                  border: '1px solid #BD3193'
+                                }}
+                                className="bg-transparent clickable d-flex align-items-center justify-content-center p-3 mb-5 col-lg-3"
+                              >
+                                <p className="p-0 m-0 small-txt txt-FFF font-weight-500 font-family-poppins mx-1">
+                                  Join
+                                </p>
+                                <div className="m-0 p-0 mx-2 d-flex align-items-center">
+                                  <CustomSvg name={"arrow-right"} />
+                                </div>                                      
+                              </button>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                        );
+                      })                                                           
+                  }
                 </div>
               </div>
 

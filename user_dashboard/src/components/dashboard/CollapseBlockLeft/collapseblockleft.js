@@ -59,6 +59,7 @@ const Block = ({ activebutton, activehandler, handleclose, isOpen }) => {
             <img src={arrow_down} className="clickable" alt="" />
           </div>
         </div>
+
         <div className="d-flex justify-content-between align-items-center topcollapsegames">
           <div>
             <img src={top_games} alt="" />
@@ -69,18 +70,9 @@ const Block = ({ activebutton, activehandler, handleclose, isOpen }) => {
           </div>
         </div>
       </div>
-      <div className="d-flex ">
-        <span
-          className="activebutton d-flex align-items-center justify-content-center col-lg-6 p-3 clickable"
-          onClick={activehandler}
-        >
-          <img src={Active} className="me-2" alt="" />
-          Active
-        </span>
-        <span className="rewardbutton d-flex align-items-center justify-content-center col-lg-6 p-3 clickable">
-          {" "}
-          Reward
-        </span>
+
+      <div className='w-100'>
+          <span className='activebutton d-flex align-items-center justify-content-center p-3 clickable' onClick={activehandler}><img src={Active} className='me-2'/>Active</span>
       </div>
 
       {activebutton && (
