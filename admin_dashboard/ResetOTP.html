@@ -17,10 +17,10 @@
     <title>Document</title>
   </head>
   <body>
-    <!-- navbar -->
+    <!-- navbar  -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div class="container">
-        <!-- logo -->
+        <!-- logo  -->
         <a class="navbar-brand fs-4" href="#">
           <img src="asset/images/logo.png" class="logo" alt="" />
           <span class="caption p-sm-0">SkyBoard</span>
@@ -29,25 +29,48 @@
     </nav>
 
     <div class="p-3 contact-form">
-      <h3>Forgot <span class="text-gradient">Password?</span></h3>
+      <h3>Email <span class="text-gradient">Sent</span></h3>
       <p class="welcome">
-        Enter an email address to get an OTP code to reset your password
+        We’ve sent the OTP verification code to your email address. Check your
+        email and enter the code below
       </p>
-      <form id="emailForm">
-        <div class="input">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-          >
-            <path
-              d="M4.615 19.5C4.155 19.5 3.771 19.346 3.463 19.038C3.15433 18.7293 3 18.345 3 17.885V7.115C3 6.655 3.15433 6.271 3.463 5.963C3.771 5.65433 4.155 5.5 4.615 5.5H19.385C19.845 5.5 20.229 5.65433 20.537 5.963C20.8457 6.271 21 6.655 21 7.115V17.885C21 18.345 20.846 18.729 20.538 19.037C20.2293 19.3457 19.845 19.5 19.385 19.5H4.615ZM12 12.615L4 7.385V17.885C4 18.0643 4.05767 18.2117 4.173 18.327C4.28833 18.4423 4.43567 18.5 4.615 18.5H19.385C19.5643 18.5 19.7117 18.4423 19.827 18.327C19.9423 18.2117 20 18.0643 20 17.885V7.385L12 12.615ZM12 11.5L19.692 6.5H4.308L12 11.5ZM4 7.385V6.5V17.885C4 18.0643 4.05767 18.2117 4.173 18.327C4.28833 18.4423 4.43567 18.5 4.615 18.5H4V7.385Z"
-              fill="white"
-            />
-          </svg>
-          <input type="text" id="email" placeholder="Enter an email address" />
+      <form id="otp-form">
+        <div class="otp-form mx-2">
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="digit1"
+            oninput="moveFocus(1)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="digit2"
+            oninput="moveFocus(2)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="digit3"
+            oninput="moveFocus(3)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="digit4"
+            oninput="moveFocus(4)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="digit5"
+            oninput="moveFocus(5)"
+          />
         </div>
 
         <button type="submit">
@@ -65,7 +88,19 @@
             />
           </svg>
         </button>
+        <div class="text-center mt-4">
+          <p class="welcome" style="margin: 0">Didn’t receive email?</p>
+          <p class="welcome" id="request_count">
+            You can resend code in
+            <span class="text-purple" id="countdown">60s</span>
+          </p>
+          <a href="#" id="resend-link" class="welcome">
+            <span class="text-purple">Resend code</span></a
+          >
+        </div>
       </form>
     </div>
+    <script src="asset/js/forgotPassword.js"></script>
+    <script src="asset/js/script.js"></script>
   </body>
 </html>

@@ -8,6 +8,8 @@ export const GamesContextProvider = ({ children }) => {
   const [lobbyCode, setLobbyCode] = useState("");
   const [tournaments, setTournaments] = useState([]);
   const [gameId, setGameId] = useState("");
+  const [topGames, setTopGames] = useState([]);
+  const [totalPlays, setTotalPlays] = useState(0);
 
   const getGames = async () => {
     try {
@@ -68,6 +70,22 @@ export const GamesContextProvider = ({ children }) => {
     }
   };
 
+  const getTopGames = async () => {
+    try {
+      const response = await getRequest("/top-active-games");
+
+      const data = response?.data;
+
+      setTopGames(data);
+
+      const total = data.reduce((sum, game) => sum + game.totalPlays, 0);
+
+      setTotalPlays(total);
+    } catch (error) {
+      console.error("Error fetching top games:", error);
+    }
+  };
+
   return (
     <GamesContext.Provider
       value={{
@@ -80,6 +98,9 @@ export const GamesContextProvider = ({ children }) => {
         setGameId,
         tournaments,
         getTournaments,
+        topGames,
+        totalPlays,
+        getTopGames,
       }}
     >
       {children}
