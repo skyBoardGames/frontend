@@ -38,17 +38,13 @@ const Block = ({ activebutton, activehandler, handleclose, isOpen }) => (
         </div>
       </div>
     </div>
-    <div className="d-flex ">
+    <div className="w-100">
       <span
-        className="activebutton d-flex align-items-center justify-content-center col-lg-6 p-3 clickable"
+        className="activebutton d-flex align-items-center justify-content-center p-3 clickable"
         onClick={activehandler}
       >
         <img src={Active} className="me-2" alt="" />
         Active
-      </span>
-      <span className="rewardbutton d-flex align-items-center justify-content-center col-lg-6 p-3 clickable">
-        {" "}
-        Reward
       </span>
     </div>
 
