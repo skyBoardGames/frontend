@@ -9,6 +9,7 @@ import socket from '../socket/socket';
 import { UserContext } from '../../../../utils/contexts/UserContext';
 import Overhead from './Overhead';
 import Won from '../../Won.jsx';
+import Pause from '../../Pause.jsx';
 // import { useParams } from 'react-router-dom';
 
 // function generateRandomCode(length) {
@@ -97,6 +98,7 @@ export default class Game extends React.Component {
       username: username,
       playerOneInfo: {},
       playerTwoInfo: {},
+      pause: false,
       answer: {}
     }
   }
@@ -129,6 +131,12 @@ export default class Game extends React.Component {
     })
   }
 
+  onPause() {
+    this.setState({
+      pause: true
+    })
+  }
+
   componentDidMount() {
     socket.connect();
 
@@ -153,12 +161,16 @@ export default class Game extends React.Component {
     }
 
     socket.on('turn_played', this.onTurnPlayed.bind(this))
+
+    socket.on('pause', this.onPause.bind(this))
   }
 
   componentWillUnmount() {
     console.log("chess is unmounting");
 
     socket.off('connect', this.onConnect);
+
+    socket.off('pause', this.onPause)
 
     socket.disconnect();
 
@@ -453,6 +465,9 @@ export default class Game extends React.Component {
           </div>
           <div>
             {this.state.winner && <Won />}
+          </div>
+          <div>
+            {this.state.pause && <Pause />}
           </div>
 
           {/* <div className="game-info">

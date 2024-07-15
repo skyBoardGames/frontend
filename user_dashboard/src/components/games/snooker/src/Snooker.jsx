@@ -7054,6 +7054,20 @@ function Snooker(props) {
         stillLoading.style.top = "0";
         stillLoading.style.color = "black";
         stillLoading.style.zIndex = "100";
+
+        const waiting = document.createElement('div');
+        
+        waiting.innerHTML = `
+            <h2>Waiting</h2>
+        `;
+        
+        waiting.style.position = "absolute"
+        waiting.style.width = "100vw";
+        waiting.style.height = "100vh";
+        waiting.style.backgroundColor = "white";
+        waiting.style.top = "0";
+        waiting.style.color = "black";
+        waiting.style.zIndex = "100";
         
         let requestAnimationFrame = (function () {
             return  window.requestAnimationFrame ||
@@ -7175,6 +7189,7 @@ function Snooker(props) {
                 console.log("images done loading");
                 document.body.removeChild(stillLoading);
                 console.log("remove stillLoading");
+                document.body.appendChild(waiting);
                 Game.initialize();
                 // window.notStarted = false
                 // requestAnimationFrame(this.mainMenu.load.bind(this.mainMenu));
@@ -7283,6 +7298,7 @@ function Snooker(props) {
                         playerTwoInfo: playerTwoInfo
                     })
                     console.log("start game");
+                    document.body.removeChild(waiting);
                     Game.mainLoop();
                     window.notStarted = false
                 })
@@ -7356,12 +7372,14 @@ function Snooker(props) {
         window.Game = Game;
         
         Game.loadAssets = function () {
+            let url = process.env.NODE_ENV == "development" ? "" : "/user_dashboard";
+
             let loadSprite = function (sprite) {
-                return Game.loadSprite("assets/sprites/" + sprite);
+                return Game.loadSprite(url + "/assets/sprites/" + sprite);
             };
         
              let loadSound = function (sound) {
-                return new Audio("assets/sounds/" + sound);
+                return new Audio(url + "/assets/sounds/" + sound);
             };
         
             sprites.ball0 = loadSprite("balls/0.png");
@@ -7588,7 +7606,7 @@ function Snooker(props) {
         const css = document.createElement('link');
 
         css.rel = "stylesheet"
-        css.href = "/css/game-layout.css"
+        css.href = process.env.NODE_ENV == "development" ? "/css/game-layout.css" : "/user_dashboard/css/game-layout.css"
 
         document.head.appendChild(css);
 
