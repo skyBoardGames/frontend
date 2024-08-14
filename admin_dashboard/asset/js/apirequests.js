@@ -77,6 +77,7 @@ const customFetch = async (url, options = {}) => {
           return retryResponse;
         } catch (refreshError) {
           console.error("Token refresh failed", refreshError);
+          window.location.href = "../admin_dashboard/login.html";z
           throw refreshError;
         }
       }
