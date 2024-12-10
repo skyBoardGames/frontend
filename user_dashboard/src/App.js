@@ -185,35 +185,40 @@ export default function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute element={Dashboard} navigateTo={navigateTo} />
+            // <ProtectedRoute element={Dashboard} navigateTo={navigateTo} />
+            <Dashboard />
           }
         />
 
         <Route
           path="/games"
           element={
-            <ProtectedRoute element={AllGames} navigateTo={navigateTo} />
+            // <ProtectedRoute element={AllGames} navigateTo={navigateTo} />
+            <AllGames />
           }
         />
 
         <Route
           path="/games/waiting-room"
           element={
-            <ProtectedRoute element={WatingRoom} navigateTo={navigateTo} />
+            // <ProtectedRoute element={WatingRoom} navigateTo={navigateTo} />
+            <WatingRoom />
           }
         />
 
         <Route
           path="/games/join-lobby"
           element={
-            <ProtectedRoute element={JoinLobby} navigateTo={navigateTo} />
+            // <ProtectedRoute element={JoinLobby} navigateTo={navigateTo} />
+            <JoinLobby />
           }
         />
 
         <Route
           path="/games/selected-game/:gameId"
           element={
-            <ProtectedRoute element={SelectedGame} navigateTo={navigateTo} />
+            // <ProtectedRoute element={SelectedGame} navigateTo={navigateTo} />
+            <SelectedGame />
           }
         />
 
@@ -222,14 +227,16 @@ export default function App() {
         <Route
           path="/all-users"
           element={
-            <ProtectedRoute element={AllUsers} navigateTo={navigateTo} />
+            // <ProtectedRoute element={AllUsers} navigateTo={navigateTo} />
+            <AllUsers />
           }
         />
 
         <Route
           path="/tournaments"
           element={
-            <ProtectedRoute element={AllTournaments} navigateTo={navigateTo} />
+            // <ProtectedRoute element={AllTournaments} navigateTo={navigateTo} />
+            <AllTournaments />
           }
         />
 
@@ -241,17 +248,19 @@ export default function App() {
         <Route
           path="/user-profile/*"
           element={
-            <ProtectedRoute
-              element={UserProfile}
-              navigateTo={navigateTo}
-              userLogout={userLogout}
-            />
+            // <ProtectedRoute
+            //   element={UserProfile}
+            //   navigateTo={navigateTo}
+            //   userLogout={userLogout}
+            // />
+            <UserProfile userLogout={userLogout} app_navigateTo={navigateTo} />
           }
         />
 
         <Route
           path="/deposit"
-          element={<ProtectedRoute element={Deposit} navigateTo={navigateTo} />}
+          // element={<ProtectedRoute element={Deposit} navigateTo={navigateTo} />}
+          element={<Deposit />}
         />
       </Routes>
     </ScrollTo>

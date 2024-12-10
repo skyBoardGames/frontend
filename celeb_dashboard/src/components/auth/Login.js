@@ -40,26 +40,26 @@ export default function Login({}) {
 
   const submit = async () => {
     try {
-      const details = {
-        email,
-        password,
-      };
+      // const details = {
+      //   email,
+      //   password,
+      // };
 
-      console.log(details);
+      // console.log(details);
 
-      const response = await loginFunc(details);
-      console.log(response);
+      // const response = await loginFunc(details);
+      // console.log(response);
 
-      if (!response.data.user.isCelebrity) {
-        throw new Error("Is not a Celebrity");
-      }
-      setUserDetails({
-        ...response?.data?.user,
-        password: null,
-        dob: formatDateString(response.data.user.dob, "short"),
-      });
+      // if (!response.data.user.isCelebrity) {
+      //   throw new Error("Is not a Celebrity");
+      // }
+      // setUserDetails({
+      //   ...response?.data?.user,
+      //   password: null,
+      //   dob: formatDateString(response.data.user.dob, "short"),
+      // });
 
-      sessionStorage.setItem("token", JSON.stringify(response?.data?.tokens));
+      // sessionStorage.setItem("token", JSON.stringify(response?.data?.tokens));
 
       openSuccessModal();
     } catch (error) {

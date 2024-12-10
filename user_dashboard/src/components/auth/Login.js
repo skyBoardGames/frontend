@@ -70,27 +70,27 @@ export default function Login({}) {
     try {
       const { email, password } = requestBody;
 
-      const response = await loginFunc(requestBody);
+      // const response = await loginFunc(requestBody);
 
-      const { tokens, user } = response.data;
+      // const { tokens, user } = response.data;
 
       // user.email = email;
 
       // user.tokens = response?.data;
 
-      sessionStorage.setItem("token", JSON.stringify(tokens));
+      // sessionStorage.setItem("token", JSON.stringify(tokens));
 
-      const result = {
-        ...user,
-        dob: formatDateString(user?.dob, "short"),
-        bgClass: "bg-FD8D84",
-        country: "Nigeria",
-      };
-      setUserDetails(result);
+      // const result = {
+      //   ...user,
+      //   dob: formatDateString(user?.dob, "short"),
+      //   bgClass: "bg-FD8D84",
+      //   country: "Nigeria",
+      // };
+      // setUserDetails(result);
 
-      openSuccessModal();
+      // openSuccessModal();
 
-      setApiReqs({ isLoading: false, data: null, errorMsg: null });
+      // setApiReqs({ isLoading: false, data: null, errorMsg: null });
 
       navigate(from, { replace: true });
     } catch (error) {

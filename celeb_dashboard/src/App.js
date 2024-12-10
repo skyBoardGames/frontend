@@ -75,7 +75,8 @@ export default function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute element={Dashboard} navigateTo={navigateTo} />
+            // <ProtectedRoute element={Dashboard} navigateTo={navigateTo} />
+            <Dashboard />
           }
         />
 
@@ -84,38 +85,43 @@ export default function App() {
         <Route
           path="/games"
           element={
-            <ProtectedRoute element={AllGames} navigateTo={navigateTo} />
+            // <ProtectedRoute element={AllGames} navigateTo={navigateTo} />
+            <AllGames />
           }
         />
 
         <Route
           path="/games/waiting-room/:gameId"
           element={
-            <ProtectedRoute element={WatingRoom} navigateTo={navigateTo} />
+            // <ProtectedRoute element={WatingRoom} navigateTo={navigateTo} />
+            <WatingRoom />
           }
         />
 
         <Route
           path="/games/create-lobby/:gameId"
           element={
-            <ProtectedRoute element={CreateLobby} navigateTo={navigateTo} />
+            // <ProtectedRoute element={CreateLobby} navigateTo={navigateTo} />
+            <CreateLobby />
           }
         />
 
         <Route
           path="/games/selected-game/:gameId"
           element={
-            <ProtectedRoute element={SelectedGame} navigateTo={navigateTo} />
+            // <ProtectedRoute element={SelectedGame} navigateTo={navigateTo} />
+            <SelectedGame />
           }
         />
 
         <Route
           path="/games/participating-users/:gameId"
           element={
-            <ProtectedRoute
-              element={ParticipatingUsers}
-              navigateTo={navigateTo}
-            />
+            // <ProtectedRoute
+            //   element={ParticipatingUsers}
+            //   navigateTo={navigateTo}
+            // />
+            <ParticipatingUsers />
           }
         />
 
@@ -126,7 +132,8 @@ export default function App() {
         <Route
           path="/all-users"
           element={
-            <ProtectedRoute element={AllUsers} navigateTo={navigateTo} />
+            // <ProtectedRoute element={AllUsers} navigateTo={navigateTo} />
+            <AllUsers />
           }
         />
 
@@ -135,21 +142,24 @@ export default function App() {
         <Route
           path="/tournaments"
           element={
-            <ProtectedRoute element={AllTournaments} navigateTo={navigateTo} />
+            // <ProtectedRoute element={AllTournaments} navigateTo={navigateTo} />
+            <AllTournaments />
           }
         />
 
         <Route
           path="/tournaments/play/:gameId"
           element={
-            <ProtectedRoute element={Tournaments} navigateTo={navigateTo} />
+            // <ProtectedRoute element={Tournaments} navigateTo={navigateTo} />
+            <Tournaments />
           }
         />
 
         <Route
           path="/tournaments/play/user-pairing/:gameId"
           element={
-            <ProtectedRoute element={UserPairing} navigateTo={navigateTo} />
+            // <ProtectedRoute element={UserPairing} navigateTo={navigateTo} />
+            <UserPairing />
           }
         />
 
@@ -158,11 +168,12 @@ export default function App() {
         <Route
           path="/user-profile/*"
           element={
-            <ProtectedRoute
-              element={UserProfile}
-              navigateTo={navigateTo}
-              userLogout={userLogout}
-            />
+            // <ProtectedRoute
+            //   element={UserProfile}
+            //   navigateTo={navigateTo}
+            //   userLogout={userLogout}
+            // />
+            <UserProfile app_navigateTo={navigateTo} userLogout={userLogout} />
           }
         />
 
@@ -170,7 +181,8 @@ export default function App() {
 
         <Route
           path="/deposit"
-          element={<ProtectedRoute element={Deposit} navigateTo={navigateTo} />}
+          // element={<ProtectedRoute element={Deposit} navigateTo={navigateTo} />}
+          element={<Deposit />}
         />
       </Routes>
     </ScrollTo>
